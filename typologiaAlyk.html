@@ -6,19 +6,26 @@
     <style>
         body { margin: 0; padding: 0; background: url('math1.jpg') fixed center; background-size: cover; font-family: Arial, sans-serif; }
         .overlay { background-color: rgba(255, 255, 255, 0.4); min-height: 100vh; padding: 20px; }
+        
+        /* Navbar */
         .navbar { background: #ffc0cb; display: flex; align-items: center; border-radius: 15px; width: fit-content; padding: 5px 10px; margin-bottom: 30px; }
         .navbar a, .navbar .dropbtn { color: #555; padding: 10px 20px; text-decoration: none; font-weight: bold; cursor: pointer; border-radius: 10px; }
         .navbar a:hover { background-color: #ff85a2; color: white; }
+        
         .dropdown { position: relative; display: inline-block; }
         .dropdown-content { display: none; position: absolute; background: white; min-width: 180px; z-index: 1000; border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
         .dropdown:hover > .dropdown-content { display: block; }
+        
         .nested-menu { position: relative; }
         .nested-menu .dropdown-content { left: 100%; top: 0; }
         .nested-menu:hover > .dropdown-content { display: block; }
+        
         .dropdown-content a { color: #d63384; padding: 12px; display: block; text-decoration: none; }
         .dropdown-content a:hover { background: #ffe6eb; }
+
+        /* Content */
         .content-wrapper { display: flex; gap: 40px; padding: 20px; max-width: 1300px; margin: 0 auto; align-items: flex-start; }
-        .left-col { flex: 2; background: transparent; padding: 0; }
+        .left-col { flex: 2; padding: 0; }
         .typo-img { width: 100%; height: auto; display: block; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .right-col { flex: 1.3; background: rgba(255, 255, 255, 0.9); padding: 40px; border-radius: 20px; min-height: 600px; }
     </style>
@@ -27,8 +34,9 @@
     <div class="overlay">
         <div class="navbar">
             <a href="index.html">Αρχική</a>
+            
             <div class="dropdown">
-                <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
+                <a class="dropbtn">Τυπολόγιο ▼</a>
                 <div class="dropdown-content">
                     <div class="nested-menu">
                         <a href="#">Γυμνάσιο ▶</a>
@@ -48,19 +56,25 @@
                     </div>
                 </div>
             </div>
-            <a href="#">Προσομοιώσεις</a>
-                 <a href="#" class="dropbtn">Προσομοιώσεις ▼</a>
-                 <div class="dropdown-content">
+
+            <div class="dropdown">
+                <a class="dropbtn">Προσομοιώσεις ▼</a>
+                <div class="dropdown-content">
                     <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
                     <a href="Krouseis.html">Κρούσεις</a>
                     <a href="mag_field.html">Μαγνητικό Πεδίο</a>
                 </div>
             </div>
+            
             <a href="#">Έξτρα Υλικό</a>
         </div>
+
         <div class="content-wrapper">
-            <div class="left-col"><img src="IMG_20260623_141222_172.jpg" class="typo-img" alt="Τυπολόγιο Α' Λυκείου"></div>
-            <div class="right-col"></div>
+            <div class="left-col">
+                <img src="IMG_20260623_141222_172.jpg" class="typo-img" alt="Τυπολόγιο Α' Λυκείου">
+            </div>
+            <div class="right-col">
+                </div>
         </div>
     </div>
 </body>
