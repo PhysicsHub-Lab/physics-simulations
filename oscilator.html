@@ -2,30 +2,30 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Προσομοίωση ΑΑΤ - Mikroi Einsteins</title>
+    <title>Προσομοίωση ΑΑΤ - PhysicsHub</title>
     <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
-        
-        /* Ροζ Μενού */
-        .navbar { 
-            background-color: #ffc0cb; display: inline-flex; justify-content: flex-start; align-items: center; 
-            border-radius: 20px; padding: 0px 10px; margin-bottom: 20px; align-self: flex-start; margin-left: 20px;
-        }
-        .navbar a, .navbar .dropbtn { color: #555; padding: 15px 20px; text-decoration: none; font-weight: bold; display: block; cursor: pointer; }
-        .navbar a:hover { color: #d63384; }
-        .dropdown { position: relative; display: flex; align-items: center; }
-        .dropdown-content { 
-            display: none; position: absolute; top: 100%; left: 0; background-color: white; 
-            min-width: 180px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1); border-radius: 10px; z-index: 1; 
-        }
-        .dropdown-content a { color: #d63384; padding: 12px 16px; display: block; }
-        .dropdown:hover .dropdown-content { display: block; }
+        /* Background & Overlay */
+        body { margin: 0; padding: 0; background: url('math1.jpg') fixed center; background-size: cover; font-family: sans-serif; }
+        .overlay { background-color: rgba(255, 255, 255, 0.6); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
 
-        /* Controls - Αυξημένο πλάτος για να χωράνε τα slider */
-        .controls { 
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; 
-            background: #fff; padding: 20px; border-radius: 8px; width: 700px; border: 1px solid #ddd; 
-        }
+        /* Μενού 2 επιπέδων */
+        .navbar { background-color: #ffc0cb; display: flex; align-items: center; border-radius: 20px; padding: 5px 10px; margin-bottom: 20px; align-self: flex-start; margin-left: 20px; }
+        .navbar a, .navbar .dropbtn { color: #555; padding: 12px 20px; text-decoration: none; font-weight: bold; cursor: pointer; border-radius: 15px; }
+        .navbar a:hover { color: white; background-color: #ff85a2; }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); z-index: 1000; border-radius: 10px; }
+        .dropdown:hover > .dropdown-content { display: block; }
+
+        .nested-menu { position: relative; }
+        .nested-menu .dropdown-content { left: 100%; top: 0; }
+        .nested-menu:hover > .dropdown-content { display: block; }
+
+        .dropdown-content a { color: #d63384; padding: 12px; display: block; text-decoration: none; }
+        .dropdown-content a:hover { background-color: #ffe6eb; }
+
+        /* Simulation Style */
+        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 8px; width: 700px; border: 1px solid #ddd; }
         .btn-container { grid-column: span 3; display: flex; justify-content: center; gap: 10px; }
         canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; }
         label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
@@ -33,36 +33,57 @@
     </style>
 </head>
 <body>
-
-    <div class="navbar">
-        <a href="index.html">Αρχική</a>
-        <a href="#">Τυπολόγιο</a>
-        <div class="dropdown">
-            <a class="dropbtn">Προσομοιώσεις</a>
-            <div class="dropdown-content">
-                <a href="oscillator.html">Απλή Αρμονική Ταλάντωση</a>
-                <a href="Krouseis.html">Κρούσεις</a>
-                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+    <div class="overlay">
+        <div class="navbar">
+            <a href="index.html">Αρχική</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
+                <div class="dropdown-content">
+                    <div class="nested-menu">
+                        <a href="#">Γυμνάσιο ▶</a>
+                        <div class="dropdown-content">
+                            <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                            <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                            <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                        </div>
+                    </div>
+                    <div class="nested-menu">
+                        <a href="#">Λύκειο ▶</a>
+                        <div class="dropdown-content">
+                            <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                            <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                            <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="dropdown">
+                <a class="dropbtn">Προσομοιώσεις ▼</a>
+                <div class="dropdown-content">
+                    <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                    <a href="Krouseis.html">Κρούσεις</a>
+                    <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                </div>
+            </div>
+            <a href="#">Έξτρα Υλικό</a>
         </div>
-        <a href="#">Έξτρα Υλικό</a>
-    </div>
 
-    <h2>Προσομοίωση Κατακόρυφου Ταλαντωτή</h2>
-    
-    <div class="controls">
-        <div class="btn-container">
-            <button id="playBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Play</button>
-            <button id="resetBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Reset</button>
+        <h2>Προσομοίωση Κατακόρυφου Ταλαντωτή</h2>
+        
+        <div class="controls">
+            <div class="btn-container">
+                <button id="playBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Play</button>
+                <button id="resetBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Reset</button>
+            </div>
+            <label>k (N/m): <input type="range" id="kSlider" min="5" max="50" value="25" step="1"><span id="kVal">25</span></label>
+            <label>m (kg): <input type="range" id="mSlider" min="0.5" max="5" value="1.5" step="0.1"><span id="mVal">1.5</span></label>
+            <label>b (Ns/m): <input type="range" id="bSlider" min="0" max="4" value="0.4" step="0.1"><span id="bVal">0.4</span></label>
+            <label style="grid-column: span 3; align-items: center; color: blue;">
+                Αρχική Θέση y₀ (m): <input type="range" id="y0Slider" min="-8" max="8" value="4" step="0.5" style="width: 50%;"><span id="y0Val">4.0</span></label>
         </div>
-        <label>k (N/m): <input type="range" id="kSlider" min="5" max="50" value="25" step="1"><span id="kVal">25</span></label>
-        <label>m (kg): <input type="range" id="mSlider" min="0.5" max="5" value="1.5" step="0.1"><span id="mVal">1.5</span></label>
-        <label>b (Ns/m): <input type="range" id="bSlider" min="0" max="4" value="0.4" step="0.1"><span id="bVal">0.4</span></label>
-        <label style="grid-column: span 3; align-items: center; color: blue;">
-            Αρχική Θέση y₀ (m): <input type="range" id="y0Slider" min="-8" max="8" value="4" step="0.5" style="width: 50%;"><span id="y0Val">4.0</span></label>
-    </div>
 
-    <canvas id="simCanvas" width="600" height="500"></canvas>
+        <canvas id="simCanvas" width="600" height="500"></canvas>
+    </div>
 
     <script>
         const canvas = document.getElementById('simCanvas');
@@ -97,28 +118,22 @@
             }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Πλέγμα και αριθμοί αριστερά
             ctx.strokeStyle = '#eee'; ctx.lineWidth = 1; ctx.fillStyle = '#666'; ctx.font = '12px sans-serif'; ctx.textAlign = 'right';
             for(let i = 50; i < 500; i += 50) { 
                 ctx.beginPath(); ctx.moveTo(50, i); ctx.lineTo(400, i); ctx.stroke(); 
                 ctx.fillText((-(i-250)/20).toFixed(1) + " m", 45, i + 4); 
             }
             
-            // Ισορροπία & Ακραίες θέσεις
-            let y_eq_pixel = 250 - (-(m * 9.81 / k) * 20);
-            ctx.strokeStyle = 'green'; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(50, y_eq_pixel); ctx.lineTo(400, y_eq_pixel); ctx.stroke();
+            ctx.strokeStyle = 'green'; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(50, 250 - (-(m * 9.81 / k) * 20)); ctx.lineTo(400, 250 - (-(m * 9.81 / k) * 20)); ctx.stroke();
             ctx.strokeStyle = 'red'; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(50, 250 - (yMaxPhys*20)); ctx.lineTo(400, 250 - (yMaxPhys*20)); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(50, 250 - (yMinPhys*20)); ctx.lineTo(400, 250 - (yMinPhys*20)); ctx.stroke();
             ctx.setLineDash([]);
 
-            // Αντικείμενα (Ταβάνι, ελατήριο, μάζα)
             ctx.fillStyle = 'black'; ctx.fillRect(125, 20, 200, 10);
             ctx.strokeStyle = 'gray'; ctx.beginPath(); ctx.moveTo(225, 30);
             for (let i = 1; i <= 25; i++) { ctx.lineTo(225 + (i%2==0 ? 15 : -15), 30 + (y-30)*(i/25)); }
             ctx.stroke();
             ctx.beginPath(); ctx.arc(225, y, 20, 0, 2 * Math.PI); ctx.fillStyle = 'blue'; ctx.fill();
-            
             ctx.fillStyle = 'black'; ctx.font = '16px sans-serif'; ctx.textAlign = 'left';
             ctx.fillText("t = " + t.toFixed(2) + " s", 60, 40);
             requestAnimationFrame(loop);
