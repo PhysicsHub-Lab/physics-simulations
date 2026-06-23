@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <title>Mikroi Einsteins - Αρχική</title>
+    <title>PhysicsHub - Αρχική</title>
     <style>
-        /* Background με πίνακα και overlay 0.6 */
         body { 
             margin: 0; padding: 0; font-family: Arial, sans-serif;
             background-image: url('math1.jpg');
@@ -23,10 +22,29 @@
             align-items: center;
         }
 
-        /* Τίτλος */
-        .header { padding: 30px; font-size: 5rem; font-family: 'Dancing Script', cursive; color: #d63384; text-align: center; }
+        /* Νέο Header */
+        .top-header {
+            text-align: left;
+            width: 100%;
+            margin-left: 40px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .main-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #d63384;
+            margin: 0;
+        }
+        .sub-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #555;
+            margin: 0;
+            padding-left: 5px;
+        }
         
-        /* Μενού αριστερά και compact */
+        /* Μενού */
         .navbar { 
             background-color: #ffc0cb; 
             display: flex; 
@@ -65,7 +83,7 @@
         .dropdown-content a:hover { background-color: #ffe6eb; }
         .dropdown:hover .dropdown-content { display: block; }
 
-        /* Main Content Layout */
+        /* Περιεχόμενο */
         .main-container { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1100px; gap: 40px; padding: 20px; width: 100%; }
         .side-col { width: 250px; text-align: center; }
         .scientist-img { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 5px solid #ffc0cb; margin-bottom: 10px; }
@@ -78,7 +96,10 @@
 </head>
 <body>
     <div class="overlay">
-        <div class="header">Mikroi Einsteins</div>
+        <div class="top-header">
+            <div class="main-title">PhysicsHub Interactive Simulations & Learning</div>
+            <div class="sub-title">by Mikroi einsteins</div>
+        </div>
 
         <div class="navbar">
             <a href="index.html">Αρχική</a>
@@ -103,8 +124,7 @@
 
             <div class="center-col">
                 <h1>Καλώς ήρθατε!</h1>
-                <p>Η Φυσική είναι η επιστήμη η οποία προσπαθεί να εξηγήσει σε δομικό βαθμό το πώς λειτουργεί το σύμπαν μας. Δυστυχώς όμως παρά την ομορφιά που έχει αυτή η διαδικασία ανακάλυψης των θεμελιωδών κανόνων που διέπουν τον κόσμο μας, συνήθως στο πλαίσιο του σχολείου αναλώνεται σε μια σειρά τύπων οι οποίοι την κάνουν τις περισσότερες φορές βαρετή και δυσνόητη στους μαθητές.</p>
-                <p>Σκοπός αυτής της σελίδας λοιπόν είναι να κάνουμε αυτήν την τόσο ωραία επιστήμη πιο ελκυστική ιδιαίτερα στους νέους ανθρώπους μέσα από μια σειρά διαδραστικών προσομοιώσεων αλλά και ανάλυση περιπτώσεων και σεναρίων από την καθημερινή μας ζωή, στα οποία η φυσική παίζει καθοριστικό ρόλο.</p>
+                <p>Η Φυσική είναι η επιστήμη η οποία προσπαθεί να εξηγήσει σε δομικό βαθμό το πώς λειτουργεί το σύμπαν μας. Δυστυχώς όμως παρά την ομορφιά που έχει αυτή η διαδικασία ανακάλυψης των θεμελιωδών κανόνων που διέπουν τον κόσμο μας, συνήθως στο πλαίσιο του σχολείου αναλώνεται σε μια σειρά τύπων οι οποίοι την κάνουν τις περισσότερες φορές βαρετή και δυσνόητη στους μαθητές. Σκοπός αυτής της σελίδας λοιπόν είναι να κάνουμε αυτήν την τόσο ωραία επιστήμη πιο ελκυστική ιδιαίτερα στους νέους ανθρώπους μέσα από μια σειρά διαδραστικών προσομοιώσεων αλλά και ανάλυση περιπτώσεων και σεναρίων από την καθημερινή μας ζωή ,στα οποία η φυσική παίζει καθοριστικό ρόλο. </p>
             </div>
 
             <div class="side-col">
