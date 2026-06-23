@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <title>Mikroi Einsteins - Αρχική</title>
+    <style>
+        /* Background με πίνακα και overlay 0.6 */
+        body { 
+            margin: 0; padding: 0; font-family: Arial, sans-serif;
+            background-image: url('math1.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        .overlay { 
+            background-color: rgba(255, 255, 255, 0.6); 
+            min-height: 100vh; 
+            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Τίτλος */
+        .header { padding: 30px; font-size: 5rem; font-family: 'Dancing Script', cursive; color: #d63384; text-align: center; }
+        
+        /* Μενού αριστερά και compact */
+        .navbar { 
+            background-color: #ffc0cb; 
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-start; 
+            border-radius: 20px; 
+            padding: 5px 10px; 
+            margin-bottom: 40px;
+            align-self: flex-start; 
+            margin-left: 20px;
+            width: fit-content;
+        }
+        .navbar a, .navbar .dropbtn { 
+            color: #555; 
+            padding: 10px 20px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 15px;
+            display: block;
+        }
+        .navbar a:hover { background-color: #ff85a2; color: white; }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { 
+            display: none; 
+            position: absolute; 
+            background-color: #fff; 
+            min-width: 200px; 
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2); 
+            z-index: 100; 
+            border-radius: 10px; 
+            margin-top: 5px;
+        }
+        .dropdown-content a { color: #d63384; padding: 12px 16px; text-decoration: none; display: block; }
+        .dropdown-content a:hover { background-color: #ffe6eb; }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* Main Content Layout */
+        .main-container { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1100px; gap: 40px; padding: 20px; width: 100%; }
+        .side-col { width: 250px; text-align: center; }
+        .scientist-img { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 5px solid #ffc0cb; margin-bottom: 10px; }
+        .quote { font-style: italic; color: #444; font-size: 0.95em; line-height: 1.4; margin-top: 10px; }
+        
+        .center-col { flex: 1; background: rgba(255, 255, 255, 0.8); padding: 40px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #d63384; margin-top: 0; }
+        p { line-height: 1.6; color: #333; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="header">Mikroi Einsteins</div>
+
+        <div class="navbar">
+            <a href="index.html">Αρχική</a>
+            <a href="#">Τυπολόγιο</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Προσομοιώσεις</a>
+                <div class="dropdown-content">
+                    <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                    <a href="Krouseis.html">Κρούσεις</a>
+                    <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                </div>
+            </div>
+            <a href="#">Έξτρα Υλικό</a>
+        </div>
+
+        <div class="main-container">
+            <div class="side-col">
+                <img src="Marie-Curie-Lab-.png" alt="Marie Curie" class="scientist-img">
+                <h3>Marie Curie</h3>
+                <p class="quote">"Nothing in life is to be feared, it is only to be understood."</p>
+            </div>
+
+            <div class="center-col">
+                <h1>Καλώς ήρθατε!</h1>
+                <p>Η Φυσική είναι η επιστήμη η οποία προσπαθεί να εξηγήσει σε δομικό βαθμό το πώς λειτουργεί το σύμπαν μας. Δυστυχώς όμως παρά την ομορφιά που έχει αυτή η διαδικασία ανακάλυψης των θεμελιωδών κανόνων που διέπουν τον κόσμο μας, συνήθως στο πλαίσιο του σχολείου αναλώνεται σε μια σειρά τύπων οι οποίοι την κάνουν τις περισσότερες φορές βαρετή και δυσνόητη στους μαθητές.</p>
+                <p>Σκοπός αυτής της σελίδας λοιπόν είναι να κάνουμε αυτήν την τόσο ωραία επιστήμη πιο ελκυστική ιδιαίτερα στους νέους ανθρώπους μέσα από μια σειρά διαδραστικών προσομοιώσεων αλλά και ανάλυση περιπτώσεων και σεναρίων από την καθημερινή μας ζωή, στα οποία η φυσική παίζει καθοριστικό ρόλο.</p>
+            </div>
+
+            <div class="side-col">
+                <img src="einstein2.jpg" alt="Albert Einstein" class="scientist-img">
+                <h3>Albert Einstein</h3>
+                <p class="quote">"I have no special talent. I am only passionately curious."</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
