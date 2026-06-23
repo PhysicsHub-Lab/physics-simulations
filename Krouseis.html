@@ -2,86 +2,82 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <title>Προσομοίωση Κρούσεων - Mikroi Einsteins</title>
+    <title>Προσομοίωση Κρούσεων - PhysicsHub</title>
     <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
-        
-        /* Ροζ Μενού - Αριστερή στοίχιση, συμμαζεμένο, τέλεια ευθυγράμμιση */
-        .navbar { 
-            background-color: #ffc0cb; 
-            display: inline-flex; 
-            justify-content: flex-start; 
-            align-items: center; 
-            border-radius: 20px; 
-            padding: 0px 10px; 
-            margin-bottom: 20px;
-            align-self: flex-start; /* Στέλνει το μενού αριστερά */
-            margin-left: 20px;      /* Μικρό περιθώριο από την άκρη της οθόνης */
-        }
-        
-        .navbar a, .navbar .dropbtn { 
-            color: #555; 
-            padding: 15px 20px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            display: block;
-            cursor: pointer;
-        }
-        
-        .navbar a:hover { color: #d63384; }
-        
-        .dropdown { position: relative; display: flex; align-items: center; }
-        
-        .dropdown-content { 
-            display: none; 
-            position: absolute; 
-            top: 100%; /* Εμφανίζεται ακριβώς κάτω από το μενού */
-            left: 0;
-            background-color: white; 
-            min-width: 180px; 
-            box-shadow: 0px 4px 8px rgba(0,0,0,0.1); 
-            border-radius: 10px; 
-            z-index: 1; 
-        }
-        
-        .dropdown-content a { color: #d63384; padding: 12px 16px; display: block; }
-        .dropdown:hover .dropdown-content { display: block; }
+        /* Background & Overlay */
+        body { margin: 0; padding: 0; background: url('math1.jpg') fixed center; background-size: cover; font-family: sans-serif; }
+        .overlay { background-color: rgba(255, 255, 255, 0.6); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
 
-        .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 8px; width: 550px; border: 1px solid #ddd; }
+        /* Μενού 2 επιπέδων */
+        .navbar { background-color: #ffc0cb; display: flex; align-items: center; border-radius: 20px; padding: 5px 10px; margin-bottom: 20px; align-self: flex-start; margin-left: 20px; }
+        .navbar a, .navbar .dropbtn { color: #555; padding: 12px 20px; text-decoration: none; font-weight: bold; cursor: pointer; border-radius: 15px; }
+        .navbar a:hover { color: white; background-color: #ff85a2; }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); z-index: 1000; border-radius: 10px; }
+        .dropdown:hover > .dropdown-content { display: block; }
+
+        .nested-menu { position: relative; }
+        .nested-menu .dropdown-content { left: 100%; top: 0; }
+        .nested-menu:hover > .dropdown-content { display: block; }
+
+        .dropdown-content a { color: #d63384; padding: 12px; display: block; text-decoration: none; }
+        .dropdown-content a:hover { background-color: #ffe6eb; }
+
+        /* Simulation Style */
+        .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 12px; width: 550px; border: 1px solid #ddd; }
         canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; }
     </style>
 </head>
 <body>
-
-    <div class="navbar">
-        <a href="index.html">Αρχική</a>
-        <a href="#">Τυπολόγιο</a>
-        <div class="dropdown">
-            <a class="dropbtn">Προσομοιώσεις</a>
-            <div class="dropdown-content">
-                <a href="oscillator.html">Απλή Αρμονική Ταλάντωση</a>
-                <a href="Krouseis.html">Κρούσεις</a>
-                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+    <div class="overlay">
+        <div class="navbar">
+            <a href="index.html">Αρχική</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
+                <div class="dropdown-content">
+                    <div class="nested-menu">
+                        <a href="#">Γυμνάσιο ▶</a>
+                        <div class="dropdown-content">
+                            <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                            <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                            <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                        </div>
+                    </div>
+                    <div class="nested-menu">
+                        <a href="#">Λύκειο ▶</a>
+                        <div class="dropdown-content">
+                            <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                            <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                            <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="dropdown">
+                <a class="dropbtn">Προσομοιώσεις ▼</a>
+                <div class="dropdown-content">
+                    <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                    <a href="Krouseis.html">Κρούσεις</a>
+                    <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                </div>
+            </div>
+            <a href="#">Έξτρα Υλικό</a>
         </div>
-        <a href="#">Έξτρα Υλικό</a>
-    </div>
 
-    <h2>Προσομοίωση Ελαστικών Κρούσεων (1D)</h2>
-    
-    <div class="controls">
-        <div class="btn-container" style="grid-column: span 2; display: flex; justify-content: center; gap: 10px;">
-            <button id="playBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Play</button>
-            <button id="resetBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Reset</button>
+        <h2>Προσομοίωση Ελαστικών Κρούσεων (1D)</h2>
+        <div class="controls">
+            <div style="grid-column: span 2; display: flex; justify-content: center; gap: 10px;">
+                <button id="playBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Play</button>
+                <button id="resetBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Reset</button>
+            </div>
+            <label style="color: blue;">m₁ (kg): <input type="range" id="m1Slider" min="1" max="10" value="2" step="0.5"><span id="m1Val">2.0</span></label>
+            <label style="color: blue;">v₁ (m/s): <input type="range" id="v1Slider" min="-5" max="5" value="3" step="0.5"><span id="v1Val">3.0</span></label>
+            <label style="color: red;">m₂ (kg): <input type="range" id="m2Slider" min="1" max="10" value="4" step="0.5"><span id="m2Val">4.0</span></label>
+            <label style="color: red;">v₂ (m/s): <input type="range" id="v2Slider" min="-5" max="5" value="-1" step="0.5"><span id="v2Val">-1.0</span></label>
         </div>
-        <label style="color: blue;">m₁ (kg): <input type="range" id="m1Slider" min="1" max="10" value="2" step="0.5"><span id="m1Val">2.0</span></label>
-        <label style="color: blue;">v₁ (m/s): <input type="range" id="v1Slider" min="-5" max="5" value="3" step="0.5"><span id="v1Val">3.0</span></label>
-        <label style="color: red;">m₂ (kg): <input type="range" id="m2Slider" min="1" max="10" value="4" step="0.5"><span id="m2Val">4.0</span></label>
-        <label style="color: red;">v₂ (m/s): <input type="range" id="v2Slider" min="-5" max="5" value="-1" step="0.5"><span id="v2Val">-1.0</span></label>
+        <canvas id="simCanvas" width="600" height="300"></canvas>
     </div>
-
-    <canvas id="simCanvas" width="600" height="300"></canvas>
 
     <script>
         const canvas = document.getElementById('simCanvas');
