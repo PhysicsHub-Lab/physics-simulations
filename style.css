@@ -14,7 +14,7 @@ body {
     padding: 20px; 
 }
 
-/* --- 2. NAVIGATION BAR (Μακιγιαρισμένο) --- */
+/* --- 2. NAVIGATION BAR --- */
 .navbar { 
     background: #800020; 
     display: flex; 
@@ -37,68 +37,57 @@ body {
     transition: all 0.3s ease;
 }
 
-.navbar a:hover { 
-    background-color: rgba(255, 255, 255, 0.2);
-}
+.navbar a:hover { background-color: rgba(255, 255, 255, 0.2); }
 
-/* --- 3. DROPDOWN ΜΕΝΟΥ --- */
+/* --- 3. DROPDOWN --- */
 .dropdown { position: relative; display: inline-block; }
-
 .dropdown-content { 
-    display: none; 
-    position: absolute; 
-    background: white; 
-    min-width: 200px; 
-    z-index: 1000; 
-    border-radius: 10px; 
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
-    margin-top: 5px;
+    display: none; position: absolute; background: white; min-width: 200px; 
+    z-index: 1000; border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); margin-top: 5px;
 }
-
 .dropdown:hover > .dropdown-content { display: block; }
-
-.nested-menu { position: relative; }
 .nested-menu .dropdown-content { left: 100%; top: 0; }
+.dropdown-content a { color: #800020; padding: 12px; display: block; text-decoration: none; font-size: 14px; }
+.dropdown-content a:hover { background: #fdf2f2; border-radius: 10px; }
 
-.dropdown-content a { 
-    color: #800020; 
-    padding: 12px; 
-    display: block; 
-    text-decoration: none; 
-    font-size: 14px; 
-}
-
-.dropdown-content a:hover { 
-    background: #fdf2f2; 
-    border-radius: 10px; 
-}
-
-/* --- 4. ΠΕΡΙΕΧΟΜΕΝΟ ΣΕΛΙΔΑΣ --- */
+/* --- 4. ΠΕΡΙΕΧΟΜΕΝΟ & CONTROLS --- */
 .content-wrapper { 
-    display: flex; 
-    gap: 40px; 
-    padding: 20px; 
-    max-width: 1300px; 
-    margin: 0 auto; 
-    align-items: flex-start; 
+    display: flex; gap: 40px; padding: 20px; max-width: 1300px; margin: 0 auto; align-items: flex-start; 
 }
 
-/* Γενικό στυλ για κουτιά κειμένου */
 .box { 
     background: rgba(255, 255, 255, 0.9); 
     padding: 30px; 
     border-radius: 20px; 
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 100%;
 }
 
-/* Στυλ για εικόνες μέσα σε κουτιά */
-.box img { 
-    width: 100%; 
-    height: auto; 
-    border-radius: 10px; 
-    margin: 15px 0; 
+/* ΕΔΩ ΕΙΝΑΙ Η ΠΡΟΣΘΗΚΗ ΓΙΑ ΤΑ CONTROLS */
+.controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 στήλες */
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
 }
 
-/* Στυλ για κεφαλίδες και κείμενο */
+.controls label {
+    display: flex;
+    flex-direction: column; /* Κείμενο πάνω, μπάρα κάτω */
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.box img { width: 100%; height: auto; border-radius: 10px; margin: 15px 0; }
 h2 { color: #800020; margin-top: 0; }
 p { line-height: 1.6; }
