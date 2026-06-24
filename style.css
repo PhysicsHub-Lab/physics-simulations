@@ -1,90 +1,19 @@
-/* --- 1. ΓΕΝΙΚΗ ΔΟΜΗ --- */
 body { 
-    margin: 0; 
-    padding: 0; 
-    background: url('math1.jpg') fixed center; 
-    background-size: cover; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    color: #333;
+    margin: 0; padding: 0; 
+    background: url('math1.jpg') fixed center; background-size: cover; 
+    font-family: sans-serif; color: #333; 
 }
+.overlay { background-color: rgba(255, 255, 255, 0.4); min-height: 100vh; padding: 20px; }
 
-.overlay { 
-    background-color: rgba(255, 255, 255, 0.4); 
-    min-height: 100vh; 
-    padding: 20px; 
-}
-
-/* --- 2. NAVIGATION BAR --- */
+/* Menu Style */
 .navbar { 
-    background: #800020; 
-    display: flex; 
-    align-items: center; 
-    border-radius: 15px; 
-    width: fit-content; 
-    padding: 5px 15px; 
-    margin-bottom: 30px; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(5px);
+    background: #800020; display: flex; align-items: center; border-radius: 15px; 
+    width: fit-content; padding: 5px 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
+.navbar a { color: #ffffff; padding: 12px 20px; text-decoration: none; font-weight: bold; }
 
-.navbar a, .navbar .dropbtn { 
-    color: #ffffff; 
-    padding: 12px 20px; 
-    text-decoration: none; 
-    font-weight: bold; 
-    cursor: pointer; 
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.navbar a:hover { background-color: rgba(255, 255, 255, 0.2); }
-
-/* --- 3. DROPDOWN --- */
-.dropdown { position: relative; display: inline-block; }
-.dropdown-content { 
-    display: none; position: absolute; background: white; min-width: 200px; 
-    z-index: 1000; border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); margin-top: 5px;
-}
-.dropdown:hover > .dropdown-content { display: block; }
-.nested-menu .dropdown-content { left: 100%; top: 0; }
-.dropdown-content a { color: #800020; padding: 12px; display: block; text-decoration: none; font-size: 14px; }
-.dropdown-content a:hover { background: #fdf2f2; border-radius: 10px; }
-
-/* --- 4. ΠΕΡΙΕΧΟΜΕΝΟ & CONTROLS --- */
-.content-wrapper { 
-    display: flex; 
-    justify-content: flex-start; 
-    padding: 20px; 
-    max-width: 800px; 
-}
-
+/* Box Style - Αριστερά */
 .box { 
-    background: rgba(255, 255, 255, 0.9); 
-    padding: 20px; 
-    border-radius: 20px; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    width: 100%;
+    background: white; padding: 20px; border-radius: 10px; 
+    width: 650px; /* Το πλάτος της παλιάς προσομοίωσης */
 }
-
-.controls {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px 20px;
-    margin-bottom: 15px;
-}
-
-.controls label {
-    display: flex;
-    flex-direction: column;
-    font-weight: bold;
-    font-size: 13px;
-}
-
-.slider-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 2px;
-}
-
-h2 { color: #800020; margin-top: 0; font-size: 22px; }
