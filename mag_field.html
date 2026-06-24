@@ -9,14 +9,42 @@
     <div class="overlay">
         <div class="navbar">
             <a href="index.html">Αρχική</a>
-            <a href="#">Προσομοιώσεις</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
+                <div class="dropdown-content">
+                    <div class="nested-menu">
+                        <a href="#">Γυμνάσιο ▶</a>
+                        <div class="dropdown-content">
+                            <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                            <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                            <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                        </div>
+                    </div>
+                    <div class="nested-menu">
+                        <a href="#">Λύκειο ▶</a>
+                        <div class="dropdown-content">
+                            <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                            <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                            <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a class="dropbtn">Προσομοιώσεις ▼</a>
+                <div class="dropdown-content">
+                    <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                    <a href="Krouseis.html">Κρούσεις</a>
+                    <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                </div>
+            </div>
+            <a href="#">Έξτρα Υλικό</a>
         </div>
 
         <div class="box">
             <h2>Κίνηση Φορτίου σε Μαγνητικό Πεδίο (2D)</h2>
             <button id="playBtn">Play</button> <button id="resetBtn">Reset</button>
             <br><br>
-            
             Τύπος Φορτίου: <select id="qSign"><option value="1">Θετικό (+q)</option><option value="-1">Αρνητικό (-q)</option></select>
             Φορά Πεδίου B: <select id="bDir"><option value="1">Προς τα Μέσα (X)</option><option value="-1">Προς τα Έξω (•)</option></select>
             <br>
@@ -30,7 +58,6 @@
             <br>
             Ύψος Εισόδου y_in (m): <input type="range" id="yInSlider" min="50" max="350" value="200" step="10"> <span id="yInVal">200</span>
             <br><br>
-            
             <canvas id="simCanvas" width="650" height="480"></canvas>
         </div>
     </div>
@@ -40,7 +67,6 @@
         const ctx = canvas.getContext('2d');
         const xMinPixels = 100, xMaxPixels = 600, yMinPixels = 30, yMaxPixels = 430;
         let x, y, vx, vy, isPlaying = false, trajectory = [];
-        
         const bSlider = document.getElementById('bSlider'), qSlider = document.getElementById('qSlider');
         const vSlider = document.getElementById('vSlider'), mSlider = document.getElementById('mSlider');
         const yInSlider = document.getElementById('yInSlider');
