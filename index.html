@@ -4,39 +4,23 @@
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <title>PhysicsHub - Αρχική</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-image: url('math1.jpg'); background-size: cover; background-attachment: fixed; background-position: center; }
-        .overlay { background-color: rgba(255, 255, 255, 0.6); min-height: 100vh; padding-bottom: 50px; display: flex; flex-direction: column; align-items: center; }
-
-        /* Header */
-        .top-header { text-align: left; width: 100%; margin-left: 40px; margin-top: 20px; margin-bottom: 10px; }
-        .main-title { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #800020; margin: 0; }
-        .sub-title { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #555; margin: 0; padding-left: 5px; }
+        /* Κρατάμε μόνο τα στυλ που είναι ΑΠΟΚΛΕΙΣΤΙΚΑ για το περιεχόμενο της Αρχικής */
+        .overlay { min-height: 100vh; padding-bottom: 50px; display: flex; flex-direction: column; align-items: center; }
         
-        /* Νέο Μενού */
-        .navbar { background-color: #800020; display: flex; align-items: center; border-radius: 20px; padding: 5px 10px; margin-bottom: 40px; align-self: flex-start; margin-left: 20px; width: fit-content; }
-        .navbar a, .navbar .dropbtn { color: #ffffff; padding: 10px 20px; text-decoration: none; font-weight: bold; cursor: pointer; border-radius: 15px; display: block; }
-        .navbar a:hover { background-color: #ff85a2; color: white; }
-
-        /* Dropdown Logic */
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content { display: none; position: absolute; background-color: #fff; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); z-index: 1000; border-radius: 10px; margin-top: 5px; }
-        .dropdown:hover > .dropdown-content { display: block; }
-
-        .nested-menu { position: relative; }
-        .nested-menu .dropdown-content { left: 100%; top: 0; }
-        .nested-menu:hover > .dropdown-content { display: block; }
-
-        .dropdown-content a { color: #800020; padding: 12px 16px; text-decoration: none; display: block; }
-        .dropdown-content a:hover { background-color: #fdf2f2; }
-
-        /* Περιεχόμενο */
-        .main-container { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1100px; gap: 40px; padding: 20px; width: 100%; }
-        .side-col { width: 250px; text-align: center; }
-        .scientist-img { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(128, 0, 32, 0.6); margin-bottom: 10px; }
-        .quote { font-style: italic; color: #444; font-size: 0.95em; line-height: 1.4; margin-top: 10px; }
-        .center-col { flex: 1; background: rgba(255, 255, 255, 0.8); padding: 40px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #800020; margin-top: 0; }
+        /* Header */        
+        .top-header { text-align: left; width: 100%; margin-left: 40px; margin-top: 20px; margin-bottom: 10px; }        
+        .main-title { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #800020; margin: 0; }        
+        .sub-title { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #555; margin: 0; padding-left: 5px; }                
+        
+        /* Περιεχόμενο */        
+        .main-container { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1100px; gap: 40px; padding: 20px; width: 100%; }        
+        .side-col { width: 250px; text-align: center; }        
+        .scientist-img { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(128, 0, 32, 0.6); margin-bottom: 10px; }        
+        .quote { font-style: italic; color: #444; font-size: 0.95em; line-height: 1.4; margin-top: 10px; }        
+        .center-col { flex: 1; background: rgba(255, 255, 255, 0.8); padding: 40px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }        
+        h1 { color: #800020; margin-top: 0; }        
         p { line-height: 1.6; color: #333; font-size: 1.1em; }
     </style>
 </head>
@@ -49,7 +33,6 @@
 
         <div class="navbar">
             <a href="index.html">Αρχική</a>
-            
             <div class="dropdown">
                 <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
                 <div class="dropdown-content">
@@ -71,7 +54,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="dropdown">
                 <a href="#" class="dropbtn">Προσομοιώσεις ▼</a>
                 <div class="dropdown-content">
@@ -91,7 +73,7 @@
             </div>
             <div class="center-col">
                 <h1>Καλώς ήρθατε!</h1>
-                <p>Η Φυσική είναι η επιστήμη η οποία προσπαθεί να εξηγήσει σε δομικό βαθμό το πώς λειτουργεί το σύμπαν μας. Δυστυχώς όμως παρά την ομορφιά που έχει αυτή η διαδικασία ανακάλυψης των θεμελιωδών κανόνων που διέπουν τον κόσμο μας, συνήθως στο πλαίσιο του σχολείου αναλώνεται σε μια σειρά τύπων οι οποίοι την κάνουν τις περισσότερες φορές βαρετή και δυσνόητη στους μαθητές. Σκοπός αυτής της σελίδας λοιπόν είναι να κάνουμε αυτήν την τόσο ωραία επιστήμη πιο ελκυστική ιδιαίτερα στους νέους ανθρώπους μέσα από μια σειρά διαδραστικών προσομοιώσεων αλλά και ανάλυση περιπτώσεων και σεναρίων από την καθημερινή μας ζωή ,στα οποία η φυσική παίζει καθοριστικό ρόλο.</p>
+                <p>Η Φυσική είναι η επιστήμη η οποία προσπαθεί να εξηγήσει σε δομικό βαθμό το πώς λειτουργεί το σύμπαν μας. Δυστυχώς όμως παρά την ομορφιά που έχει αυτή η διαδικασία ανακάλυψης των θεμελιωδών κανόνων που διέπουν τον κόσμο μας, συνήθως στο πλαίσιο του σχολείου αναλώνεται σε μια σειρά τύπων οι οποίοι την κάνουν τις περισσότερες φορές βαρετή και δυσνόητη στους μαθητές. Σκοπός αυτής της σελίδας λοιπόν είναι να κάνουμε αυτήν την τόσο ωραία επιστήμη πιο ελκυστική ιδιαίτερα στους νέους ανθρώπους μέσα από μια σειρά διαδραστικών προσομοιώσεων αλλά και ανάλυση περιπτώσεων και σεναρίων από την καθημερινή μας ζωή, στα οποία η φυσική παίζει καθοριστικό ρόλο.</p>
             </div>
             <div class="side-col">
                 <img src="einstein2.jpg" alt="Albert Einstein" class="scientist-img">
