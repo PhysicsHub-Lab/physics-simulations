@@ -1,19 +1,66 @@
-body { 
-    margin: 0; padding: 0; 
-    background: url('math1.jpg') fixed center; background-size: cover; 
-    font-family: sans-serif; color: #333; 
+/* style.css */
+/* 1. Αυτό κάνει το "άσπρισμα" στο background (μαυροπίνακας) */
+body {
+    margin: 0;
+    padding: 0;
+    background: url('math1.jpg') fixed center;
+    background-size: cover;
+    font-family: sans-serif;
+    position: relative;
 }
-.overlay { background-color: rgba(255, 255, 255, 0.4); min-height: 100vh; padding: 20px; }
 
-/* Menu Style */
-.navbar { 
-    background: #800020; display: flex; align-items: center; border-radius: 15px; 
-    width: fit-content; padding: 5px 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6); /* Ρύθμισε το 0.3 αν θες πιο πολύ/λιγότερο άσπρο */
+    pointer-events: none;
+    z-index: -1;
 }
-.navbar a { color: #ffffff; padding: 12px 20px; text-decoration: none; font-weight: bold; }
 
-/* Box Style - Αριστερά */
-.box { 
-    background: white; padding: 20px; border-radius: 10px; 
-    width: 650px; /* Το πλάτος της παλιάς προσομοίωσης */
+/* Στυλ για το μενού - Μπορντό χρώμα */
+.navbar {
+    background-color: #800020;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    align-self: flex-start;
+    margin-left: 20px;
 }
+
+.navbar a, .navbar .dropbtn {
+    color: white; /* Άσπρα γράμματα στο μενού */
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.navbar a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.dropdown { position: relative; display: inline-block; }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 10px;
+}
+.dropdown:hover > .dropdown-content { display: block; }
+
+.nested-menu { position: relative; }
+.nested-menu .dropdown-content { left: 100%; top: 0; }
+.nested-menu:hover > .dropdown-content { display: block; }
+
+.dropdown-content a { color: #800020; padding: 12px; display: block; text-decoration: none; }
+.dropdown-content a:hover { background-color: #fdf2f2; }
