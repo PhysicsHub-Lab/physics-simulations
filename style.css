@@ -52,42 +52,39 @@ body {
 
 /* --- 4. ΠΕΡΙΕΧΟΜΕΝΟ & CONTROLS --- */
 .content-wrapper { 
-    display: flex; gap: 40px; padding: 20px; max-width: 1300px; margin: 0 auto; align-items: flex-start; 
+    display: flex; 
+    justify-content: flex-start; 
+    padding: 20px; 
+    max-width: 800px; 
 }
 
 .box { 
     background: rgba(255, 255, 255, 0.9); 
-    padding: 30px; 
+    padding: 20px; 
     border-radius: 20px; 
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width: 100%;
 }
 
-/* ΡΥΘΜΙΣΗ CONTROLS (2 ΣΤΗΛΕΣ) */
 .controls {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px 30px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
+    gap: 10px 20px;
+    margin-bottom: 15px;
 }
 
 .controls label {
     display: flex;
-    flex-direction: column; /* Κείμενο πάνω, μπάρα κάτω */
+    flex-direction: column;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .slider-container {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 5px;
+    gap: 5px;
+    margin-top: 2px;
 }
 
-.box img { width: 100%; height: auto; border-radius: 10px; margin: 15px 0; }
-h2 { color: #800020; margin-top: 0; }
-p { line-height: 1.6; }
+h2 { color: #800020; margin-top: 0; font-size: 22px; }
