@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Προσομοίωση Δύναμης Lorentz - PhysicsHub</title>
-   <!DOCTYPE html>
-<html lang="el">
-<head>
-    <meta charset="UTF-8">
-    <title>Προσομοίωση Δύναμης Lorentz - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -51,32 +46,31 @@
                 <h2>Κίνηση Φορτίου σε Μαγνητικό Πεδίο (2D)</h2>
                 
                 <div class="controls">
-                    <div class="btn-container" style="grid-column: span 2;">
+                    <div class="btn-container" style="grid-column: span 3; display: flex; justify-content: center; gap: 15px; margin-bottom: 10px;">
                         <button id="playBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Play</button>
                         <button id="resetBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Reset</button>
                     </div>
-                    
-                    <label>Τύπος Φορτίου: <select id="qSign"><option value="1">Θετικό (+q)</option><option value="-1">Αρνητικό (-q)</option></select></label>
-                    <label>Φορά Πεδίου B: <select id="bDir"><option value="1">Προς τα Μέσα (X)</option><option value="-1">Προς τα Έξω (•)</option></select></label>
-                    
+
+                    <label>Τύπος Φορτίου: 
+                        <select id="qSign"><option value="1">Θετικό (+q)</option><option value="-1">Αρνητικό (-q)</option></select>
+                    </label>
+                    <label>Φορά Πεδίου B: 
+                        <select id="bDir"><option value="1">Προς τα Μέσα (X)</option><option value="-1">Προς τα Έξω (•)</option></select>
+                    </label>
+                    <label>Ύψος Εισόδου y_in (m): 
+                        <div class="slider-container"><input type="range" id="yInSlider" min="50" max="350" value="200" step="10"><span id="yInVal">200</span></div>
+                    </label>
                     <label>Ένταση B (T): 
                         <div class="slider-container"><input type="range" id="bSlider" min="0.5" max="3" value="1.5" step="0.1"><span id="bVal">1.5</span></div>
                     </label>
-                    
                     <label>Φορτίο q (μC): 
                         <div class="slider-container"><input type="range" id="qSlider" min="1" max="5" value="2" step="0.5"><span id="qVal">2.0</span></div>
                     </label>
-                    
                     <label>Ταχύτητα v₀ (m/s): 
                         <div class="slider-container"><input type="range" id="vSlider" min="10" max="40" value="25" step="1"><span id="vVal">25</span></div>
                     </label>
-                    
                     <label>Μάζα m (kg): 
                         <div class="slider-container"><input type="range" id="mSlider" min="1" max="5" value="2" step="0.5"><span id="mVal">2.0</span></div>
-                    </label>
-                    
-                    <label style="grid-column: span 2;">Ύψος Εισόδου y_in (m): 
-                        <div class="slider-container"><input type="range" id="yInSlider" min="50" max="350" value="200" step="10"><span id="yInVal">200</span></div>
                     </label>
                 </div>
 
@@ -84,6 +78,7 @@
             </div>
         </div>
     </div>
+
     <script>
         const canvas = document.getElementById('simCanvas');
         const ctx = canvas.getContext('2d');
@@ -129,20 +124,17 @@
                 if (x > canvas.width || x < 0 || y > canvas.height || y < 0) { isPlaying = false; playBtn.innerText = "Play"; }
             }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
             ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
             ctx.strokeRect(xMinPixels, yMinPixels, xMaxPixels - xMinPixels, yMaxPixels - yMinPixels);
             ctx.setLineDash([]);
             ctx.fillStyle = 'rgba(255, 0, 0, 0.25)'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center';
             for (let px = xMinPixels + 40; px < xMaxPixels; px += 80) for (let py = yMinPixels + 40; py < yMaxPixels; py += 80) ctx.fillText((B > 0) ? "X" : "•", px, py);
-            
             drawArrow(xMinPixels, yMaxPixels, xMinPixels, yMinPixels - 15, 'black', 2);
             drawArrow(xMinPixels, yMaxPixels, xMaxPixels + 15, yMaxPixels, 'black', 2);
             ctx.fillStyle = 'black'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
             for (let offset = 0; offset <= 500; offset += 100) { let tx = xMinPixels + offset; ctx.beginPath(); ctx.moveTo(tx, yMaxPixels); ctx.lineTo(tx, yMaxPixels + 4); ctx.stroke(); ctx.fillText(offset + "m", tx, yMaxPixels + 18); }
             ctx.textAlign = 'right';
             for (let offset = 0; offset <= 400; offset += 100) { let ty = yMaxPixels - offset; ctx.beginPath(); ctx.moveTo(xMinPixels, ty); ctx.lineTo(xMinPixels - 4, ty); ctx.stroke(); ctx.fillText(offset + "m", xMinPixels - 8, ty + 4); }
-            
             if (x > 0 && x < canvas.width) {
                 drawArrow(x, y, x + vx * 1.5, y + vy * 1.5, 'blue');
                 if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) {
@@ -150,14 +142,11 @@
                     drawArrow(x, y, x + Fx, y + Fy, 'red');
                 }
             }
-
             ctx.strokeStyle = 'black'; ctx.lineWidth = 2.5; ctx.beginPath();
             if(trajectory.length > 0) { ctx.moveTo(trajectory[0].x, trajectory[0].y); for(let p of trajectory) ctx.lineTo(p.x, p.y); ctx.stroke(); }
             ctx.beginPath(); ctx.arc(x, y, 9, 0, 2 * Math.PI); ctx.fillStyle = 'black'; ctx.fill();
-            
             ctx.fillStyle = 'blue'; ctx.fillText("➔ Ταχύτητα (v)", 450, 20);
             ctx.fillStyle = 'red'; ctx.fillText("➔ Δύναμη Lorentz (F)", 450, 43);
-            
             requestAnimationFrame(loop);
         }
         loop();
