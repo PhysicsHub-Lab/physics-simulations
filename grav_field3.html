@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>NASA Mission - PhysicsHub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Layout προσομοίωσης */
+        #page-wrapper { display: flex; justify-content: center; padding: 20px; }
+        #sim-layout { display: flex; flex-direction: row; align-items: flex-start; gap: 20px; }
+        #canvas-col { display: flex; flex-direction: column; gap: 10px; background: white; padding: 10px; border-radius: 15px; }
+        #dashboard { display: flex; align-items: center; gap: 16px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 10px 16px; }
+        #sim-canvas { border: 1px solid #ccc; border-radius: 8px; background: white; display: block; }
+        #v-info { background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 8px 12px; }
+        
+        /* Panel αποστολής */
+        #mission-col { width: 280px; }
+        #start-mission-btn { background-color: white; color: #800020; border: 2px solid #800020; border-radius: 10px; padding: 14px 20px; font-weight: bold; cursor: pointer; width: 100%; }
+        #start-mission-btn:hover { background-color: #800020; color: white; }
+        #mission-panel { display: none; background: white; border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin-top: 10px; }
+        #ans-input { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        #check-btn { background-color: white; color: #800020; border: 2px solid #800020; border-radius: 6px; padding: 8px 16px; font-weight: bold; cursor: pointer; }
+        #check-btn:hover { background-color: #800020; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="index.html">Αρχική</a>
+    <div class="dropdown">
+        <span>Τυπολόγιο ▼</span>
+        <div class="dropdown-content">
+            <div class="nested-menu"><span>Γυμνάσιο ▶</span>
+                <div class="dropdown-content">
+                    <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                    <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                    <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                </div>
+            </div>
+            <div class="nested-menu"><span>Λύκειο ▶</span>
+                <div class="dropdown-content">
+                    <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                    <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                    <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown">
+        <span>Προσομοιώσεις ▼</span>
+        <div class="dropdown-content">
+            <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+            <a href="Krouseis.html">Κρούσεις</a>
+            <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+        </div>
+    </div>
+    <a href="extra.html">Έξτρα Υλικό</a>
+</div>
+
+<div id="page-wrapper">
+    <div id="sim-layout">
+        <div id="canvas-col">
+            <div id="dashboard">
+                M: <input type="range" id="m-slider" min="50" max="200" value="100"> <span id="m-val">100</span>
+                r: <input type="range" id="r-slider" min="50" max="150" value="100"> <span id="r-val">100</span>
+                <button id="play-btn">Play</button> <button id="stop-btn">Stop</button>
+            </div>
+            <canvas id="sim-canvas" width="630" height="400"></canvas>
+            <div id="v-info">Ταχύτητα (v): <span id="v-val">1.00</span> m/s</div>
+        </div>
+        
+        <div id="mission-col">
+            <button id="start-mission-btn">ΕΝΑΡΞΗ ΣΕΝΑΡΙΟΥ</button>
+            <div id="mission-panel">
+                <h3 id="mission-title">Αποστολή NASA</h3>
+                <p id="mission-text">Είστε αστροφυσικός στη NASA και σας αναθέτουν να βάλετε ένα δορυφόρο σε τροχιά σε απόσταση r1 από το κέντρο της Γης. Ποια η ταχύτητα v1 που πρέπει να έχει; (Θεωρούμε G=1 και M γνωστό).<br>
+                <small>(Υπόδειξη: Η ρίζα γράφεται ως (...)^1/2)</small></p>
+                <input type="text" id="ans-input" placeholder="Απάντηση...">
+                <button id="check-btn">Έλεγχος</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let step = 1; let angle = 0, isRunning = false, r = 100, M = 100;
+    const canvas = document.getElementById('sim-canvas'); const ctx = canvas.getContext('2d');
+    
+    function updateDisplay() { 
+        document.getElementById('m-val').innerText = M; 
+        document.getElementById('r-val').innerText = r; 
+        document.getElementById('v-val').innerText = Math.sqrt(M/r).toFixed(2); 
+    }
+    
+    document.getElementById('start-mission-btn').addEventListener('click', () => { 
+        document.getElementById('mission-panel').style.display = 'block'; 
+    });
+    
+    document.getElementById('check-btn').addEventListener('click', () => {
+        const ans = document.getElementById('ans-input').value.replace(/\s+/g, '');
+        if (step === 1 && ans === "(M/r1)^1/2") {
+            alert("Σωστά!");
+            document.getElementById('mission-text').innerHTML = "Ο διευθυντής αλλάζει την απόφαση του και σας λέει να βάλετε το δορυφόρο σε τροχιά 4r1. Ποια η ταχύτητα v2 που πρέπει να έχει;<br><small>(Υπόδειξη: Η απάντηση να δοθεί σε συνάρτηση του v1, π.χ. v1/2)</small>";
+            document.getElementById('ans-input').value = ""; step = 2;
+        } else if (step === 2 && ans === "v1/2") {
+            document.getElementById('mission-text').innerHTML = "Συγχαρητήρια, η αποστολή ολοκληρώθηκε! Είσαι πολύ καλός στη Φυσική. Σε συμβουλεύουμε να σκεφτείς το Φυσικό ως επιλογή στο μηχανογραφικό σου!";
+            document.getElementById('ans-input').style.display = 'none';
+            document.getElementById('check-btn').style.display = 'none';
+        } else { alert("Λάθος, προσπαθήστε ξανά."); }
+    });
+
+    function draw() { 
+        ctx.clearRect(0,0,630,400); 
+        ctx.setLineDash([5,5]); ctx.strokeStyle="red"; ctx.beginPath(); ctx.arc(315,200,r,0,Math.PI*2); ctx.stroke(); 
+        // Γη
+        ctx.beginPath(); ctx.arc(315,200,20,0,Math.PI*2); ctx.fillStyle="#1E90FF"; ctx.fill(); 
+        ctx.fillStyle="#228B22"; ctx.beginPath(); ctx.ellipse(310,195,12,18,Math.PI/4,0,Math.PI*2); ctx.fill();
+        // Δορυφόρος
+        ctx.fillStyle="black"; ctx.beginPath(); ctx.arc(315+Math.cos(angle)*r, 200+Math.sin(angle)*r, 6, 0, Math.PI*2); ctx.fill(); 
+        if(isRunning) angle += (Math.sqrt(M)/Math.pow(r, 1.5))*5; 
+        requestAnimationFrame(draw); 
+    }
+    document.getElementById('r-slider').addEventListener('input', (e) => { r=parseInt(e.target.value); updateDisplay(); });
+    document.getElementById('m-slider').addEventListener('input', (e) => { M=parseInt(e.target.value); updateDisplay(); });
+    document.getElementById('play-btn').addEventListener('click', () => isRunning=true);
+    document.getElementById('stop-btn').addEventListener('click', () => isRunning=false);
+    updateDisplay(); draw();
+</script>
+</body>
+</html>
