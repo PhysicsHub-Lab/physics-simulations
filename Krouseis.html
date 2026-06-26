@@ -3,68 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Προσομοίωση Κρούσεων - PhysicsHub</title>
+    <link rel="stylesheet" href="style.css">
+    
     <style>
-        /* Background & Overlay */
-        body { margin: 0; padding: 0; background: url('math1.jpg') fixed center; background-size: cover; font-family: sans-serif; }
-        .overlay { background-color: rgba(255, 255, 255, 0.6); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
-
-        /* Μενού 2 επιπέδων */
-        .navbar { background-color: #800020; display: flex; align-items: center; border-radius: 20px; padding: 5px 10px; margin-bottom: 20px; align-self: flex-start; margin-left: 20px; }
-        .navbar a, .navbar .dropbtn { color: #ffffff; padding: 12px 20px; text-decoration: none; font-weight: bold; cursor: pointer; border-radius: 15px; }
-        .navbar a:hover { color: white; background-color: #ff85a2; }
-
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); z-index: 1000; border-radius: 10px; }
-        .dropdown:hover > .dropdown-content { display: block; }
-
-        .nested-menu { position: relative; }
-        .nested-menu .dropdown-content { left: 100%; top: 0; }
-        .nested-menu:hover > .dropdown-content { display: block; }
-
-        .dropdown-content a { color: #800020; padding: 12px; display: block; text-decoration: none; }
-        .dropdown-content a:hover { background-color: #fdf2f2; }
-
-        /* Simulation Style */
+        /* CSS μόνο για τη διάταξη της συγκεκριμένης προσομοίωσης */
+        .sim-page-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
         .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 12px; width: 550px; border: 1px solid #ddd; }
-        canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; }
+        canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; margin-top: 10px; }
+        label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
+        input[type="range"] { width: 100%; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <div class="overlay">
-        <div class="navbar">
-            <a href="index.html">Αρχική</a>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
-                <div class="dropdown-content">
-                    <div class="nested-menu">
-                        <a href="#">Γυμνάσιο ▶</a>
-                        <div class="dropdown-content">
-                            <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
-                            <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
-                            <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
-                        </div>
-                    </div>
-                    <div class="nested-menu">
-                        <a href="#">Λύκειο ▶</a>
-                        <div class="dropdown-content">
-                            <a href="typologiaAlyk.html">Α' Λυκείου</a>
-                            <a href="typologiaBlyk.html">Β' Λυκείου</a>
-                            <a href="typologiaGlyk.html">Γ' Λυκείου</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="dropdown">
-                <a class="dropbtn">Προσομοιώσεις ▼</a>
-                <div class="dropdown-content">
-                    <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
-                    <a href="Krouseis.html">Κρούσεις</a>
-                    <a href="mag_field.html">Μαγνητικό Πεδίο</a>
-                </div>
-            </div>
-            <a href="#">Έξτρα Υλικό</a>
-        </div>
 
+    <div class="navbar">
+        <a href="index.html">Αρχική</a>
+        <div class="dropdown">
+            <span>Τυπολόγιο ▼</span>
+            <div class="dropdown-content">
+                <div class="nested-menu">
+                    <span>Γυμνάσιο ▶</span>
+                    <div class="dropdown-content">
+                        <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                        <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                        <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                    </div>
+                </div>
+                <div class="nested-menu">
+                    <span>Λύκειο ▶</span>
+                    <div class="dropdown-content">
+                        <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                        <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                        <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <span>Προσομοιώσεις ▼</span>
+            <div class="dropdown-content">
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                <a href="Krouseis.html">Κρούσεις</a>
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+		<a href="grav_field3.html">Βαρυτικό πεδίο</a>
+            </div>
+        </div>
+        <a href="#">Έξτρα Υλικό</a>
+    </div>
+
+    <div class="sim-page-wrapper">
         <h2>Προσομοίωση Ελαστικών Κρούσεων (1D)</h2>
         <div class="controls">
             <div style="grid-column: span 2; display: flex; justify-content: center; gap: 10px;">
