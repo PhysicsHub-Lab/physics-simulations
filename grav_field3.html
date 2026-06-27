@@ -5,17 +5,32 @@
     <title>NASA Mission - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Layout προσομοίωσης */
+        body { font-family: sans-serif; background-color: #f4f4f9; margin: 0; }
+        
+        /* Διάταξη περιεχομένου */
         #page-wrapper { display: flex; justify-content: center; padding: 20px; }
-        #sim-layout { display: flex; flex-direction: row; align-items: flex-start; gap: 20px; }
-        #canvas-col { display: flex; flex-direction: column; gap: 10px; background: white; padding: 10px; border-radius: 15px; }
-        #dashboard { display: flex; align-items: center; gap: 16px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 10px 16px; }
+        #sim-layout { display: flex; flex-direction: row; align-items: flex-start; gap: 20px; max-width: 1300px; }
+        
+        #canvas-col { display: flex; flex-direction: column; gap: 10px; background: white; padding: 15px; border-radius: 15px; border: 1px solid #ddd; }
+        #dashboard { display: flex; align-items: center; gap: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 10px; }
         #sim-canvas { border: 1px solid #ccc; border-radius: 8px; background: white; display: block; }
-        #v-info { background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 8px 12px; }
+        #v-info { background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 8px; font-weight: bold; }
+        
+        /* Πλαίσιο Θεωρίας */
+        .theory-panel { 
+            width: 300px; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 15px; 
+            border: 1px solid #ddd; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            line-height: 1.5;
+            font-size: 14px;
+        }
         
         /* Panel αποστολής */
         #mission-col { width: 280px; }
-        #start-mission-btn { background-color: white; color: #800020; border: 2px solid #800020; border-radius: 10px; padding: 14px 20px; font-weight: bold; cursor: pointer; width: 100%; }
+        #start-mission-btn { background-color: white; color: #800020; border: 2px solid #800020; border-radius: 10px; padding: 14px; font-weight: bold; cursor: pointer; width: 100%; }
         #start-mission-btn:hover { background-color: #800020; color: white; }
         #mission-panel { display: none; background: white; border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin-top: 10px; }
         #ans-input { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
@@ -25,40 +40,41 @@
 </head>
 <body>
 
-<div class="navbar">
-    <a href="index.html">Αρχική</a>
-    <div class="dropdown">
-        <span>Τυπολόγιο ▼</span>
-        <div class="dropdown-content">
+<div class="navbar">    
+    <a href="index.html">Αρχική</a>    
+    <div class="dropdown">        
+        <span>Τυπολόγιο ▼</span>        
+        <div class="dropdown-content">            
             <div class="nested-menu"><span>Γυμνάσιο ▶</span>
                 <div class="dropdown-content">
                     <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
                     <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
                     <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
                 </div>
-            </div>
+            </div>            
             <div class="nested-menu"><span>Λύκειο ▶</span>
                 <div class="dropdown-content">
                     <a href="typologiaAlyk.html">Α' Λυκείου</a>
                     <a href="typologiaBlyk.html">Β' Λυκείου</a>
                     <a href="typologiaGlyk.html">Γ' Λυκείου</a>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="dropdown">
-        <span>Προσομοιώσεις ▼</span>
-        <div class="dropdown-content">
-            <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
-            <a href="Krouseis.html">Κρούσεις</a>
-            <a href="mag_field.html">Μαγνητικό Πεδίο</a>
-        </div>
-    </div>
+            </div>        
+        </div>    
+    </div>    
+    <div class="dropdown">        
+        <span>Προσομοιώσεις ▼</span>        
+        <div class="dropdown-content">            
+            <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>            
+            <a href="Krouseis.html">Κρούσεις</a>            
+            <a href="mag_field.html">Μαγνητικό Πεδίο</a>        
+        </div>    
+    </div>    
     <a href="physics_in_action.html">Φυσική στη πράξη</a>
 </div>
 
 <div id="page-wrapper">
     <div id="sim-layout">
+        
         <div id="canvas-col">
             <div id="dashboard">
                 M: <input type="range" id="m-slider" min="50" max="200" value="100"> <span id="m-val">100</span>
@@ -68,7 +84,24 @@
             <canvas id="sim-canvas" width="630" height="400"></canvas>
             <div id="v-info">Ταχύτητα (v): <span id="v-val">1.00</span> m/s</div>
         </div>
-        
+
+        <div class="theory-panel">
+            <h2>Βαρυτικό Πεδίο – Θεωρία</h2>
+            <p>Κάθε σώμα με μάζα δημιουργεί γύρω του βαρυτικό πεδίο. Ο νόμος του Νεύτωνα: <b>F = G(M·m)/r²</b></p>
+            <p>Για κυκλική τροχιά, η απαιτούμενη ταχύτητα είναι: <b>v = √(GM/r)</b></p>
+            <hr>
+            <h4>Πειραματίσου!</h4>
+            <ul>
+                <li>Αύξησε τη μάζα (M). Τι συμβαίνει στη βαρυτική έλξη;</li>
+                <li>Αύξησε την απόσταση (r). Πώς αλλάζει η απαιτούμενη ταχύτητα;</li>
+            </ul>
+            <h4>Αναρωτήσου!</h4>
+            <ul>
+                <li>Γιατί ο Διεθνής Διαστημικός Σταθμός δεν πέφτει στη Γη;</li>
+                <li>Τι θα συνέβαινε αν η μάζα της Γης διπλασιαζόταν;</li>
+            </ul>
+        </div>
+
         <div id="mission-col">
             <button id="start-mission-btn">ΕΝΑΡΞΗ ΣΕΝΑΡΙΟΥ</button>
             <div id="mission-panel">
@@ -120,6 +153,7 @@
         if(isRunning) angle += (Math.sqrt(M)/Math.pow(r, 1.5))*5; 
         requestAnimationFrame(draw); 
     }
+    
     document.getElementById('r-slider').addEventListener('input', (e) => { r=parseInt(e.target.value); updateDisplay(); });
     document.getElementById('m-slider').addEventListener('input', (e) => { M=parseInt(e.target.value); updateDisplay(); });
     document.getElementById('play-btn').addEventListener('click', () => isRunning=true);
