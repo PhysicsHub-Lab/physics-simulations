@@ -6,10 +6,15 @@
     <link rel="stylesheet" href="style.css">
     
     <style>
-        /* CSS μόνο για τη διάταξη της συγκεκριμένης προσομοίωσης */
-        .sim-page-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
+        .page-content { display: flex; gap: 20px; align-items: flex-start; padding: 20px; flex-wrap: wrap; }
+        .sim-container { display: flex; flex-direction: column; }
         .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 12px; width: 550px; border: 1px solid #ddd; }
         canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; margin-top: 10px; }
+        
+        /* Πλαίσιο κειμένου */
+        .info-box { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 8px; width: 350px; border: 1px solid #ddd; line-height: 1.6; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .info-box h3 { color: #800020; margin-top: 0; }
+
         label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
         input[type="range"] { width: 100%; margin-top: 5px; }
     </style>
@@ -21,16 +26,14 @@
         <div class="dropdown">
             <span>Τυπολόγιο ▼</span>
             <div class="dropdown-content">
-                <div class="nested-menu">
-                    <span>Γυμνάσιο ▶</span>
+                <div class="nested-menu"><span>Γυμνάσιο ▶</span>
                     <div class="dropdown-content">
                         <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
                         <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
                         <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
                     </div>
                 </div>
-                <div class="nested-menu">
-                    <span>Λύκειο ▶</span>
+                <div class="nested-menu"><span>Λύκειο ▶</span>
                     <div class="dropdown-content">
                         <a href="typologiaAlyk.html">Α' Λυκείου</a>
                         <a href="typologiaBlyk.html">Β' Λυκείου</a>
@@ -45,25 +48,38 @@
                 <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
                 <a href="Krouseis.html">Κρούσεις</a>
                 <a href="mag_field.html">Μαγνητικό Πεδίο</a>
-		<a href="grav_field3.html">Βαρυτικό πεδίο</a>
+                <a href="grav_field3.html">Βαρυτικό πεδίο</a>
             </div>
         </div>
         <a href="#">Έξτρα Υλικό</a>
     </div>
 
-    <div class="sim-page-wrapper">
-        <h2>Προσομοίωση Ελαστικών Κρούσεων (1D)</h2>
-        <div class="controls">
-            <div style="grid-column: span 2; display: flex; justify-content: center; gap: 10px;">
-                <button id="playBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Play</button>
-                <button id="resetBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Reset</button>
+    <div class="page-content">
+        <div class="sim-container">
+            <h2>Προσομοίωση Ελαστικών Κρούσεων (1D)</h2>
+            <div class="controls">
+                <div style="grid-column: span 2; display: flex; justify-content: center; gap: 10px;">
+                    <button id="playBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Play</button>
+                    <button id="resetBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Reset</button>
+                </div>
+                <label style="color: blue;">m₁ (kg): <input type="range" id="m1Slider" min="1" max="10" value="2" step="0.5"><span id="m1Val">2.0</span></label>
+                <label style="color: blue;">v₁ (m/s): <input type="range" id="v1Slider" min="-5" max="5" value="3" step="0.5"><span id="v1Val">3.0</span></label>
+                <label style="color: red;">m₂ (kg): <input type="range" id="m2Slider" min="1" max="10" value="4" step="0.5"><span id="m2Val">4.0</span></label>
+                <label style="color: red;">v₂ (m/s): <input type="range" id="v2Slider" min="-5" max="5" value="-1" step="0.5"><span id="v2Val">-1.0</span></label>
             </div>
-            <label style="color: blue;">m₁ (kg): <input type="range" id="m1Slider" min="1" max="10" value="2" step="0.5"><span id="m1Val">2.0</span></label>
-            <label style="color: blue;">v₁ (m/s): <input type="range" id="v1Slider" min="-5" max="5" value="3" step="0.5"><span id="v1Val">3.0</span></label>
-            <label style="color: red;">m₂ (kg): <input type="range" id="m2Slider" min="1" max="10" value="4" step="0.5"><span id="m2Val">4.0</span></label>
-            <label style="color: red;">v₂ (m/s): <input type="range" id="v2Slider" min="-5" max="5" value="-1" step="0.5"><span id="v2Val">-1.0</span></label>
+            <canvas id="simCanvas" width="600" height="300"></canvas>
         </div>
-        <canvas id="simCanvas" width="600" height="300"></canvas>
+
+        <div class="info-box">
+            <h3>Προσομοίωση Ελαστικών Κρούσεων (1D)</h3>
+            <p>Στην ελαστική κρούση ισχύουν ταυτόχρονα η Αρχή Διατήρησης της Ορμής (ΑΔΟ) και η Αρχή Διατήρησης της Κινητικής Ενέργειας.</p>
+            <p>Η ορμή του συστήματος διατηρείται: <strong>m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'</strong></p>
+            <p>Η κινητική ενέργεια διατηρείται: <strong>½m₁v₁² + ½m₂v₂² = ½m₁(v₁')² + ½m₂(v₂')²</strong></p>
+            <p>Από τον συνδυασμό των εξισώσεων προκύπτουν οι τελικές ταχύτητες:<br>
+            <strong>v₁' = [(m₁ − m₂)/(m₁ + m₂)]·v₁ + [2m₂/(m₁ + m₂)]·v₂</strong><br>
+            <strong>v₂' = [2m₁/(m₁ + m₂)]·v₁ + [(m₂ − m₁)/(m₁ + m₂)]·v₂</strong></p>
+            <p>Η προσομοίωση επιβεβαιώνει ότι στην ελαστική κρούση η ενέργεια δεν χάνεται, αλλά μεταφέρεται μεταξύ των σωμάτων ανάλογα με τη μάζα και την αρχική τους ταχύτητα.</p>
+        </div>
     </div>
 
     <script>
