@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Κύκλωμα σε Σειρά</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Διάταξη: Προσομοίωση αριστερά, Κείμενο δεξιά */
+        .main-wrapper { display: flex; justify-content: center; gap: 30px; padding: 20px; align-items: flex-start; }
+        
+        /* Το λευκό πλαίσιο για τα controls/info ώστε να μην χάνονται στο background */
+        .sim-panel-wrapper { 
+            background: white; padding: 20px; border-radius: 18px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+        }
+
+        /* Το λευκό πλαίσιο για το κείμενο στα δεξιά */
+        .theory-panel { 
+            background: white; max-width: 400px; padding: 25px; border-radius: 18px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); line-height: 1.6; font-size: 14px;
+        }
+
+        /* Τα αρχικά σου στυλ */
+        h1 { text-align: center; color: #8b0030; }
+        .controls { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; align-items: center; margin-bottom: 20px; }
+        input { padding: 7px; width: 90px; }
+        button { background: #8b0030; color: white; border: none; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #b0003d; }
+        .info { text-align: center; font-size: 18px; margin-top: 15px; }
+        canvas { display: block; margin: 25px auto; background: white; border-radius: 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="index.html">Αρχική</a>
+    <div class="dropdown">
+        <span>Τυπολόγιο ▼</span>
+        <div class="dropdown-content">
+            <div class="nested-menu"><span>Γυμνάσιο ▶</span>
+                <div class="dropdown-content"><a href="typologiaAgymn.html">Α' Γυμνασίου</a><a href="typologiaBgymn.html">Β' Γυμνασίου</a><a href="typologiaGgymn.html">Γ' Γυμνασίου</a></div>
+            </div>
+            <div class="nested-menu"><span>Λύκειο ▶</span>
+                <div class="dropdown-content"><a href="typologiaAlyk.html">Α' Λυκείου</a><a href="typologiaBlyk.html">Β' Λυκείου</a><a href="typologiaGlyk.html">Γ' Λυκείου</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown">
+        <span>Προσομοιώσεις ▼</span>
+        <div class="dropdown-content">
+            <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+            <a href="Krouseis.html">Κρούσεις</a>
+            <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+            <a href="grav_field3.html">Βαρυτικό πεδίο</a>
+        </div>
+    </div>
+    <a href="physics_in_action.html">Φυσική στη πράξη</a>
+</div>
+
+<div class="main-wrapper">
+    <div class="sim-panel-wrapper">
+        <h1>Κύκλωμα σε Σειρά</h1>
+        <div class="controls">
+            <label>Τάση: <input id="voltage" type="number" value="12"> V</label>
+            <label>Αντίσταση λάμπας: <input id="resistance" type="number" value="10"> Ω</label>
+            <button onclick="addLamp()">Προσθήκη λάμπας</button>
+            <button onclick="toggleCircuit()">Άνοιγμα / Κλείσιμο</button>
+            <button onclick="burnLamp()">Κάψε λάμπα</button>
+            <button onclick="resetCircuit()">Επαναφορά</button>
+        </div>
+        <div class="info">
+            <p id="status">Κατάσταση: Ανοιχτό κύκλωμα</p>
+            <p id="totalR">Rολ = 0 Ω</p>
+            <p id="current">I = 0 A</p>
+        </div>
+        <canvas id="canvas" width="1000" height="430"></canvas>
+    </div>
+
+    <div class="theory-panel">
+        <h2>Κύκλωμα σε Σειρά – Θεωρία</h2>
+        <p>Στο κύκλωμα σε σειρά οι λαμπτήρες συνδέονται ο ένας μετά τον άλλο, σχηματίζοντας μία μόνο διαδρομή για το ηλεκτρικό ρεύμα. Αυτό σημαίνει ότι το ίδιο ρεύμα διαρρέει όλους τους λαμπτήρες.</p>
+        <p>Η ένταση του ρεύματος υπολογίζεται από τον νόμο του Ohm: <b>I = V / Rολ</b></p>
+        <p>Η ολική αντίσταση στο κύκλωμα σε σειρά είναι: <b>Rολ = R1 + R2 + R3 + ...</b></p>
+        <p>Η τάση της πηγής μοιράζεται στους λαμπτήρες: <b>V = V1 + V2 + V3 + ...</b></p>
+        <p>Η ηλεκτρική ισχύς κάθε λαμπτήρα είναι: <b>Pi = Vi·I = I²·Ri</b></p>
+        <h3>Πειραματίσου!</h3>
+        <ul>
+            <li>Άλλαξε την τάση της πηγής και παρατήρησε πώς μεταβάλλεται το ρεύμα.</li>
+            <li>Πρόσθεσε περισσότερους λαμπτήρες και παρατήρησε την αύξηση της ολικής αντίστασης.</li>
+            <li>Άνοιξε και κλείσε τον διακόπτη και παρατήρησε πότε ρέει το ρεύμα.</li>
+            <li>Κάψε έναν λαμπτήρα. Τι συμβαίνει στους υπόλοιπους;</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    /* Ο κώδικας σου αυτούσιος */
+    const canvas = document.getElementById("canvas");const ctx = canvas.getContext("2d");
+    let lamps = [];let circuitClosed = false;let flowOffset = 0;
+    const maxLamps = 4;
+    function addLamp(){ if(lamps.length >= maxLamps){ alert("Μπορούν να προστεθούν έως 4 λάμπες."); return; }
+      const r = Number(document.getElementById("resistance").value);
+      if(r <= 0 || isNaN(r)){ alert("Δώσε έγκυρη αντίσταση."); return; }
+      lamps.push({ resistance: r, burned: false }); update(); }
+    function toggleCircuit(){ circuitClosed = !circuitClosed; update(); }
+    function burnLamp(){ if(lamps.length === 0){ alert("Δεν υπάρχει λάμπα για να καεί."); return; }
+      lamps[lamps.length - 1].burned = true; update(); }
+    function resetCircuit(){ lamps = []; circuitClosed = false; flowOffset = 0; update(); }
+    function totalResistance(){ return lamps.reduce((sum, lamp) => sum + lamp.resistance, 0); }
+    function hasBurnedLamp(){ return lamps.some(lamp => lamp.burned); }
+    function current(){ const V = Number(document.getElementById("voltage").value); const R = totalResistance();
+      if(!circuitClosed || lamps.length === 0 || hasBurnedLamp() || R === 0){ return 0; }
+      return V / R; }
+    function updateText(){ let status = "Ανοιχτό κύκλωμα";
+      if(circuitClosed && lamps.length > 0 && !hasBurnedLamp()){ status = "Κλειστό κύκλωμα"; }
+      if(hasBurnedLamp()){ status = "Κύκλωμα με καμένη λάμπα"; }
+      document.getElementById("status").textContent = "Κατάσταση: " + status;
+      document.getElementById("totalR").textContent = "Rολ = " + totalResistance().toFixed(2) + " Ω";
+      document.getElementById("current").textContent = "I = " + current().toFixed(3) + " A"; }
+    function drawWirePath(){ ctx.lineWidth = 6; ctx.strokeStyle = "#222"; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(120, 250); ctx.lineTo(120, 120); ctx.lineTo(820, 120); ctx.lineTo(820, 310); ctx.lineTo(120, 310); ctx.lineTo(120, 250); ctx.stroke(); }
+    function drawBattery(){ ctx.strokeStyle = "#222"; ctx.lineWidth = 4; ctx.fillStyle = "#f7f7f7";
+      ctx.strokeRect(80, 210, 80, 80); ctx.fillStyle = "#8b0030"; ctx.font = "bold 20px Arial";
+      ctx.fillText(document.getElementById("voltage").value + " V", 92, 200); ctx.fillStyle = "#222";
+      ctx.font = "20px Arial"; ctx.fillText("+", 102, 240); ctx.fillText("−", 104, 275); }
+    function drawSwitch(){ ctx.strokeStyle = "#222"; ctx.lineWidth = 4;
+      ctx.strokeRect(220, 85, 110, 70); ctx.beginPath(); ctx.moveTo(245, 120);
+      if(circuitClosed){ ctx.lineTo(305, 120); }else{ ctx.lineTo(305, 95); }
+      ctx.stroke(); ctx.fillStyle = "#222"; ctx.font = "15px Arial"; ctx.fillText("Διακόπτης", 230, 175); }
+    function drawLamps(){ const startX = 420; const spacing = 125;
+      lamps.forEach((lamp, index) => { const x = startX + index * spacing; const y = 120;
+        ctx.strokeStyle = "#333"; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x, y, 32, 0, 2 * Math.PI); ctx.stroke();
+        const gradient = ctx.createRadialGradient(x, y, 5, x, y, 32);
+        if(lamp.burned){ gradient.addColorStop(0, "#999"); gradient.addColorStop(1, "#444"); }
+        else if(current() > 0){ gradient.addColorStop(0, "#fff8a8"); gradient.addColorStop(0.5, "yellow"); gradient.addColorStop(1, "#f2a900"); }
+        else{ gradient.addColorStop(0, "#ffffff"); gradient.addColorStop(1, "#cccccc"); }
+        ctx.fillStyle = gradient; ctx.beginPath(); ctx.arc(x, y, 25, 0, 2 * Math.PI); ctx.fill();
+        if(lamp.burned){ ctx.strokeStyle = "red"; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - 20, y - 20); ctx.lineTo(x + 20, y + 20); ctx.moveTo(x + 20, y - 20); ctx.lineTo(x - 20, y + 20); ctx.stroke(); }
+        ctx.fillStyle = "#222"; ctx.font = "bold 16px Arial"; ctx.fillText("Λάμπα " + (index + 1), x - 35, y - 48);
+        ctx.font = "16px Arial"; ctx.fillText(lamp.resistance + " Ω", x - 18, y + 55); }); }
+    function drawCurrentFlow(){ if(current() <= 0) return; flowOffset += 2; ctx.fillStyle = "#00a651";
+      const segments = [ {x1:120, y1:120, x2:820, y2:120}, {x1:820, y1:120, x2:820, y2:310}, {x1:820, y1:310, x2:120, y2:310}, {x1:120, y1:310, x2:120, y2:120} ];
+      const spacing = 45;
+      segments.forEach(seg => { const dx = seg.x2 - seg.x1; const dy = seg.y2 - seg.y1; const length = Math.sqrt(dx * dx + dy * dy);
+        for(let d = flowOffset % spacing; d < length; d += spacing){ const t = d / length; const x = seg.x1 + dx * t; const y = seg.y1 + dy * t;
+          ctx.beginPath(); ctx.arc(x, y, 6, 0, 2 * Math.PI); ctx.fill(); } });
+      ctx.font = "bold 20px Arial"; ctx.fillText("Το ρεύμα ρέει", 420, 260); }
+    function drawEmptyMessage(){ if(lamps.length === 0){ ctx.fillStyle = "#777"; ctx.font = "22px Arial"; ctx.fillText("Πρόσθεσε έως 4 λάμπες για να δημιουργήσεις το κύκλωμα.", 250, 220); } }
+    function draw(){ ctx.clearRect(0, 0, canvas.width, canvas.height); drawWirePath(); drawBattery(); drawSwitch(); drawLamps(); drawCurrentFlow(); drawEmptyMessage(); }
+    function update(){ updateText(); draw(); }
+    function animate(){ updateText(); draw(); requestAnimationFrame(animate); }
+    document.getElementById("voltage").addEventListener("input", update);
+    document.getElementById("resistance").addEventListener("input", update);
+    animate();
+</script>
+</body>
+</html>
