@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Φυσική εν Δράσει - PhysicsHub</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Διάταξη περιεχομένου */
+        .content-wrapper { 
+            display: flex; 
+            padding: 40px; 
+            gap: 30px; 
+            max-width: 1200px; 
+            margin: auto; 
+        }
+        
+        .visuals-column { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+        
+        .visual-item { background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        .visual-item img { width: 100%; height: auto; border-radius: 4px; }
+        .visual-item p { font-weight: bold; margin-top: 10px; color: #333; text-align: center; }
+        
+        .text-column { 
+            flex: 1; 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html">Αρχική</a>
+        <div class="dropdown">
+            <span>Τυπολόγιο ▼</span>
+            <div class="dropdown-content">
+                <div class="nested-menu"><span>Γυμνάσιο ▶</span>
+                    <div class="dropdown-content">
+                        <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                        <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                        <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                    </div>
+                </div>
+                <div class="nested-menu"><span>Λύκειο ▶</span>
+                    <div class="dropdown-content">
+                        <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                        <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                        <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <span>Προσομοιώσεις ▼</span>
+            <div class="dropdown-content">
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                <a href="Krouseis.html">Κρούσεις</a>
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                <a href="grav_field3.html">Βαρυτικό πεδίο</a>
+            </div>
+        </div>
+        <a href="#">Φυσική στην πράξη</a>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="visuals-column">
+            <div class="visual-item">
+                <img src="πραγμ αμορτισερ.jpg" alt="Πραγματικό αμορτισέρ">
+                <p>Αμορτισέρ αυτοκινήτου</p>
+            </div>
+            <div class="visual-item">
+                <img src="αμορτισερ και φθινουσα ταλαντωση.png" alt="Φυσική εξήγηση">
+                <p>Φυσική εξήγηση (Μοντέλο μάζας-ελατηρίου-αποσβεστήρα)</p>
+            </div>
+        </div>
+
+        <div class="text-column">
+            <h2>Φθίνουσα ταλάντωση και αμορτισερ</h2>
+            <p>Έστω πως βρίσκεστε στο αυτοκίνητο καθ’ οδόν για το μάθημα Φυσικής σας. Παρατηρείτε μπροστά ότι ο δρόμος είναι γεμάτος λακκούβες. Έχετε αναρωτηθεί ποτέ τι μηχανισμούς έχει το αυτοκίνητο ώστε να μην αναπηδά λες και είστε σε rave πάρτι; Η απάντηση κρύβεται στις φθίνουσες ταλαντώσεις. Το αυτοκίνητο συνδέεται με τον τροχό με ένα ελατήριο και με ένα μηχάνημα το οποίο αποσβένει τις ταλαντώσεις και είναι γνωστό ως αμορτισέρ (όπως φαίνεται στην πρώτη εικόνα).
+Όταν φτάνετε στη λακκούβα, το ελατήριο επιμηκύνεται ώστε ο τροχός να προσαρμοστεί στην ανωμαλία του οδοστρώματος, προστατεύοντας τον σκελετό από μια απότομη πρόσκρουση. Ωστόσο, όπως γνωρίζουμε, ένα ιδανικό ελατήριο θα συνέχιζε να ταλαντώνεται επ’ άπειρον. Έτσι λοιπόν, για να αποτρέψουμε αυτή την ατέρμονη κίνηση, ενσωματώσαμε στη διάταξη του ελατηρίου με τον τροχό έναν αποσβεστήρα, ο οποίος ασκεί μια δύναμη αντίρροπη προς τη δύναμη του ελατηρίου. Με αυτόν τον τρόπο απορροφάται η ενέργεια της ταλάντωσης, η κίνηση φθίνει και το αυτοκίνητό σας επιστρέφει γρήγορα σε κατάσταση ισορροπίας, επιτρέποντάς σας να συνεχίσετε ομαλά τη διαδρομή σας.
+Η καθαρή σύνδεση μεταξύ της πραγματικότητας και του φυσικού μοντέλου γίνεται στη δεύτερη εικόνα, όπου το αμορτισέρ, για ευκολία στην κατανόηση, αναπαρίσταται ως ένα μηχάνημα δεξιά του ελατηρίου αντί μέσα του, ώστε να γίνει πιο εύκολα αντιληπτή η επίδραση που έχει στην κίνηση. Τώρα που καταλάβατε το πόση Φυσική κρύβεται μέσα σε κάτι τόσο καθημερινό όπως η διαδρομή με το αυτοκίνητο, πιστεύουμε πως είναι η καλύτερη ευκαιρία να πάτε πίσω στην προσομοίωση των ταλαντώσεων για να επιβεβαιώσετε και μόνοι σας τα συμπεράσματά σας. https://physicshub-lab.github.io/physics-simulations/oscilator.html
+</p>
+        </div>
+    </div>
+
+</body>
+</html>
