@@ -4,123 +4,130 @@
     <meta charset="UTF-8">
     <title>Προσομοίωση ΑΑΤ - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
-    
     <style>
-        /* CSS ΜΟΝΟ για τη διάταξη της προσομοίωσης */
-        .sim-page-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
-        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 8px; width: 700px; border: 1px solid #ddd; }
+        .sim-page-wrapper { display: flex; justify-content: center; padding: 40px; gap: 30px; align-items: flex-start; }
+        
+        /* Προσομοίωση (Αριστερά) */
+        .sim-content { display: flex; flex-direction: column; align-items: center; }
+        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; background: white; padding: 20px; border-radius: 8px; width: 600px; border: 1px solid #ddd; }
         .btn-container { grid-column: span 3; display: flex; justify-content: center; gap: 10px; }
-        canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; margin-bottom: 20px; }
+        canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; }
         label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
         input[type="range"] { width: 100%; margin-top: 5px; }
+
+        /* Πλαίσιο Κειμένου (Δεξιά) */
+        .theory-panel { 
+            width: 400px; background: white; padding: 25px; border-radius: 15px; 
+            border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            line-height: 1.6; font-size: 14px;
+        }
     </style>
 </head>
 <body>
-
-    <div class="navbar">
-        <a href="index.html">Αρχική</a>
-        <div class="dropdown">
-            <span>Τυπολόγιο ▼</span>
-            <div class="dropdown-content">
-                <div class="nested-menu">
-                    <span>Γυμνάσιο ▶</span>
-                    <div class="dropdown-content">
-                        <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
-                        <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
-                        <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
-                    </div>
-                </div>
-                <div class="nested-menu">
-                    <span>Λύκειο ▶</span>
-                    <div class="dropdown-content">
-                        <a href="typologiaAlyk.html">Α' Λυκείου</a>
-                        <a href="typologiaBlyk.html">Β' Λυκείου</a>
-                        <a href="typologiaGlyk.html">Γ' Λυκείου</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="dropdown">
-            <span>Προσομοιώσεις ▼</span>
-            <div class="dropdown-content">
-                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
-                <a href="Krouseis.html">Κρούσεις</a>
-                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
-		<a href="grav_field3.html">Βαρυτικό πεδίο</a>
-            </div>
-        </div>
-        <a href="physics_in_action.html">Φυσική στη πράξη</a>
+    <div class="navbar">        
+        <a href="index.html">Αρχική</a>        
+        <div class="dropdown">            
+            <span>Τυπολόγιο ▼</span>            
+            <div class="dropdown-content">                
+                <div class="nested-menu"><span>Γυμνάσιο ▶</span>
+                    <div class="dropdown-content"><a href="typologiaAgymn.html">Α' Γυμνασίου</a><a href="typologiaBgymn.html">Β' Γυμνασίου</a><a href="typologiaGgymn.html">Γ' Γυμνασίου</a></div>
+                </div>                
+                <div class="nested-menu"><span>Λύκειο ▶</span>
+                    <div class="dropdown-content"><a href="typologiaAlyk.html">Α' Λυκείου</a><a href="typologiaBlyk.html">Β' Λυκείου</a><a href="typologiaGlyk.html">Γ' Λυκείου</a></div>
+                </div>            
+            </div>        
+        </div>        
+        <div class="dropdown">            
+            <span>Προσομοιώσεις ▼</span>            
+            <div class="dropdown-content">                
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>                
+                <a href="Krouseis.html">Κρούσεις</a>                
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>		
+                <a href="grav_field3.html">Βαρυτικό πεδίο</a>            
+            </div>        
+        </div>        
+        <a href="physics_in_action.html">Φυσική στη πράξη</a>    
     </div>
 
     <div class="sim-page-wrapper">
-        <h2>Προσομοίωση Κατακόρυφου Ταλαντωτή</h2>
-        
-        <div class="controls">
-            <div class="btn-container">
-                <button id="playBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Play</button>
-                <button id="resetBtn" style="font-size:16px; padding:6px 20px; cursor:pointer;">Reset</button>
+        <div class="sim-content">
+            <h2>Προσομοίωση Κατακόρυφου Ταλαντωτή</h2>
+            <div class="controls">
+                <div class="btn-container">
+                    <button id="playBtn">Play</button> <button id="resetBtn">Reset</button>
+                </div>
+                <label>k (N/m): <input type="range" id="kSlider" min="5" max="50" value="25" step="1"><span id="kVal">25</span></label>
+                <label>m (kg): <input type="range" id="mSlider" min="0.5" max="5" value="1.5" step="0.1"><span id="mVal">1.5</span></label>
+                <label>b (Ns/m): <input type="range" id="bSlider" min="0" max="4" value="0.4" step="0.1"><span id="bVal">0.4</span></label>
+                <label style="grid-column: span 3; align-items: center; color: blue;">
+                    Αρχική Θέση y₀ (m): <input type="range" id="y0Slider" min="-8" max="8" value="4" step="0.5" style="width: 50%;"><span id="y0Val">4.0</span></label>
             </div>
-            <label>k (N/m): <input type="range" id="kSlider" min="5" max="50" value="25" step="1"><span id="kVal">25</span></label>
-            <label>m (kg): <input type="range" id="mSlider" min="0.5" max="5" value="1.5" step="0.1"><span id="mVal">1.5</span></label>
-            <label>b (Ns/m): <input type="range" id="bSlider" min="0" max="4" value="0.4" step="0.1"><span id="bVal">0.4</span></label>
-            <label style="grid-column: span 3; align-items: center; color: blue;">
-                Αρχική Θέση y₀ (m): <input type="range" id="y0Slider" min="-8" max="8" value="4" step="0.5" style="width: 50%;"><span id="y0Val">4.0</span></label>
+            <canvas id="simCanvas" width="400" height="500"></canvas>
         </div>
 
-        <canvas id="simCanvas" width="600" height="500"></canvas>
+        <div class="theory-panel">
+            <h2>Κατακόρυφη Ταλάντωση</h2>
+            <p>Η κατακόρυφη ταλάντωση είναι μία από τις βασικότερες μορφές αρμονικής κίνησης και περιγράφει την κίνηση ενός σώματος που είναι δεμένο σε κατακόρυφο ελατήριο.</p>
+            <p>Όταν το σώμα ισορροπεί, το βάρος του εξισορροπείται από τη δύναμη του ελατηρίου. Αν το μετακινήσουμε από τη θέση ισορροπίας και το αφήσουμε ελεύθερο, αρχίζει να εκτελεί ταλάντωση γύρω από αυτήν.</p>
+            <p>Η συμπεριφορά του συστήματος εξαρτάται από τρεις βασικές παραμέτρους:</p>
+            <ul>
+                <li><b>Σταθερά ελατηρίου (k):</b> Όσο μεγαλύτερη είναι η σταθερά του ελατηρίου, τόσο πιο «σκληρό» είναι το ελατήριο και τόσο πιο γρήγορα πραγματοποιείται η ταλάντωση.</li>
+                <li><b>Μάζα (m):</b> Μεγαλύτερη μάζα οδηγεί σε πιο αργή ταλάντωση, καθώς το σώμα παρουσιάζει μεγαλύτερη αδράνεια.</li>
+                <li><b>Συντελεστής απόσβεσης (b):</b> Εκφράζει τις αντιστάσεις του περιβάλλοντος (π.χ. τριβές ή αντίσταση του αέρα). Όσο μεγαλύτερη είναι η απόσβεση, τόσο πιο γρήγορα μειώνεται το πλάτος της ταλάντωσης μέχρι το σώμα να ακινητοποιηθεί στη θέση ισορροπίας.</li>
+            </ul>
+            <p>Η αρχική θέση καθορίζει από ποιο σημείο ξεκινά η κίνηση και επηρεάζει το αρχικό πλάτος της ταλάντωσης.</p>
+            <p><b>Πειραματίσου!</b> Δοκίμασε να αλλάξεις μία μόνο παράμετρο κάθε φορά και παρατήρησε τι συμβαίνει.</p>
+            <ul>
+                <li>Αυξάνει η μάζα → Πώς αλλάζει ο χρόνος που χρειάζεται για μία πλήρη ταλάντωση;</li>
+                <li>Αυξάνει η σταθερά του ελατηρίου → Η κίνηση γίνεται πιο γρήγορη ή πιο αργή;</li>
+                <li>Αυξάνει η απόσβεση → Μετά από πόσες ταλαντώσεις σταματά ουσιαστικά η κίνηση;</li>
+                <li>Άλλαξε την αρχική θέση → Επηρεάζεται η περίοδος ή μόνο το πλάτος;</li>
+            </ul>
+            <p><b>Σκέψου:</b></p>
+            <ul>
+                <li>Γιατί η θέση ισορροπίας του σώματος βρίσκεται χαμηλότερα από το φυσικό μήκος του ελατηρίου;</li>
+                <li>Αν διπλασιάσουμε τη μάζα, η περίοδος διπλασιάζεται;</li>
+                <li>Γιατί, ακόμη και όταν υπάρχει απόσβεση, το σώμα καταλήγει πάντα στη θέση ισορροπίας;</li>
+            </ul>
+        </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('simCanvas');
-        const ctx = canvas.getContext('2d');
+        const canvas = document.getElementById('simCanvas'); const ctx = canvas.getContext('2d');
         let y = 0, v = 0, t = 0, isPlaying = false, yMaxPhys = -Infinity, yMinPhys = Infinity;
         const playBtn = document.getElementById('playBtn'), resetBtn = document.getElementById('resetBtn');
         const kSlider = document.getElementById('kSlider'), mSlider = document.getElementById('mSlider');
         const bSlider = document.getElementById('bSlider'), y0Slider = document.getElementById('y0Slider');
-
+        
         function initPhysics() {
             let y0 = parseFloat(y0Slider.value);
             y = 250 - (y0 * 20); v = 0; t = 0; yMaxPhys = y0; yMinPhys = y0;
         }
-
         playBtn.onclick = () => { isPlaying = !isPlaying; playBtn.innerText = isPlaying ? "Pause" : "Play"; };
         resetBtn.onclick = () => { isPlaying = false; playBtn.innerText = "Play"; initPhysics(); };
         [kSlider, mSlider, bSlider, y0Slider].forEach(slider => slider.oninput = initPhysics);
-
         initPhysics();
-
+        
         function loop() {
             let k = parseFloat(kSlider.value), m = parseFloat(mSlider.value), b = parseFloat(bSlider.value), y0 = parseFloat(y0Slider.value);
             document.getElementById('kVal').innerText = k; document.getElementById('mVal').innerText = m;
             document.getElementById('bVal').innerText = b; document.getElementById('y0Val').innerText = y0.toFixed(1);
-
             let y_phys = -(y - 250) / 20;
             if (isPlaying) {
-                let dt = 0.02;
-                let a = -(k * y_phys) / m - 9.81 - (b * v) / m;
+                let dt = 0.02; let a = -(k * y_phys) / m - 9.81 - (b * v) / m;
                 v += a * dt; y_phys += v * dt; y = 250 - (y_phys * 20); t += dt;
                 if (y_phys > yMaxPhys) yMaxPhys = y_phys; if (y_phys < yMinPhys) yMinPhys = y_phys;
             }
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#eee'; ctx.lineWidth = 1; ctx.fillStyle = '#666'; ctx.font = '12px sans-serif'; ctx.textAlign = 'right';
-            for(let i = 50; i < 500; i += 50) { 
-                ctx.beginPath(); ctx.moveTo(50, i); ctx.lineTo(400, i); ctx.stroke(); 
-                ctx.fillText((-(i-250)/20).toFixed(1) + " m", 45, i + 4); 
-            }
-            
+            ctx.strokeStyle = '#eee'; ctx.lineWidth = 1; ctx.fillStyle = '#666'; ctx.textAlign = 'right';
+            for(let i = 50; i < 500; i += 50) { ctx.beginPath(); ctx.moveTo(50, i); ctx.lineTo(400, i); ctx.stroke(); ctx.fillText((-(i-250)/20).toFixed(1) + " m", 45, i + 4); }
             ctx.strokeStyle = 'green'; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(50, 250 - (-(m * 9.81 / k) * 20)); ctx.lineTo(400, 250 - (-(m * 9.81 / k) * 20)); ctx.stroke();
             ctx.strokeStyle = 'red'; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(50, 250 - (yMaxPhys*20)); ctx.lineTo(400, 250 - (yMaxPhys*20)); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(50, 250 - (yMinPhys*20)); ctx.lineTo(400, 250 - (yMinPhys*20)); ctx.stroke();
-            ctx.setLineDash([]);
-
-            ctx.fillStyle = 'black'; ctx.fillRect(125, 20, 200, 10);
-            ctx.strokeStyle = 'gray'; ctx.beginPath(); ctx.moveTo(225, 30);
-            for (let i = 1; i <= 25; i++) { ctx.lineTo(225 + (i%2==0 ? 15 : -15), 30 + (y-30)*(i/25)); }
-            ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(50, 250 - (yMinPhys*20)); ctx.lineTo(400, 250 - (yMinPhys*20)); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = 'black'; ctx.fillRect(125, 20, 200, 10); ctx.strokeStyle = 'gray'; ctx.beginPath(); ctx.moveTo(225, 30);
+            for (let i = 1; i <= 25; i++) { ctx.lineTo(225 + (i%2==0 ? 15 : -15), 30 + (y-30)*(i/25)); } ctx.stroke();
             ctx.beginPath(); ctx.arc(225, y, 20, 0, 2 * Math.PI); ctx.fillStyle = 'blue'; ctx.fill();
-            ctx.fillStyle = 'black'; ctx.font = '16px sans-serif'; ctx.textAlign = 'left';
-            ctx.fillText("t = " + t.toFixed(2) + " s", 60, 40);
+            ctx.fillStyle = 'black'; ctx.fillText("t = " + t.toFixed(2) + " s", 380, 40);
             requestAnimationFrame(loop);
         }
         loop();
