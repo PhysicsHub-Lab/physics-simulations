@@ -94,14 +94,61 @@
         </div>
     </div>
 
-    <script>
-        // (Το JavaScript παραμένει το ίδιο όπως το είχες)
+   <script>
         const canvas = document.getElementById('simCanvas'); const ctx = canvas.getContext('2d'); const xMinPixels = 100, xMaxPixels = 600, yMinPixels = 30, yMaxPixels = 430; let x, y, vx, vy, t = 0, isPlaying = false, trajectory = []; const playBtn = document.getElementById('playBtn'), resetBtn = document.getElementById('resetBtn'); const qSignSelect = document.getElementById('qSign'), bDirSelect = document.getElementById('bDir'); const bSlider = document.getElementById('bSlider'), qSlider = document.getElementById('qSlider'); const vSlider = document.getElementById('vSlider'), mSlider = document.getElementById('mSlider'); const yInSlider = document.getElementById('yInSlider');
+        
         function initPhysics() { x = 50; y = yMaxPixels - parseFloat(yInSlider.value); vx = parseFloat(vSlider.value); vy = 0; t = 0; trajectory = []; isPlaying = false; playBtn.innerText = "Play"; document.getElementById('bVal').innerText = parseFloat(bSlider.value).toFixed(1); document.getElementById('qVal').innerText = parseFloat(qSlider.value).toFixed(1); document.getElementById('vVal').innerText = vSlider.value; document.getElementById('mVal').innerText = parseFloat(mSlider.value).toFixed(1); document.getElementById('yInVal').innerText = yInSlider.value; }
+        
         playBtn.onclick = () => { isPlaying = !isPlaying; playBtn.innerText = isPlaying ? "Pause" : "Play"; }; resetBtn.onclick = initPhysics; [qSignSelect, bDirSelect, bSlider, qSlider, vSlider, mSlider, yInSlider].forEach(el => el.onchange = el.oninput = initPhysics);
+        
         function drawArrow(fromX, fromY, toX, toY, color, lineWidth = 2) { let headlen = 10, dx = toX - fromX, dy = toY - fromY, angle = Math.atan2(dy, dx); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lineWidth; ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(toX, toY); ctx.stroke(); ctx.beginPath(); ctx.moveTo(toX, toY); ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6)); ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6)); ctx.fill(); }
+        
         initPhysics();
-        function loop() { let B = parseFloat(bSlider.value) * parseInt(bDirSelect.value), q = parseFloat(qSlider.value) * parseInt(qSignSelect.value), m = parseFloat(mSlider.value); if (isPlaying) { let dt = 0.05; if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) { vx += (q * vy * B) / m * dt; vy -= (q * vx * B) / m * dt; } x += vx * dt; y += vy * dt; t += dt; trajectory.push({x: x, y: y}); if (x > canvas.width || x < 0 || y > canvas.height || y < 0) { isPlaying = false; playBtn.innerText = "Play"; } } ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]); ctx.strokeRect(xMinPixels, yMinPixels, xMaxPixels - xMinPixels, yMaxPixels - yMinPixels); ctx.setLineDash([]); ctx.fillStyle = 'rgba(255, 0, 0, 0.25)'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; for (let px = xMinPixels + 40; px < xMaxPixels; px += 80) for (let py = yMinPixels + 40; py < yMaxPixels; py += 80) ctx.fillText((B > 0) ? "X" : "•", px, py); drawArrow(xMinPixels, yMaxPixels, xMinPixels, yMinPixels - 15, 'black', 2); drawArrow(xMinPixels, yMaxPixels, xMaxPixels + 15, yMaxPixels, 'black', 2); ctx.fillStyle = 'black'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; for (let offset = 0; offset <= 500; offset += 100) { let tx = xMinPixels + offset; ctx.beginPath(); ctx.moveTo(tx, yMaxPixels); ctx.lineTo(tx, yMaxPixels + 4); ctx.stroke(); ctx.fillText(offset + "m", tx, yMaxPixels + 18); } ctx.textAlign = 'right'; for (let offset = 0; offset <= 400; offset += 100) { let ty = yMaxPixels - offset; ctx.beginPath(); ctx.moveTo(xMinPixels, ty); ctx.lineTo(xMinPixels - 4, ty); ctx.stroke(); ctx.fillText(offset + "m", xMinPixels - 8, ty + 4); } if (x > 0 && x < canvas.width) { drawArrow(x, y, x + vx * 1.5, y + vy * 1.5, 'blue'); if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) { let Fx = (q*vy * B) * 2.0 * (q < 0 ? -1 : 1), Fy = -(q*vx * B) * 2.0 * (q < 0 ? -1 : 1); drawArrow(x, y, x + Fx, y + Fy, 'red'); } } ctx.strokeStyle = 'black'; ctx.lineWidth = 2.5; ctx.beginPath(); if(trajectory.length > 0) { ctx.moveTo(trajectory[0].x, trajectory[0].y); for(let p of trajectory) ctx.lineTo(p.x, p.y); ctx.stroke(); } ctx.beginPath(); ctx.arc(x, y, 9, 0, 2 * Math.PI); ctx.fillStyle = 'black'; ctx.fill(); ctx.fillStyle = 'blue'; ctx.fillText("➔ Ταχύτητα (v)", 450, 20); ctx.fillStyle = 'red'; ctx.fillText("➔ Δύναμη Lorentz (F)", 450, 43); requestAnimationFrame(loop); } loop();
+        
+        function loop() { 
+            let B = parseFloat(bSlider.value) * parseInt(bDirSelect.value);
+            let q = parseFloat(qSlider.value) * parseInt(qSignSelect.value);
+            let m = parseFloat(mSlider.value); 
+            
+            if (isPlaying) { 
+                let dt = 0.05; 
+                if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) { 
+                    vx += (q * vy * B) / m * dt; 
+                    vy -= (q * vx * B) / m * dt; 
+                } 
+                x += vx * dt; y += vy * dt; t += dt; trajectory.push({x: x, y: y}); 
+                if (x > canvas.width || x < 0 || y > canvas.height || y < 0) { isPlaying = false; playBtn.innerText = "Play"; } 
+            } 
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            // Σχεδίαση πλαισίου...
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]); ctx.strokeRect(xMinPixels, yMinPixels, xMaxPixels - xMinPixels, yMaxPixels - yMinPixels); ctx.setLineDash([]); 
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.25)'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; 
+            for (let px = xMinPixels + 40; px < xMaxPixels; px += 80) for (let py = yMinPixels + 40; py < yMaxPixels; py += 80) ctx.fillText((B > 0) ? "X" : "•", px, py); 
+            
+            // Άξονες...
+            drawArrow(xMinPixels, yMaxPixels, xMinPixels, yMinPixels - 15, 'black', 2); drawArrow(xMinPixels, yMaxPixels, xMaxPixels + 15, yMaxPixels, 'black', 2); 
+            
+            // Σχεδίαση αντικειμένων
+            if (x > 0 && x < canvas.width) { 
+                drawArrow(x, y, x + vx * 1.5, y + vy * 1.5, 'blue'); // Ταχύτητα
+                if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) { 
+                    // ΔΙΟΡΘΩΣΗ: Απλή σχέση δύναμης με q, v, B
+                    let Fx = (q * vy * B) * 0.5; 
+                    let Fy = -(q * vx * B) * 0.5;
+                    drawArrow(x, y, x + Fx, y + Fy, 'red'); 
+                } 
+            } 
+            
+            // Τροχιά και σωματίδιο
+            ctx.strokeStyle = 'black'; ctx.lineWidth = 2.5; ctx.beginPath(); 
+            if(trajectory.length > 0) { ctx.moveTo(trajectory[0].x, trajectory[0].y); for(let p of trajectory) ctx.lineTo(p.x, p.y); ctx.stroke(); } 
+            ctx.beginPath(); ctx.arc(x, y, 9, 0, 2 * Math.PI); ctx.fillStyle = 'black'; ctx.fill(); 
+            
+            ctx.fillStyle = 'blue'; ctx.fillText("➔ Ταχύτητα (v)", 450, 20); ctx.fillStyle = 'red'; ctx.fillText("➔ Δύναμη Lorentz (F)", 450, 43); 
+            requestAnimationFrame(loop); 
+        } 
+        loop();
     </script>
 </body>
 </html>
