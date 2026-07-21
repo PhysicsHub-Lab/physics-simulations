@@ -303,7 +303,7 @@ function draw() {
     let arrowScale = 0.8;
 
     // --- 1. Μεταφορική Ταχύτητα v_cm (ΠΡΑΣΙΝΟ) παντού οριζόντια ---
-    drawArrow(x, y, x + v_cm_px * arrowScale, y, 'green', 2, 'v_cm'); 
+    drawArrow(x, y, x + v_cm_px * arrowScale, y, 'green', 2, ''); // Αφαιρέθηκε η ετικέτα 'v_cm' από το κέντρο
     drawArrow(x, y - R, x + v_cm_px * arrowScale, y - R, 'green', 1.5, ''); 
     drawArrow(x, y + R, x + v_cm_px * arrowScale, y + R, 'green', 1.5, ''); 
     drawArrow(x + R, y, x + R + v_cm_px * arrowScale, y, 'green', 1.5, ''); 
