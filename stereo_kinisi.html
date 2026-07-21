@@ -15,11 +15,21 @@
             margin: 0;
         }
 
-        /* Περιθώριο γύρω από το μενού για να αναπνέει */
+        /* Περιθώριο γύρω από το μενού */
         .overlay {
             width: 100%;
             padding: 15px 20px;
             box-sizing: border-box;
+        }
+
+        /* Wrapper για να μπουν η προσομοίωση και το κείμενο δίπλα-δίπλα */
+        .page-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 25px;
+            margin: 20px 40px;
+            flex-wrap: wrap; /* Για να προσαρμόζεται σωστά σε μικρότερες οθόνες */
         }
 
         /* Λευκό κουτί που περιέχει όλη την προσομοίωση */
@@ -28,7 +38,6 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            margin: 20px 0 20px 40px; /* Απόσταση από το μενού & από αριστερά */
             display: inline-flex;
             flex-direction: column;
             align-items: center;
@@ -60,6 +69,26 @@
             width: 100%;
             box-sizing: border-box;
             justify-content: space-around;
+        }
+
+        /* Νέο Λευκό Πλαίσιο Επεξήγησης (Δεξιά) */
+        .info-container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 380px; /* Ρυθμίστε το πλάτος ανάλογα με τις ανάγκες σας */
+            box-sizing: border-box;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-container h3 {
+            margin-top: 0;
+            color: #800020; /* Ή το χρώμα που χρησιμοποιείτε στο μενού */
+            font-size: 1.2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
         }
 
         label { font-weight: bold; }
@@ -98,9 +127,8 @@
                     <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
                     <a href="Krouseis.html">Κρούσεις</a>
                     <a href="mag_field.html">Μαγνητικό Πεδίο</a>
-                    <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
-                    <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
-         	    <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>	
+                    <a href="grav_field3.html">Βαρυτικό πεδίο</a>
+                    <a href="ohm_law.html">Κύκλωμα σε σειρά</a>
                 </div>
             </div>
             <a href="physics_in_action.html">Φυσική στη πράξη</a>
@@ -108,22 +136,42 @@
         </div>
     </div>
 
-    <!-- Κουτί Προσομοίωσης -->
-    <div class="sim-container">
-        <h2>Σύνθετη Κίνηση Τροχού: Μεταφορά & Περιστροφή (Κύλιση χωρίς Ολίσθηση)</h2>
-        <canvas id="simCanvas" width="800" height="420"></canvas>
+    <!-- Wrapper που κρατάει την Προσομοίωση και το Κείμενο δίπλα-δίπλα -->
+    <div class="page-wrapper">
+        
+        <!-- ΑΡΙΣΤΕΡΑ: Κουτί Προσομοίωσης -->
+        <div class="sim-container">
+            <h2>Σύνθετη Κίνηση Τροχού: Μεταφορά & Περιστροφή (Κύλιση χωρίς Ολίσθηση)</h2>
+            <canvas id="simCanvas" width="800" height="420"></canvas>
 
-        <div class="controls">
-            <div>
-                <label for="wSlider">Γωνιακή Ταχύτητα (&omega;):</label>
-                <input type="range" id="wSlider" min="-3" max="3" step="0.1" value="1">
-                <span id="wVal" class="value-display">1.0 rad/s</span>
-            </div>
-            <div>
-                <label>Ταχύτητα ΚΜ (v<sub>cm</sub> = &omega;&middot;R):</label>
-                <span id="vVal" class="value-display">0.50 m/s</span>
+            <div class="controls">
+                <div>
+                    <label for="wSlider">Γωνιακή Ταχύτητα (&omega;):</label>
+                    <input type="range" id="wSlider" min="-3" max="3" step="0.1" value="1">
+                    <span id="wVal" class="value-display">1.0 rad/s</span>
+                </div>
+                <div>
+                    <label>Ταχύτητα ΚΜ (v<sub>cm</sub> = &omega;&middot;R):</label>
+                    <span id="vVal" class="value-display">0.50 m/s</span>
+                </div>
             </div>
         </div>
+
+        <!-- ΔΕΞΙΑ: Επεξηγηματικό Κουτί Κειμένου -->
+        <div class="info-container">
+            <h3>Θεωρία & Επεξήγηση</h3>
+            <p>
+                Η κύλιση ενός τροχού χωρίς ολίσθηση αποτελεί συνδυασμό δύο ανεξάρτητων κινήσεων:
+            </p>
+            <ul>
+                <li><strong>Μεταφορική Κίνηση:</strong> Όλα τα σημεία του τροχού έχουν την ίδια ταχύτητα $v_{cm}$ με το Κέντρο Μάζας.</li>
+                <li><strong>Περιστροφική Κίνηση:</strong> Τα σημεία της περιφέρειας έχουν γραμμική ταχύτητα λόγω περιστροφής $v_{περιφ} = \omega \cdot R$.</li>
+            </ul>
+            <p>
+                <strong>Σημείο Επαφής:</strong> Στο χαμηλότερο σημείο, η μεταφορική και η περιστροφική ταχύτητα έχουν αντίθετες κατευθύνσεις, με αποτέλεσμα η συνολική ταχύτητα να είναι μηδέν ($v = 0$).
+            </p>
+        </div>
+
     </div>
 
 <script>
@@ -265,7 +313,7 @@ function drawArrow(fromx, fromy, tox, toy, color, lineWidth, label) {
 function drawLegend() {
     let lx = 15;
     let ly = 15;
-    let lw = 255; // Αύξηση πλάτους από 220 σε 255px
+    let lw = 255; // Διορθωμένο πλάτος
     let lh = 90;
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
@@ -291,6 +339,7 @@ function drawLegend() {
     ctx.fillRect(lx + 10, ly + 65, 15, 3);
     ctx.fillText('v_συν : Συνολική ταχύτητα', lx + 35, ly + 68);
 }
+
 draw();
 </script>
 </body>
