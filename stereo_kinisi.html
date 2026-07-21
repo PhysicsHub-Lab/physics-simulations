@@ -29,7 +29,7 @@
             align-items: flex-start;
             gap: 25px;
             margin: 20px 40px;
-            flex-wrap: wrap; /* Για να προσαρμόζεται σωστά σε μικρότερες οθόνες */
+            flex-wrap: wrap;
         }
 
         /* Λευκό κουτί που περιέχει όλη την προσομοίωση */
@@ -71,13 +71,13 @@
             justify-content: space-around;
         }
 
-        /* Νέο Λευκό Πλαίσιο Επεξήγησης (Δεξιά) */
+        /* Λευκό Πλαίσιο Επεξήγησης (Δεξιά) */
         .info-container {
             background: #ffffff;
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            width: 380px; /* Ρυθμίστε το πλάτος ανάλογα με τις ανάγκες σας */
+            width: 400px;
             box-sizing: border-box;
             color: #333;
             line-height: 1.6;
@@ -85,7 +85,7 @@
 
         .info-container h3 {
             margin-top: 0;
-            color: #800020; /* Ή το χρώμα που χρησιμοποιείτε στο μενού */
+            color: #800020;
             font-size: 1.2rem;
             border-bottom: 2px solid #eee;
             padding-bottom: 8px;
@@ -168,8 +168,14 @@
                 <li><strong>Περιστροφική Κίνηση:</strong> Τα σημεία της περιφέρειας έχουν γραμμική ταχύτητα λόγω περιστροφής $v_{περιφ} = \omega \cdot R$.</li>
             </ul>
             <p>
-                <strong>Σημείο Επαφής:</strong> Στο χαμηλότερο σημείο, η μεταφορική και η περιστροφική ταχύτητα έχουν αντίθετες κατευθύνσεις, με αποτέλεσμα η συνολική ταχύτητα να είναι μηδέν ($v = 0$).
+                <strong>Υπολογισμός Συνισταμένης Ταχύτητας $v_{συν}$:</strong>
             </p>
+            <ul>
+                <li><strong>Ανώτερο σημείο:</strong> $v_{συν} = v_{cm} + v_{περιφ} = 2 v_{cm}$</li>
+                <li><strong>Σημείο επαφής (κάτω):</strong> $v_{συν} = v_{cm} - v_{περιφ} = 0$</li>
+                <li><strong>Άκρα ($90^\circ$):</strong> $v_{συν} = \sqrt{v_{cm}^2 + v_{περιφ}^2} = \sqrt{2} v_{cm}$ (Πυθαγόρειο)</li>
+                <li><strong>Τυχαία γωνία $\theta$:</strong> $v_{συν} = \sqrt{v_{cm}^2 + v_{περιφ}^2 + 2v_{cm}v_{περιφ}\cos\theta}$ (Νόμος Συνημιτόνων)</li>
+            </ul>
         </div>
 
     </div>
@@ -251,24 +257,53 @@ function draw() {
     ctx.fillStyle = '#333';
     ctx.fill();
 
-    // -- Σχεδίαση Βελών & Ετικετών (με βάση τα pixels κίνησης) --
+    // -- Σχεδίαση Βελών & Ετικετών --
     let v_per_px = omega * R; 
     let arrowScale = 0.8;
 
-    // 1. Μεταφορική Ταχύτητα v_cm (ΠΡΑΣΙΝΟ)
+    // --- 1. Μεταφορική Ταχύτητα v_cm (ΠΡΑΣΙΝΟ) παντού οριζόντια ---
     drawArrow(x, y, x + v_cm_px * arrowScale, y, 'green', 2, 'v_cm'); 
     drawArrow(x, y - R, x + v_cm_px * arrowScale, y - R, 'green', 1.5, ''); 
     drawArrow(x, y + R, x + v_cm_px * arrowScale, y + R, 'green', 1.5, ''); 
+    drawArrow(x + R, y, x + R + v_cm_px * arrowScale, y, 'green', 1.5, ''); 
+    drawArrow(x - R, y, x - R + v_cm_px * arrowScale, y, 'green', 1.5, ''); 
 
-    // 2. Περιστροφική Ταχύτητα v_per (ΜΠΛΕ)
-    drawArrow(x, y - R, x + v_per_px * arrowScale, y - R, 'blue', 1.5, ''); 
-    drawArrow(x, y + R, x - v_per_px * arrowScale, y + R, 'blue', 1.5, ''); 
+    // --- 2. Περιστροφική Ταχύτητα v_per (ΜΠΛΕ) εφαπτομενικά ---
+    drawArrow(x, y - R, x + v_per_px * arrowScale, y - R, 'blue', 1.5, '');            // Πάνω
+    drawArrow(x, y + R, x - v_per_px * arrowScale, y + R, 'blue', 1.5, '');            // Κάτω
+    drawArrow(x + R, y, x + R, y + v_per_px * arrowScale, 'blue', 1.5, '');            // Δεξιά (90 deg)
+    drawArrow(x - R, y, x - R, y - v_per_px * arrowScale, 'blue', 1.5, '');            // Αριστερά (90 deg)
 
-    // 3. Συνολική Ταχύτητα v_συν (ΚΟΚΚΙΝΟ)
+    // --- 3. Τυχαία Γωνία (45 μοίρες) για Νόμο Συνημιτόνων ---
+    let theta = Math.PI / 4; // 45 μοίρες
+    let px = x + R * Math.cos(theta);
+    let py = y - R * Math.sin(theta); // Αρνητικό Y επειδή ο Canvas έχει το 0 πάνω
+
+    // v_cm στο σημείο 45 deg (οριζόντια)
+    drawArrow(px, py, px + v_cm_px * arrowScale, py, 'green', 1.5, '');
+
+    // v_per στο σημείο 45 deg (εφαπτομενική: κάθετη στην ακτίνα)
+    let v_per_x = v_per_px * Math.sin(theta);
+    let v_per_y = v_per_px * Math.cos(theta);
+    drawArrow(px, py, px + v_per_x * arrowScale, py + v_per_y * arrowScale, 'blue', 1.5, '');
+
+    // v_συν στο σημείο 45 deg (συνισταμένη των δύο)
+    let v_tot_x = v_cm_px + v_per_x;
+    let v_tot_y = v_per_y;
+    drawArrow(px, py, px + v_tot_x * arrowScale, py + v_tot_y * arrowScale, 'red', 2, '');
+
+    // --- 4. Συνολική Ταχύτητα v_συν (ΚΟΚΚΙΝΟ) στα υπόλοιπα σημεία ---
     drawArrow(x, y, x + v_cm_px * arrowScale, y, 'red', 2.5, '');
     
+    // Πάνω σημείο (2 * v_cm)
     let top_total_px = v_cm_px + v_per_px;
     drawArrow(x, y - R, x + top_total_px * arrowScale, y - R, 'red', 3, 'v_συν'); 
+
+    // Δεξί άκρο (Πυθαγόρειο)
+    drawArrow(x + R, y, x + R + v_cm_px * arrowScale, y + v_per_px * arrowScale, 'red', 2, '');
+
+    // Αριστερό άκρο (Πυθαγόρειο)
+    drawArrow(x - R, y, x - R + v_cm_px * arrowScale, y - v_per_px * arrowScale, 'red', 2, '');
 
     // Σχεδίαση Υπομνήματος (Legend)
     drawLegend();
@@ -313,7 +348,7 @@ function drawArrow(fromx, fromy, tox, toy, color, lineWidth, label) {
 function drawLegend() {
     let lx = 15;
     let ly = 15;
-    let lw = 255; // Διορθωμένο πλάτος
+    let lw = 255;
     let lh = 90;
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
