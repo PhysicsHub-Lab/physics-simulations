@@ -45,10 +45,35 @@
 
         .sim-container h2 {
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-size: 1.3rem;
             color: #222;
             text-align: center;
+        }
+
+        /* Στυλ για τη μπάρα του κουμπιού Play/Pause */
+        .top-controls {
+            margin-bottom: 15px;
+        }
+
+        .btn-toggle {
+            background-color: #800020;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-toggle:hover {
+            background-color: #a00028;
+        }
+
+        .btn-toggle:active {
+            transform: scale(0.98);
         }
 
         canvas { 
@@ -142,6 +167,12 @@
         <!-- ΑΡΙΣΤΕΡΑ: Κουτί Προσομοίωσης -->
         <div class="sim-container">
             <h2>Σύνθετη Κίνηση Τροχού: Μεταφορά & Περιστροφή (Κύλιση χωρίς Ολίσθηση)</h2>
+            
+            <!-- Κουμπί Control κάτω από τον τίτλο και πάνω από την προσομοίωση -->
+            <div class="top-controls">
+                <button id="toggleBtn" class="btn-toggle">⏸ Παύση</button>
+            </div>
+
             <canvas id="simCanvas" width="800" height="420"></canvas>
 
             <div class="controls">
@@ -186,6 +217,7 @@ const ctx = canvas.getContext('2d');
 const wSlider = document.getElementById('wSlider');
 const wVal = document.getElementById('wVal');
 const vVal = document.getElementById('vVal');
+const toggleBtn = document.getElementById('toggleBtn');
 
 // --- ΠΑΡΑΜΕΤΡΟΙ ΜΕΓΕΘΟΥΣ & ΚΛΙΜΑΚΑΣ ---
 const R = 50;           // Ακτίνα για τη ΣΧΕΔΙΑΣΗ στο Canvas (pixels)
@@ -195,6 +227,13 @@ const scale = R / R_real; // Συντελεστής μετατροπής: 100 pi
 let x = canvas.width / 2; 
 let y = canvas.height - R - 60; 
 let angle = 0; 
+let isRunning = true; // Μεταβλητή ελέγχου κίνησης
+
+// Event Listener για το κουμπί Έναρξη / Παύση
+toggleBtn.addEventListener('click', () => {
+    isRunning = !isRunning;
+    toggleBtn.textContent = isRunning ? '⏸ Παύση' : '▶ Έναρξη';
+});
 
 function draw() {
     let omega = parseFloat(wSlider.value); 
@@ -211,12 +250,14 @@ function draw() {
     wVal.textContent = omega.toFixed(1) + " rad/s";
     vVal.textContent = v_cm_m.toFixed(2) + " m/s"; 
 
-    // Ενημέρωση θέσης (σε pixels) & γωνίας
-    x += v_cm_px * dt;
-    angle += omega * dt;
+    // Ενημέρωση θέσης & γωνίας ΜΟΝΟ αν η προσομοίωση εκτελείται (isRunning == true)
+    if (isRunning) {
+        x += v_cm_px * dt;
+        angle += omega * dt;
 
-    if (x > canvas.width + R) x = -R;
-    if (x < -R) x = canvas.width + R;
+        if (x > canvas.width + R) x = -R;
+        if (x < -R) x = canvas.width + R;
+    }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
 
@@ -277,17 +318,17 @@ function draw() {
     // --- 3. Τυχαία Γωνία (45 μοίρες) για Νόμο Συνημιτόνων ---
     let theta = Math.PI / 4; // 45 μοίρες
     let px = x + R * Math.cos(theta);
-    let py = y - R * Math.sin(theta); // Αρνητικό Y επειδή ο Canvas έχει το 0 πάνω
+    let py = y - R * Math.sin(theta); 
 
     // v_cm στο σημείο 45 deg (οριζόντια)
     drawArrow(px, py, px + v_cm_px * arrowScale, py, 'green', 1.5, '');
 
-    // v_per στο σημείο 45 deg (εφαπτομενική: κάθετη στην ακτίνα)
+    // v_per στο σημείο 45 deg (εφαπτομενική)
     let v_per_x = v_per_px * Math.sin(theta);
     let v_per_y = v_per_px * Math.cos(theta);
     drawArrow(px, py, px + v_per_x * arrowScale, py + v_per_y * arrowScale, 'blue', 1.5, '');
 
-    // v_συν στο σημείο 45 deg (συνισταμένη των δύο)
+    // v_συν στο σημείο 45 deg
     let v_tot_x = v_cm_px + v_per_x;
     let v_tot_y = v_per_y;
     drawArrow(px, py, px + v_tot_x * arrowScale, py + v_tot_y * arrowScale, 'red', 2, '');
