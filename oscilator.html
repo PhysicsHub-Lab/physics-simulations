@@ -45,7 +45,7 @@
                 <a href="mag_field.html">Μαγνητικό Πεδίο</a>
                 <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
                 <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
-         	    <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>	
+                <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>    
             </div>        
         </div>        
         <a href="physics_in_action.html">Φυσική στη πράξη</a>
@@ -58,13 +58,17 @@
             <h2>Προσομοίωση Κατακόρυφου Ταλαντωτή</h2>
             <div class="controls">
                 <div class="btn-container">
-                    <button id="playBtn">Play</button> <button id="resetBtn">Reset</button>
+                    <button id="playBtn">Play</button> 
+                    <button id="resetBtn">Reset</button>
                 </div>
                 <label>k (N/m): <input type="range" id="kSlider" min="5" max="50" value="25" step="1"><span id="kVal">25</span></label>
                 <label>m (kg): <input type="range" id="mSlider" min="0.5" max="5" value="1.5" step="0.1"><span id="mVal">1.5</span></label>
                 <label>b (Ns/m): <input type="range" id="bSlider" min="0" max="4" value="0.4" step="0.1"><span id="bVal">0.4</span></label>
                 <label style="grid-column: span 3; align-items: center; color: blue;">
-                    Αρχική Θέση y₀ (m): <input type="range" id="y0Slider" min="-8" max="8" value="4" step="0.5" style="width: 50%;"><span id="y0Val">4.0</span></label>
+                    Αρχική Απομάκρυνση y₀ από Θ.Ι. (m): 
+                    <input type="range" id="y0Slider" min="-4" max="4" value="2" step="0.2" style="width: 50%;">
+                    <span id="y0Val">2.0</span>
+                </label>
             </div>
             <canvas id="simCanvas" width="400" height="500"></canvas>
         </div>
@@ -76,64 +80,184 @@
             <p>Η συμπεριφορά του συστήματος εξαρτάται από τρεις βασικές παραμέτρους:</p>
             <ul>
                 <li><b>Σταθερά ελατηρίου (k):</b> Όσο μεγαλύτερη είναι η σταθερά του ελατηρίου, τόσο πιο «σκληρό» είναι το ελατήριο και τόσο πιο γρήγορα πραγματοποιείται η ταλάντωση.</li>
-                <li><b>Μάζα (m):</b> Μεγαλύτερη μάζα οδηγεί σε πιο αργή ταλάντωση, καθώς το σώμα παρουσιάζει μεγαλύτερη αδράνεια.</li>
-                <li><b>Συντελεστής απόσβεσης (b):</b> Εκφράζει τις αντιστάσεις του περιβάλλοντος (π.χ. τριβές ή αντίσταση του αέρα). Όσο μεγαλύτερη είναι η απόσβεση, τόσο πιο γρήγορα μειώνεται το πλάτος της ταλάντωσης μέχρι το σώμα να ακινητοποιηθεί στη θέση ισορροπίας.</li>
-            </ul>
-            <p>Η αρχική θέση καθορίζει από ποιο σημείο ξεκινά η κίνηση και επηρεάζει το αρχικό πλάτος της ταλάντωσης.</p>
-            <p><b>Πειραματίσου!</b> Δοκίμασε να αλλάξεις μία μόνο παράμετρο κάθε φορά και παρατήρησε τι συμβαίνει.</p>
-            <ul>
-                <li>Αυξάνει η μάζα → Πώς αλλάζει ο χρόνος που χρειάζεται για μία πλήρη ταλάντωση;</li>
-                <li>Αυξάνει η σταθερά του ελατηρίου → Η κίνηση γίνεται πιο γρήγορη ή πιο αργή;</li>
-                <li>Αυξάνει η απόσβεση → Μετά από πόσες ταλαντώσεις σταματά ουσιαστικά η κίνηση;</li>
-                <li>Άλλαξε την αρχική θέση → Επηρεάζεται η περίοδος ή μόνο το πλάτος;</li>
-            </ul>
-            <p><b>Σκέψου:</b></p>
-            <ul>
-                <li>Γιατί η θέση ισορροπίας του σώματος βρίσκεται χαμηλότερα από το φυσικό μήκος του ελατηρίου;</li>
-                <li>Αν διπλασιάσουμε τη μάζα, η περίοδος διπλασιάζεται;</li>
-                <li>Γιατί, ακόμη και όταν υπάρχει απόσβεση, το σώμα καταλήγει πάντα στη θέση ισορροπίας;</li>
+                <li><b>Μάζα (m):</b> Μεγαλύτερη μάζα μετατοπίζει τη Θέση Ισορροπίας χαμηλότερα και οδηγεί σε πιο αργή ταλάντωση (μεγαλύτερη περίοδο).</li>
+                <li><b>Συντελεστής απόσβεσης (b):</b> Εκφράζει τις αντιστάσεις του περιβάλλοντος. Όσο μεγαλύτερη είναι η απόσβεση, τόσο πιο γρήγορα μειώνεται το πλάτος της ταλάντωσης μέχρι το σώμα να ακινητοποιηθεί στη Θέση Ισορροπίας.</li>
             </ul>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('simCanvas'); const ctx = canvas.getContext('2d');
-        let y = 0, v = 0, t = 0, isPlaying = false, yMaxPhys = -Infinity, yMinPhys = Infinity;
-        const playBtn = document.getElementById('playBtn'), resetBtn = document.getElementById('resetBtn');
-        const kSlider = document.getElementById('kSlider'), mSlider = document.getElementById('mSlider');
-        const bSlider = document.getElementById('bSlider'), y0Slider = document.getElementById('y0Slider');
+        const canvas = document.getElementById('simCanvas'); 
+        const ctx = canvas.getContext('2d');
         
+        let y_phys = 0;   // Θέση σε μέτρα (0 = φυσικό μήκος ελατηρίου, κάτω = αρνητικό)
+        let v = 0;        // Ταχύτητα (m/s)
+        let t = 0;        // Χρόνος (s)
+        let isPlaying = false;
+        let yMaxPhys = -Infinity, yMinPhys = Infinity;
+
+        const playBtn = document.getElementById('playBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const kSlider = document.getElementById('kSlider');
+        const mSlider = document.getElementById('mSlider');
+        const bSlider = document.getElementById('bSlider');
+        const y0Slider = document.getElementById('y0Slider');
+
+        const g = 9.81; // Επιτάχυνση βαρύτητας
+
         function initPhysics() {
+            let m = parseFloat(mSlider.value);
+            let k = parseFloat(kSlider.value);
             let y0 = parseFloat(y0Slider.value);
-            y = 250 - (y0 * 20); v = 0; t = 0; yMaxPhys = y0; yMinPhys = y0;
+            
+            // Η Θέση Ισορροπίας (Θ.Ι.) βρίσκεται στο y_eq = -m*g/k (κάτω από το φυσικό μήκος)
+            let y_eq = -(m * g) / k;
+            
+            // Η αρχική θέση ορίζεται ως απομάκρυνση από τη Θέση Ισορροπίας
+            y_phys = y_eq + y0; 
+            v = 0; 
+            t = 0; 
+            yMaxPhys = y_phys; 
+            yMinPhys = y_phys;
         }
-        playBtn.onclick = () => { isPlaying = !isPlaying; playBtn.innerText = isPlaying ? "Pause" : "Play"; };
-        resetBtn.onclick = () => { isPlaying = false; playBtn.innerText = "Play"; initPhysics(); };
-        [kSlider, mSlider, bSlider, y0Slider].forEach(slider => slider.oninput = initPhysics);
-        initPhysics();
+
+        playBtn.onclick = () => { 
+            isPlaying = !isPlaying; 
+            playBtn.innerText = isPlaying ? "Pause" : "Play"; 
+        };
         
+        resetBtn.onclick = () => { 
+            isPlaying = false; 
+            playBtn.innerText = "Play"; 
+            initPhysics(); 
+        };
+
+        [kSlider, mSlider, bSlider, y0Slider].forEach(slider => slider.oninput = () => {
+            initPhysics();
+        });
+
+        initPhysics();
+
         function loop() {
-            let k = parseFloat(kSlider.value), m = parseFloat(mSlider.value), b = parseFloat(bSlider.value), y0 = parseFloat(y0Slider.value);
-            document.getElementById('kVal').innerText = k; document.getElementById('mVal').innerText = m;
-            document.getElementById('bVal').innerText = b; document.getElementById('y0Val').innerText = y0.toFixed(1);
-            let y_phys = -(y - 250) / 20;
+            let k = parseFloat(kSlider.value);
+            let m = parseFloat(mSlider.value);
+            let b = parseFloat(bSlider.value);
+            let y0 = parseFloat(y0Slider.value);
+
+            // Ενημέρωση των τιμών στα labels
+            document.getElementById('kVal').innerText = k; 
+            document.getElementById('mVal').innerText = m;
+            document.getElementById('bVal').innerText = b; 
+            document.getElementById('y0Val').innerText = y0.toFixed(1);
+
             if (isPlaying) {
-                let dt = 0.02; let a = -(k * y_phys) / m - 9.81 - (b * v) / m;
-                v += a * dt; y_phys += v * dt; y = 250 - (y_phys * 20); t += dt;
-                if (y_phys > yMaxPhys) yMaxPhys = y_phys; if (y_phys < yMinPhys) yMinPhys = y_phys;
+                let dt = 0.016; // Time step (~60fps)
+                
+                // Συνισταμένη δύναμη: F_spring + F_gravity + F_damping
+                // F_spring = -k * y_phys, F_gravity = -m * g, F_damping = -b * v
+                let a = (-k * y_phys - m * g - b * v) / m;
+                
+                v += a * dt; 
+                y_phys += v * dt; 
+                t += dt;
+
+                if (y_phys > yMaxPhys) yMaxPhys = y_phys; 
+                if (y_phys < yMinPhys) yMinPhys = y_phys;
             }
+
+            // Υπολογισμός Θέσης Ισορροπίας (σε μέτρα)
+            let y_eq = -(m * g) / k;
+
+            // Μετατροπή των μέτρων σε Pixels στον καμβά
+            // y_phys = 0 (φυσικό μήκος) -> Pixel 120
+            // Κλίμακα: 1m = 25 pixels
+            const scale = 25;
+            const originY = 120;
+            let canvasY = originY - (y_phys * scale);
+            let canvasY_eq = originY - (y_eq * scale);
+
+            // Καθαρισμός καμβά
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#eee'; ctx.lineWidth = 1; ctx.fillStyle = '#666'; ctx.textAlign = 'right';
-            for(let i = 50; i < 500; i += 50) { ctx.beginPath(); ctx.moveTo(50, i); ctx.lineTo(400, i); ctx.stroke(); ctx.fillText((-(i-250)/20).toFixed(1) + " m", 45, i + 4); }
-            ctx.strokeStyle = 'green'; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(50, 250 - (-(m * 9.81 / k) * 20)); ctx.lineTo(400, 250 - (-(m * 9.81 / k) * 20)); ctx.stroke();
-            ctx.strokeStyle = 'red'; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(50, 250 - (yMaxPhys*20)); ctx.lineTo(400, 250 - (yMaxPhys*20)); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(50, 250 - (yMinPhys*20)); ctx.lineTo(400, 250 - (yMinPhys*20)); ctx.stroke(); ctx.setLineDash([]);
-            ctx.fillStyle = 'black'; ctx.fillRect(125, 20, 200, 10); ctx.strokeStyle = 'gray'; ctx.beginPath(); ctx.moveTo(225, 30);
-            for (let i = 1; i <= 25; i++) { ctx.lineTo(225 + (i%2==0 ? 15 : -15), 30 + (y-30)*(i/25)); } ctx.stroke();
-            ctx.beginPath(); ctx.arc(225, y, 20, 0, 2 * Math.PI); ctx.fillStyle = 'blue'; ctx.fill();
-            ctx.fillStyle = 'black'; ctx.fillText("t = " + t.toFixed(2) + " s", 380, 40);
+
+            // 1. Πλέγμα & Κλίμακα Μέτρων
+            ctx.strokeStyle = '#f0f0f0'; 
+            ctx.lineWidth = 1; 
+            ctx.fillStyle = '#888'; 
+            ctx.textAlign = 'right';
+            ctx.font = '11px sans-serif';
+            
+            for(let i = 40; i < 480; i += 40) { 
+                ctx.beginPath(); 
+                ctx.moveTo(50, i); 
+                ctx.lineTo(380, i); 
+                ctx.stroke(); 
+                let mVal = -((i - originY) / scale);
+                ctx.fillText(mVal.toFixed(1) + " m", 45, i + 4); 
+            }
+
+            // 2. Πράσινη Διακεκομμένη Γραμμή -> Θέση Ισορροπίας (Θ.Ι.)
+            ctx.strokeStyle = '#2e7d32'; 
+            ctx.setLineDash([5, 5]); 
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); 
+            ctx.moveTo(50, canvasY_eq); 
+            ctx.lineTo(380, canvasY_eq); 
+            ctx.stroke(); 
+            
+            ctx.fillStyle = '#2e7d32';
+            ctx.textAlign = 'left';
+            ctx.fillText("Θ.Ι. (" + y_eq.toFixed(2) + "m)", 310, canvasY_eq - 5);
+
+            // 3. Κόκκινες Διακεκομμένες Γραμμές -> Ακραίες Θέσεις
+            ctx.strokeStyle = '#d32f2f'; 
+            ctx.setLineDash([3, 4]); 
+            ctx.beginPath(); 
+            ctx.moveTo(50, originY - (yMaxPhys * scale)); 
+            ctx.lineTo(380, originY - (yMaxPhys * scale)); 
+            ctx.stroke(); 
+            
+            ctx.beginPath(); 
+            ctx.moveTo(50, originY - (yMinPhys * scale)); 
+            ctx.lineTo(380, originY - (yMinPhys * scale)); 
+            ctx.stroke(); 
+            ctx.setLineDash([]); // Επαναφορά συνεχούς γραμμής
+
+            // 4. Οροφή
+            ctx.fillStyle = '#333'; 
+            ctx.fillRect(150, 10, 150, 10); 
+
+            // 5. Ελατήριο (Σχεδίαση Zig-Zag)
+            ctx.strokeStyle = '#555'; 
+            ctx.lineWidth = 2;
+            ctx.beginPath(); 
+            ctx.moveTo(225, 20);
+            let coils = 20;
+            for (let i = 1; i <= coils; i++) { 
+                let px = 225 + (i % 2 === 0 ? 12 : -12);
+                let py = 20 + (canvasY - 20) * (i / coils);
+                ctx.lineTo(px, py); 
+            } 
+            ctx.stroke();
+
+            // 6. Σώμα (Μάζα) - Το μέγεθος αλλάζει ελαφρώς ανάλογα με τη μάζα
+            let radius = 14 + m * 2;
+            ctx.beginPath(); 
+            ctx.arc(225, canvasY, radius, 0, 2 * Math.PI); 
+            ctx.fillStyle = '#1976d2'; 
+            ctx.fill(); 
+            ctx.strokeStyle = '#0d47a1';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 7. Χρονόμετρο
+            ctx.fillStyle = '#000'; 
+            ctx.font = 'bold 13px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText("t = " + t.toFixed(2) + " s", 370, 35);
+
             requestAnimationFrame(loop);
         }
+
         loop();
     </script>
 </body>
