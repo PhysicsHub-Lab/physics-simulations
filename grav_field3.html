@@ -69,7 +69,7 @@
             <a href="mag_field.html">Μαγνητικό Πεδίο</a>
             <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
             <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
-         	<a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
+            <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
             <a href="waves.html">Συμβολή κυμάτων</a>
         </div>    
     </div>    
@@ -136,16 +136,30 @@
     });
     
     document.getElementById('check-btn').addEventListener('click', () => {
-        const ans = document.getElementById('ans-input').value.replace(/\s+/g, '');
-        if (step === 1 && ans === "(M/r1)^1/2") {
+        // Αφαιρεί τα διαστήματα και μετατρέπει τα κεφαλαία σε μικρά για ευκολία
+        const ans = document.getElementById('ans-input').value.replace(/\s+/g, '').toLowerCase();
+    
+        // Λίστα με όλες τις αποδεκτές μορφές γραφής για το Step 1
+        const validAnswersStep1 = [
+            "(m/r1)^1/2", 
+            "(m/r1)^(1/2)", 
+            "sqrt(m/r1)", 
+            "sqrt(m/r_1)", 
+            "(m/r_1)^1/2"
+        ];
+
+        if (step === 1 && validAnswersStep1.includes(ans)) {
             alert("Σωστά!");
             document.getElementById('mission-text').innerHTML = "Ο διευθυντής αλλάζει την απόφαση του και σας λέει να βάλετε το δορυφόρο σε τροχιά 4r1. Ποια η ταχύτητα v2 που πρέπει να έχει;<br><small>(Υπόδειξη: Η απάντηση να δοθεί σε συνάρτηση του v1, π.χ. v1/2)</small>";
-            document.getElementById('ans-input').value = ""; step = 2;
-        } else if (step === 2 && ans === "v1/2") {
+            document.getElementById('ans-input').value = ""; 
+            step = 2;
+        } else if (step === 2 && (ans === "v1/2" || ans === "0.5v1" || ans === "0,5v1" || ans === "v_1/2")) {
             document.getElementById('mission-text').innerHTML = "Συγχαρητήρια, η αποστολή ολοκληρώθηκε! Είσαι πολύ καλός στη Φυσική. Σε συμβουλεύουμε να σκεφτείς το Φυσικό ως επιλογή στο μηχανογραφικό σου!";
             document.getElementById('ans-input').style.display = 'none';
             document.getElementById('check-btn').style.display = 'none';
-        } else { alert("Λάθος, προσπαθήστε ξανά."); }
+        } else { 
+            alert("Λάθος, προσπαθήστε ξανά."); 
+        }
     });
 
     function draw() { 
