@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>1D Συμβολή Κυμάτων - PhysicsHub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .sim-page-wrapper { display: flex; justify-content: center; padding: 40px; gap: 30px; align-items: flex-start; }
+        
+        .sim-content { display: flex; flex-direction: column; align-items: center; }
+        .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; background: white; padding: 20px; border-radius: 8px; width: 550px; border: 1px solid #ddd; }
+        .btn-container { grid-column: span 2; display: flex; justify-content: center; gap: 10px; }
+        canvas { border: 1px solid #ccc; background: #fafafa; border-radius: 8px; }
+        label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; gap: 4px; }
+        input[type="range"], select { width: 100%; padding: 4px; }
+
+        /* Πλαίσιο Εξισώσεων */
+        .equations-box {
+            width: 550px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #2196F3;
+            padding: 12px 18px;
+            margin-top: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .eq-y1 { color: #1976D2; font-weight: bold; }
+        .eq-y2 { color: #D32F2F; font-weight: bold; }
+        .eq-ytot { color: #6A1B9A; font-weight: bold; }
+
+        .theory-panel { 
+            width: 400px; background: white; padding: 25px; border-radius: 15px; 
+            border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            line-height: 1.6; font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">        
+        <a href="index.html">Αρχική</a>        
+        <div class="dropdown">            
+            <span>Τυπολόγιο ▼</span>            
+            <div class="dropdown-content">                
+                <div class="nested-menu"><span>Γυμνάσιο ▶</span>
+                    <div class="dropdown-content"><a href="typologiaAgymn.html">Α' Γυμνασίου</a><a href="typologiaBgymn.html">Β' Γυμνασίου</a><a href="typologiaGgymn.html">Γ' Γυμνασίου</a></div>
+                </div>                
+                <div class="nested-menu"><span>Λύκειο ▶</span>
+                    <div class="dropdown-content"><a href="typologiaAlyk.html">Α' Λυκείου</a><a href="typologiaBlyk.html">Β' Λυκείου</a><a href="typologiaGlyk.html">Γ' Λυκείου</a></div>
+                </div>            
+            </div>        
+        </div>        
+        <div class="dropdown">            
+            <span>Προσομοιώσεις ▼</span>            
+            <div class="dropdown-content">                
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                <a href="wave1d.html">1D Συμβολή Κυμάτων</a>
+                <a href="Krouseis.html">Κρούσεις</a>
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
+                <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
+                <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>    
+            </div>        
+        </div>        
+        <a href="physics_in_action.html">Φυσική στη πράξη</a>
+        <a href="about_us.html">Σχετικά με εμάς</a>
+        <a href="feedback.html">Αξιολόγησε μας</a>
+    </div>
+
+    <div class="sim-page-wrapper">
+        <div class="sim-content">
+            <h2>Συμβολή Κυμάτων σε 1 Διάσταση (Χορδή)</h2>
+            <div class="controls">
+                <div class="btn-container">
+                    <button id="playBtn">Pause</button> 
+                    <button id="resetBtn">Reset</button>
+                </div>
+                <label>Πλάτος Κύματος Α (cm): 
+                    <input type="range" id="aSlider" min="1" max="4" value="2.5" step="0.5">
+                    <span id="aVal">2.5</span>
+                </label>
+                <label>Μήκος Κύματος λ (cm): 
+                    <input type="range" id="lambdaSlider" min="4" max="12" value="8" step="1">
+                    <span id="lambdaVal">8.0</span>
+                </label>
+                <label style="grid-column: span 2;">Διαφορά Φάσης 2ου Κύματος (Δφ):
+                    <select id="phaseSelect">
+                        <option value="0">0° (0 rad) - Συμφωνία Φάσης (Ενισχυτική Συμβολή)</option>
+                        <option value="180">180° (π rad) - Αντίθεση Φάσης (Ακυρωτική Συμβολή)</option>
+                    </select>
+                </label>
+            </div>
+            
+            <canvas id="simCanvas" width="550" height="320"></canvas>
+
+            <!-- Πλαίσιο Μαθηματικών Εξισώσεων -->
+            <div class="equations-box">
+                <div class="eq-y1" id="eqY1">y₁ = 2.5 · sin[2π(t/T - x/8.0)]</div>
+                <div class="eq-y2" id="eqY2">y₂ = 2.5 · sin[2π(t/T + x/8.0)]</div>
+                <div class="eq-ytot" id="eqYtot">y_ολ = y₁ + y₂</div>
+            </div>
+        </div>
+
+        <div class="theory-panel">
+            <h2>Αρχή της Επαλληλίας & Εξισώσεις</h2>
+            <p>Όταν δύο αρμονικοί παλμοί διαδίδονται σε μια χορδή προς αντίθετες κατευθύνσεις, η απομάκρυνση κάθε σημείου δίνεται από την Αρχή της Επαλληλίας: $y = y_1 + y_2$.</p>
+
+            <h3>Περιπτώσεις Συμβολής:</h3>
+            <ul>
+                <li><b>$\Delta\phi = 0^\circ$ (Συμφωνία Φάσης):</b><br>
+                    Όταν συναντώνται δύο κορυφές ($+A$ με $+A$) ή δύο κοιλίες ($-A$ με $-A$), το συνιστάμενο πλάτος διπλασιάζεται ($2A$). Πρόκειται για <b>Ενισχυτική Συμβολή</b>.
+                </li>
+                <li style="margin-top: 10px;"><b>$\Delta\phi = 180^\circ$ ($\pi$ rad - Αντίθεση Φάσης):</b><br>
+                    Όταν συναντάται κορυφή ($+A$) με κοιλία ($-A$), η συνιστάμενη απομάκρυνση μηδενίζεται ($y = 0$). Πρόκειται για <b>Ακυρωτική Συμβολή</b> και η χορδή φαίνεται στιγμιαία εντελώς επίπεδη!
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+
+        let isPlaying = true;
+        let t = 0;
+
+        const playBtn = document.getElementById('playBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const aSlider = document.getElementById('aSlider');
+        const lambdaSlider = document.getElementById('lambdaSlider');
+        const phaseSelect = document.getElementById('phaseSelect');
+
+        playBtn.onclick = () => {
+            isPlaying = !isPlaying;
+            playBtn.innerText = isPlaying ? "Pause" : "Play";
+        };
+
+        resetBtn.onclick = () => {
+            t = 0;
+            if(!isPlaying) {
+                isPlaying = true;
+                playBtn.innerText = "Pause";
+            }
+        };
+
+        const v = 2.5;         // Ταχύτητα διάδοσης (cm/s)
+        const scale = 18;      // 1 cm = 18 pixels
+        const originX = 40;    // Αρχή αξόνων X
+        const centerY = h / 2;   // y = 0
+        const xTarget = 12;    // Σημείο ελέγχου (cm)
+
+        // 1ο Κύμα (Διαδίδεται προς τα δεξιά: +x)
+        function calcY1(x, time, A, lambda) {
+            let T = lambda / v;
+            let xFront = v * time; // Το μέτωπο του κύματος
+            
+            // Ο παλμός υπάρχει μόνο στο διάστημα [xFront - lambda, xFront]
+            if (x <= xFront && x >= xFront - lambda) {
+                return A * Math.sin(2 * Math.PI * (time / T - x / lambda));
+            }
+            return 0;
+        }
+
+        // 2ο Κύμα (Διαδίδεται προς τα αριστερά: -x)
+        function calcY2(x, time, A, lambda, isOpposite) {
+            let T = lambda / v;
+            let xFront = 24 - v * time; // Το μέτωπο ξεκινάει από το δεξί άκρο (x = 24 cm)
+            let phaseDiff = isOpposite ? Math.PI : 0;
+
+            // Ο παλμός υπάρχει μόνο στο διάστημα [xFront, xFront + lambda]
+            if (x >= xFront && x <= xFront + lambda) {
+                return A * Math.sin(2 * Math.PI * (time / T + (x - 24) / lambda) + phaseDiff);
+            }
+            return 0;
+        }
+
+        function updateEquationsText(A, lambda, isOpposite) {
+            let T = lambda / v;
+
+            document.getElementById('aVal').innerText = A.toFixed(1);
+            document.getElementById('lambdaVal').innerText = lambda.toFixed(1);
+
+            // Παίρνουμε την ακριβή τιμή του t όπως φαίνεται στην οθόνη (π.χ. 5.23)
+            let tDisplay = parseFloat(t.toFixed(2));
+
+            let y1_at_12 = calcY1(xTarget, tDisplay, A, lambda);
+	    let y2_at_12 = calcY2(xTarget, tDisplay, A, lambda, isOpposite);
+	    let yTot_at_12 = y1_at_12 + y2_at_12;
+
+            let phaseText = isOpposite ? " + π" : "";
+
+            // Κλασικές Σχολικές Εξισώσεις
+            document.getElementById('eqY1').innerText = `y₁ = ${A.toFixed(1)} · sin[2π(t/${T.toFixed(1)} - x/${lambda.toFixed(1)})]`;
+            document.getElementById('eqY2').innerText = `y₂ = ${A.toFixed(1)} · sin[2π(t/${T.toFixed(1)} + x/${lambda.toFixed(1)})${phaseText}]`;
+            
+            document.getElementById('eqYtot').innerText = 
+                `Για x = 12 cm (t = ${t.toFixed(2)}s):  y₁ = ${y1_at_12.toFixed(2)} cm | y₂ = ${y2_at_12.toFixed(2)} cm  ⇒  y_ολ = ${yTot_at_12.toFixed(2)} cm`;
+        }
+
+        function drawCartesianAxes(A) {
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 1.2;
+            ctx.fillStyle = '#333';
+            ctx.font = '11px sans-serif';
+
+            // Άξονας X
+            ctx.beginPath();
+            ctx.moveTo(originX - 10, centerY);
+            ctx.lineTo(w - 10, centerY);
+            ctx.stroke();
+
+            // Βέλος X
+            ctx.beginPath();
+            ctx.moveTo(w - 10, centerY);
+            ctx.lineTo(w - 18, centerY - 4);
+            ctx.lineTo(w - 18, centerY + 4);
+            ctx.fill();
+            ctx.fillText("x (cm)", w - 35, centerY + 20);
+
+            // Υποδιαιρέσεις X
+            ctx.textAlign = 'center';
+            for (let xCm = 0; xCm <= 26; xCm += 2) {
+                let px = originX + xCm * scale;
+                if (px < w - 20) {
+                    ctx.beginPath();
+                    ctx.moveTo(px, centerY - 3);
+                    ctx.lineTo(px, centerY + 3);
+                    ctx.stroke();
+                    if (xCm % 4 === 0 && xCm !== 0) {
+                        if (xCm === 12) ctx.font = 'bold 12px sans-serif';
+                        else ctx.font = '11px sans-serif';
+                        ctx.fillText(xCm, px, centerY + 16);
+                    }
+                }
+            }
+
+            // Διακεκομμένη γραμμή αναφοράς στο x = 12 cm
+            let pTargetX = originX + xTarget * scale;
+            ctx.strokeStyle = 'rgba(156, 39, 176, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(pTargetX, 25);
+            ctx.lineTo(pTargetX, h - 25);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Άξονας Y
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(originX, h - 20);
+            ctx.lineTo(originX, 20);
+            ctx.stroke();
+
+            // Βέλος Y
+            ctx.beginPath();
+            ctx.moveTo(originX, 20);
+            ctx.lineTo(originX - 4, 28);
+            ctx.lineTo(originX + 4, 28);
+            ctx.fill();
+            ctx.fillText("y (cm)", originX - 15, 15);
+
+            // Σημάδια Πλάτους Y
+            ctx.textAlign = 'right';
+            ctx.font = '11px sans-serif';
+            let yTicks = [
+                { val: 2 * A, label: "+2A" },
+                { val: A, label: "+A" },
+                { val: -A, label: "-A" },
+                { val: -2 * A, label: "-2A" }
+            ];
+
+            yTicks.forEach(tick => {
+                let py = centerY - tick.val * scale;
+                if (py > 25 && py < h - 25) {
+                    ctx.strokeStyle = '#ccc';
+                    ctx.setLineDash([2, 2]);
+                    ctx.beginPath();
+                    ctx.moveTo(originX, py);
+                    ctx.lineTo(w - 20, py);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    ctx.strokeStyle = '#999';
+                    ctx.beginPath();
+                    ctx.moveTo(originX - 3, py);
+                    ctx.lineTo(originX + 3, py);
+                    ctx.stroke();
+                    
+                    ctx.fillText(tick.label, originX - 6, py + 4);
+                }
+            });
+
+            ctx.fillText("0", originX - 6, centerY + 14);
+        }
+
+        function draw() {
+            let A = parseFloat(aSlider.value);
+            let lambda = parseFloat(lambdaSlider.value);
+            let isOpposite = phaseSelect.value === '180';
+
+            updateEquationsText(A, lambda, isOpposite);
+
+            ctx.clearRect(0, 0, w, h);
+
+            drawCartesianAxes(A);
+
+            // Σχεδίαση Χορδής
+            ctx.lineWidth = 3.5;
+
+            for (let px = originX; px < w - 20; px++) {
+                let x1 = (px - originX) / scale;
+                let x2 = (px + 1 - originX) / scale;
+
+                let y1_p1 = calcY1(x1, t, A, lambda);
+                let y1_p2 = calcY2(x1, t, A, lambda, isOpposite);
+                let y1_total = y1_p1 + y1_p2;
+
+                let y2_p1 = calcY1(x2, t, A, lambda);
+                let y2_p2 = calcY2(x2, t, A, lambda, isOpposite);
+                let y2_total = y2_p1 + y2_p2;
+
+                // Χρώματα ανάλογα με την περιοχή
+                if (y1_p1 !== 0 && y1_p2 !== 0) {
+                    ctx.strokeStyle = '#6A1B9A'; // Μωβ στη Συμβολή
+                } else if (y1_p1 !== 0) {
+                    ctx.strokeStyle = '#2196F3'; // Μπλε (1ο Κύμα)
+                } else if (y1_p2 !== 0) {
+                    ctx.strokeStyle = '#F44336'; // Κόκκινο (2ο Κύμα)
+                } else {
+                    ctx.strokeStyle = '#444444'; // Ήρεμη χορδή
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(px, centerY - y1_total * scale);
+                ctx.lineTo(px + 1, centerY - y2_total * scale);
+                ctx.stroke();
+            }
+
+            // Χρονόμετρο
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 13px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText("t = " + t.toFixed(2) + " s", w - 25, 35);
+
+            if (t > 8.0) t = 0;
+        }
+
+        function loop() {
+            if (isPlaying) {
+                t += 0.015;
+            }
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
+</body>
+</html>
