@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Οριζόντια Βολή - PhysicsHub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .sim-page-wrapper { 
+            display: flex; 
+            justify-content: center; 
+            padding: 30px; 
+            gap: 20px; 
+            align-items: flex-start; 
+        }
+        
+        .sim-content { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        
+        .controls { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; 
+            margin-bottom: 15px; 
+            background: white; 
+            padding: 15px 20px; 
+            border-radius: 8px; 
+            width: 100%; 
+            max-width: 500px;
+            border: 1px solid #ddd; 
+            box-sizing: border-box;
+        }
+        
+        .btn-container { 
+            grid-column: span 2; 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+        }
+        
+        .main-layout {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .graphs-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .canvas-card {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        canvas { background: #fff; border-radius: 4px; display: block; }
+        label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
+        input[type="range"] { width: 100%; margin-top: 5px; }
+
+        .theory-panel { 
+            width: 320px; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid #ddd; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); 
+            line-height: 1.5; 
+            font-size: 13.5px;
+        }
+
+        .theory-panel h2 { margin-top: 0; color: #1976d2; font-size: 18px; }
+        .theory-panel h3 { margin-bottom: 5px; color: #333; font-size: 15px; }
+        .formula-box {
+            background: #f8f9fa;
+            border-left: 4px solid #1976d2;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">        
+        <a href="index.html">Αρχική</a>        
+        <div class="dropdown">            
+            <span>Τυπολόγιο ▼</span>            
+            <div class="dropdown-content">                
+                <div class="nested-menu"><span>Γυμνάσιο ▶</span>
+                    <div class="dropdown-content"><a href="typologiaAgymn.html">Α' Γυμνασίου</a><a href="typologiaBgymn.html">Β' Γυμνασίου</a><a href="typologiaGgymn.html">Γ' Γυμνασίου</a></div>
+                </div>                
+                <div class="nested-menu"><span>Λύκειο ▶</span>
+                    <div class="dropdown-content"><a href="typologiaAlyk.html">Α' Λυκείου</a><a href="typologiaBlyk.html">Β' Λυκείου</a><a href="typologiaGlyk.html">Γ' Λυκείου</a></div>
+                </div>            
+            </div>        
+        </div>        
+        <div class="dropdown">            
+            <span>Προσομοιώσεις ▼</span>            
+            <div class="dropdown-content">                
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                <a href="Krouseis.html">Κρούσεις</a>
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
+                <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
+                <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
+                <a href="waves.html">Συμβολή κυμάτων</a>
+		<a href="oriz_voli.html">Οριζόντια βολή</a>
+            </div>        
+        </div>        
+        <a href="physics_in_action.html">Φυσική στη πράξη</a>
+        <a href="about_us.html">Σχετικά με εμάς</a>
+        <a href="feedback.html">Αξιολόγησε μας</a>
+    </div>
+
+    <div class="sim-page-wrapper">
+        
+        <div class="sim-content">
+            <h2>Προσομοίωση Οριζόντιας Βολής</h2>
+            
+            <div class="controls">
+                <div class="btn-container">
+                    <button id="playBtn">Play</button> 
+                    <button id="resetBtn">Reset</button>
+                </div>
+                <label>Αρχική Ταχύτητα v₀ (m/s): 
+                    <input type="range" id="v0Slider" min="5" max="40" value="15" step="1">
+                    <span id="v0Val">15</span>
+                </label>
+                <label>Αρχικό Ύψος h (m): 
+                    <input type="range" id="hSlider" min="10" max="40" value="25" step="1">
+                    <span id="hVal">25</span>
+                </label>
+            </div>
+
+            <div class="main-layout">
+                <div class="graphs-column">
+                    <div class="canvas-card">
+                        <canvas id="graphVxCanvas" width="270" height="230"></canvas>
+                    </div>
+                    <div class="canvas-card">
+                        <canvas id="graphVyCanvas" width="270" height="230"></canvas>
+                    </div>
+                </div>
+
+                <div class="canvas-card">
+                    <canvas id="simCanvas" width="480" height="470"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="theory-panel">
+            <h2>Θεωρία Οριζόντιας Βολής</h2>
+            <p>Η οριζόντια βολή είναι μια <b>σύνθετη κίνηση</b> που πραγματοποιείται στο κατακόρυφο επίπεδο υπό την επίδραση μόνο του βάρους του σώματος (αντίσταση αέρα = 0).</p>
+            
+            <p>Σύμφωνα με την <i>Αρχή Ανεξαρτησίας των Κινήσεων</i>, η κίνηση αναλύεται σε δύο ανεξάρτητες συνιστώσες:</p>
+
+            <h3>1. Οριζόντιος Άξονας (Ox)</h3>
+            <p>Εκτελεί <b>Ευθύγραμμη Ομαλή Κίνηση</b> με σταθερή ταχύτητα $v_x = v_0$.</p>
+            <div class="formula-box">
+                v<sub>x</sub> = v<sub>0</sub><br>
+                x = v<sub>0</sub> · t
+            </div>
+
+            <h3>2. Κατακόρυφος Άξονας (Oy)</h3>
+            <p>Εκτελεί <b>Ελεύθερη Πτώση</b> χωρίς αρχική ταχύτητα ($v_{y0} = 0$) με επιτάχυνση $g$.</p>
+            <div class="formula-box">
+                v<sub>y</sub> = g · t<br>
+                y = ½ · g · t²
+            </div>
+
+            <h3>3. Συνισταμένη Ταχύτητα (v)</h3>
+            <p>Η συνολική ταχύτητα υπολογίζεται με Πυθαγόρειο Θεώρημα:</p>
+            <div class="formula-box">
+                v = √(v<sub>x</sub>² + v<sub>y</sub>²)
+            </div>
+            <p><small><b>Υπόμνημα Διανυσμάτων:</b><br>
+            <span style="color:#2e7d32;">■</span> Οριζόντια $v_x$ (Σταθερή)<br>
+            <span style="color:#d32f2f;">■</span> Κατακόρυφη $v_y$ (Αυξανόμενη)<br>
+            <span style="color:#1976d2;">■</span> Συνισταμένη $v$</small></p>
+        </div>
+
+    </div>
+
+    <script>
+        const simCanvas = document.getElementById('simCanvas');
+        const ctxSim = simCanvas.getContext('2d');
+
+        const graphVxCanvas = document.getElementById('graphVxCanvas');
+        const ctxVx = graphVxCanvas.getContext('2d');
+
+        const graphVyCanvas = document.getElementById('graphVyCanvas');
+        const ctxVy = graphVyCanvas.getContext('2d');
+
+        const playBtn = document.getElementById('playBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const v0Slider = document.getElementById('v0Slider');
+        const hSlider = document.getElementById('hSlider');
+
+        const g = 9.81;
+        let t = 0;
+        let isPlaying = false;
+        let trajectory = [];
+        let historyData = [];
+
+        function initPhysics() {
+            t = 0;
+            isPlaying = false;
+            playBtn.innerText = "Play";
+            trajectory = [];
+            historyData = [];
+            
+            let v0 = parseFloat(v0Slider.value);
+            historyData.push({ t: 0, vx: v0, vy: 0 });
+        }
+
+        playBtn.onclick = () => {
+            let h = parseFloat(hSlider.value);
+            let tTotal = Math.sqrt((2 * h) / g);
+            
+            if (t >= tTotal) {
+                initPhysics();
+            }
+            
+            isPlaying = !isPlaying;
+            playBtn.innerText = isPlaying ? "Pause" : "Play";
+        };
+
+        resetBtn.onclick = () => {
+            initPhysics();
+        };
+
+        [v0Slider, hSlider].forEach(slider => slider.oninput = () => {
+            initPhysics();
+        });
+
+        function drawArrow(ctx, fromX, fromY, toX, toY, color, label) {
+            let headlen = 8;
+            let dx = toX - fromX;
+            let dy = toY - fromY;
+            let angle = Math.atan2(dy, dx);
+            
+            if (Math.hypot(dx, dy) < 2) return;
+
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            if (label) {
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillText(label, toX + Math.cos(angle) * 10, toY + Math.sin(angle) * 10);
+            }
+        }
+
+        // Συνάρτηση για υπολογισμό στρογγυλεμένου μέγιστου ορίου Y (πολλαπλάσια του 20)
+        function getNiceMaxY(rawMax) {
+            if (rawMax <= 20) return 20;  // Τιμές: 0, 5, 10, 15, 20
+            if (rawMax <= 40) return 40;  // Τιμές: 0, 10, 20, 30, 40
+            if (rawMax <= 60) return 60;  // Τιμές: 0, 15, 30, 45, 60
+            if (rawMax <= 80) return 80;  // Τιμές: 0, 20, 40, 60, 80
+            return Math.ceil(rawMax / 20) * 20;
+        }
+
+        initPhysics();
+
+        function loop() {
+            let v0 = parseFloat(v0Slider.value);
+            let h = parseFloat(hSlider.value);
+
+            document.getElementById('v0Val').innerText = v0;
+            document.getElementById('hVal').innerText = h;
+
+            let tTotal = Math.sqrt((2 * h) / g);
+            let maxRange = v0 * tTotal;
+
+            if (isPlaying) {
+                let dt = 0.016; 
+                t += dt;
+
+                if (t >= tTotal) {
+                    t = tTotal;
+                    isPlaying = false;
+                    playBtn.innerText = "Play";
+                }
+
+                let vx_curr = v0;
+                let vy_curr = g * t;
+                historyData.push({ t: t, vx: vx_curr, vy: vy_curr });
+            }
+
+            let x_m = v0 * t;
+            let y_m = 0.5 * g * t * t;
+            let vx = v0;
+            let vy = g * t;
+
+            const originX = 40;
+            const originY = 50;
+            const availableWidth = simCanvas.width - originX - 40; 
+            const scaleX = Math.min(10, availableWidth / maxRange);
+            const scaleY = (simCanvas.height - originY - 50) / 40;
+
+            let ballX = originX + x_m * scaleX;
+            let ballY = originY + y_m * scaleY;
+            let groundY = originY + h * scaleY;
+
+            if (isPlaying || t > 0) {
+                trajectory.push({ x: ballX, y: ballY });
+            }
+
+            // ==========================================
+            // 1. ΣΧΕΔΙΑΣΗ ΠΡΟΣΟΜΟΙΩΣΗΣ (simCanvas)
+            // ==========================================
+            ctxSim.clearRect(0, 0, simCanvas.width, simCanvas.height);
+
+            // Έδαφος
+            ctxSim.fillStyle = '#8d6e63';
+            ctxSim.fillRect(0, groundY, simCanvas.width, simCanvas.height - groundY);
+            ctxSim.strokeStyle = '#5d4037';
+            ctxSim.lineWidth = 2;
+            ctxSim.beginPath();
+            ctxSim.moveTo(0, groundY);
+            ctxSim.lineTo(simCanvas.width, groundY);
+            ctxSim.stroke();
+
+            // Πλατφόρμα / Πύργος
+            ctxSim.fillStyle = '#cfd8dc';
+            ctxSim.fillRect(0, originY, originX, groundY - originY);
+            ctxSim.strokeStyle = '#78909c';
+            ctxSim.strokeRect(0, originY, originX, groundY - originY);
+
+            // Τροχιά (Διακεκομμένη γραμμή)
+            if (trajectory.length > 1) {
+                ctxSim.strokeStyle = '#9e9e9e';
+                ctxSim.setLineDash([3, 3]);
+                ctxSim.lineWidth = 1.5;
+                ctxSim.beginPath();
+                ctxSim.moveTo(trajectory[0].x, trajectory[0].y);
+                for (let p of trajectory) {
+                    ctxSim.lineTo(p.x, p.y);
+                }
+                ctxSim.stroke();
+                ctxSim.setLineDash([]);
+            }
+
+            // Διανύσματα Ταχυτήτων
+            const vScale = 2.8;
+            let arrowVx_X = ballX + vx * vScale;
+            let arrowVx_Y = ballY;
+
+            let arrowVy_X = ballX;
+            let arrowVy_Y = ballY + vy * vScale;
+
+            let arrowV_X = ballX + vx * vScale;
+            let arrowV_Y = ballY + vy * vScale;
+
+            if (vy > 0.5) {
+                ctxSim.strokeStyle = '#bdbdbd';
+                ctxSim.setLineDash([2, 2]);
+                ctxSim.beginPath();
+                ctxSim.moveTo(arrowVx_X, arrowVx_Y);
+                ctxSim.lineTo(arrowV_X, arrowV_Y);
+                ctxSim.lineTo(arrowVy_X, arrowVy_Y);
+                ctxSim.stroke();
+                ctxSim.setLineDash([]);
+            }
+
+            drawArrow(ctxSim, ballX, ballY, arrowVx_X, arrowVx_Y, '#2e7d32', 'vx');
+            drawArrow(ctxSim, ballX, ballY, arrowVy_X, arrowVy_Y, '#d32f2f', 'vy');
+            drawArrow(ctxSim, ballX, ballY, arrowV_X, arrowV_Y, '#1976d2', 'v');
+
+            // Μπάλα
+            ctxSim.beginPath();
+            ctxSim.arc(ballX, ballY, 8, 0, 2 * Math.PI);
+            ctxSim.fillStyle = '#ff6f00';
+            ctxSim.fill();
+            ctxSim.strokeStyle = '#e65100';
+            ctxSim.lineWidth = 1.5;
+            ctxSim.stroke();
+
+            // Πληροφορίες / Χρονόμετρο
+            ctxSim.fillStyle = '#000';
+            ctxSim.font = 'bold 12px sans-serif';
+            ctxSim.textAlign = 'left';
+            ctxSim.fillText("t = " + t.toFixed(2) + " s", 60, 25);
+            ctxSim.fillText("x = " + x_m.toFixed(1) + " m", 160, 25);
+            ctxSim.fillText("y = " + y_m.toFixed(1) + " m", 260, 25);
+
+            // ==========================================
+            // 2. ΔΙΑΓΡΑΜΜΑΤΑ u_x(t) & u_y(t)
+            // ==========================================
+            let niceMaxVx = getNiceMaxY(v0 * 1.1);
+            drawGraph(ctxVx, "Διάγραμμα ux - t", "#2e7d32", tTotal, niceMaxVx, (pt) => pt.vx, "ux (m/s)");
+
+            let maxVy = g * tTotal;
+            let niceMaxVy = getNiceMaxY(maxVy * 1.1);
+            drawGraph(ctxVy, "Διάγραμμα uy - t", "#d32f2f", tTotal, niceMaxVy, (pt) => pt.vy, "uy (m/s)");
+
+            requestAnimationFrame(loop);
+        }
+
+        function drawGraph(ctx, title, color, maxT, maxY, valExtractor, yLabel) {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            const gLeft = 50; 
+            const gRight = 240;
+            const gTop = 45;  
+            const gBottom = 190;
+
+            // Τίτλος
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(title, (gLeft + gRight) / 2, 18);
+
+            // Άξονες
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(gLeft, gTop - 10);
+            ctx.lineTo(gLeft, gBottom);
+            ctx.lineTo(gRight, gBottom);
+            ctx.stroke();
+
+            // Ετικέτες Αξόνων
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(yLabel, 5, gTop - 15);
+            
+            ctx.textAlign = 'center';
+            ctx.fillText("t (s)", gRight + 12, gBottom + 4);
+
+            // Πλέγμα & Τιμές στον κατακόρυφο άξονα (Στρογγυλοποιημένοι Αριθμοί)
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'right';
+            for (let step = 0; step <= 4; step++) {
+                let val = (maxY / 4) * step;
+                let py = gBottom - (val / maxY) * (gBottom - gTop);
+                
+                ctx.strokeStyle = '#eee';
+                ctx.beginPath();
+                ctx.moveTo(gLeft, py);
+                ctx.lineTo(gRight, py);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#666';
+                ctx.fillText(Math.round(val), gLeft - 6, py + 3);
+            }
+
+            // Καμπύλη
+            if (historyData.length > 1) {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+
+                for (let i = 0; i < historyData.length; i++) {
+                    let pt = historyData[i];
+                    let px = gLeft + (pt.t / maxT) * (gRight - gLeft);
+                    let py = gBottom - (valExtractor(pt) / maxY) * (gBottom - gTop);
+                    
+                    px = Math.min(px, gRight);
+                    py = Math.max(gTop, Math.min(gBottom, py));
+
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+                ctx.stroke();
+
+                // Τρέχον σημείο (κουκίδα)
+                let lastPt = historyData[historyData.length - 1];
+                let lastPx = Math.min(gLeft + (lastPt.t / maxT) * (gRight - gLeft), gRight);
+                let lastPy = Math.max(gTop, Math.min(gBottom, gBottom - (valExtractor(lastPt) / maxY) * (gBottom - gTop)));
+
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(lastPx, lastPy, 3.5, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+
+        loop();
+    </script>
+</body>
+</html>
