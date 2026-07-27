@@ -5,21 +5,53 @@
     <title>Προσομοίωση ΑΑΤ - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .sim-page-wrapper { display: flex; justify-content: center; padding: 40px; gap: 30px; align-items: flex-start; }
+        .sim-page-wrapper { 
+            display: flex; 
+            justify-content: center; 
+            padding: 40px; 
+            gap: 30px; 
+            align-items: flex-start; 
+        }
         
-        /* Προσομοίωση (Αριστερά) */
         .sim-content { display: flex; flex-direction: column; align-items: center; }
-        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; background: white; padding: 20px; border-radius: 8px; width: 600px; border: 1px solid #ddd; }
+        
+        .controls { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+            margin-bottom: 15px; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            width: 640px; 
+            border: 1px solid #ddd; 
+            box-sizing: border-box;
+        }
+        
         .btn-container { grid-column: span 3; display: flex; justify-content: center; gap: 10px; }
-        canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; }
+        
+        .canvas-container {
+            display: flex;
+            gap: 10px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        canvas { background: #fff; border-radius: 4px; }
         label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
         input[type="range"] { width: 100%; margin-top: 5px; }
 
-        /* Πλαίσιο Κειμένου (Δεξιά) */
         .theory-panel { 
-            width: 400px; background: white; padding: 25px; border-radius: 15px; 
-            border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            line-height: 1.6; font-size: 14px;
+            width: 380px; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            border: 1px solid #ddd; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            line-height: 1.6; 
+            font-size: 14px;
         }
     </style>
 </head>
@@ -71,7 +103,11 @@
                     <span id="y0Val">2.0</span>
                 </label>
             </div>
-            <canvas id="simCanvas" width="400" height="500"></canvas>
+            
+            <div class="canvas-container">
+                <canvas id="simCanvas" width="250" height="480"></canvas>
+                <canvas id="graphCanvas" width="380" height="480"></canvas>
+            </div>
         </div>
 
         <div class="theory-panel">
@@ -88,14 +124,19 @@
     </div>
 
     <script>
-        const canvas = document.getElementById('simCanvas'); 
-        const ctx = canvas.getContext('2d');
+        const simCanvas = document.getElementById('simCanvas'); 
+        const ctxSim = simCanvas.getContext('2d');
+
+        const graphCanvas = document.getElementById('graphCanvas'); 
+        const ctxGraph = graphCanvas.getContext('2d');
         
-        let y_phys = 0;   // Θέση σε μέτρα (0 = φυσικό μήκος ελατηρίου, κάτω = αρνητικό)
-        let v = 0;        // Ταχύτητα (m/s)
-        let t = 0;        // Χρόνος (s)
+        let y_phys = 0;   
+        let v = 0;        
+        let t = 0;        
         let isPlaying = false;
         let yMaxPhys = -Infinity, yMinPhys = Infinity;
+
+        let historyData = [];
 
         const playBtn = document.getElementById('playBtn');
         const resetBtn = document.getElementById('resetBtn');
@@ -104,22 +145,23 @@
         const bSlider = document.getElementById('bSlider');
         const y0Slider = document.getElementById('y0Slider');
 
-        const g = 9.81; // Επιτάχυνση βαρύτητας
+        const g = 9.81; 
 
         function initPhysics() {
             let m = parseFloat(mSlider.value);
             let k = parseFloat(kSlider.value);
             let y0 = parseFloat(y0Slider.value);
             
-            // Η Θέση Ισορροπίας (Θ.Ι.) βρίσκεται στο y_eq = -m*g/k (κάτω από το φυσικό μήκος)
             let y_eq = -(m * g) / k;
             
-            // Η αρχική θέση ορίζεται ως απομάκρυνση από τη Θέση Ισορροπίας
             y_phys = y_eq + y0; 
             v = 0; 
             t = 0; 
             yMaxPhys = y_phys; 
             yMinPhys = y_phys;
+            
+            historyData = [];
+            historyData.push({ t: 0, y_rel: y0 });
         }
 
         playBtn.onclick = () => { 
@@ -145,17 +187,13 @@
             let b = parseFloat(bSlider.value);
             let y0 = parseFloat(y0Slider.value);
 
-            // Ενημέρωση των τιμών στα labels
             document.getElementById('kVal').innerText = k; 
             document.getElementById('mVal').innerText = m;
             document.getElementById('bVal').innerText = b; 
             document.getElementById('y0Val').innerText = y0.toFixed(1);
 
             if (isPlaying) {
-                let dt = 0.016; // Time step (~60fps)
-                
-                // Συνισταμένη δύναμη: F_spring + F_gravity + F_damping
-                // F_spring = -k * y_phys, F_gravity = -m * g, F_damping = -b * v
+                let dt = 0.016; 
                 let a = (-k * y_phys - m * g - b * v) / m;
                 
                 v += a * dt; 
@@ -164,97 +202,232 @@
 
                 if (y_phys > yMaxPhys) yMaxPhys = y_phys; 
                 if (y_phys < yMinPhys) yMinPhys = y_phys;
+
+                let y_eq = -(m * g) / k;
+                let y_rel = y_phys - y_eq; 
+
+                historyData.push({ t: t, y_rel: y_rel });
+
+                if (historyData.length > 600) {
+                    historyData.shift();
+                }
             }
 
-            // Υπολογισμός Θέσης Ισορροπίας (σε μέτρα)
             let y_eq = -(m * g) / k;
+            
+            const scale = 20;     
+            const originY = 140;  
 
-            // Μετατροπή των μέτρων σε Pixels στον καμβά
-            // y_phys = 0 (φυσικό μήκος) -> Pixel 120
-            // Κλίμακα: 1m = 25 pixels
-            const scale = 25;
-            const originY = 120;
             let canvasY = originY - (y_phys * scale);
             let canvasY_eq = originY - (y_eq * scale);
+            let canvasY_fm = originY; // Φυσικό μήκος (y = 0)
 
-            // Καθαρισμός καμβά
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // ==========================================
+            // 1. ΣΧΕΔΙΑΣΗ ΠΡΟΣΟΜΟΙΩΣΗΣ (simCanvas)
+            // ==========================================
+            ctxSim.clearRect(0, 0, simCanvas.width, simCanvas.height);
 
-            // 1. Πλέγμα & Κλίμακα Μέτρων
-            ctx.strokeStyle = '#f0f0f0'; 
-            ctx.lineWidth = 1; 
-            ctx.fillStyle = '#888'; 
-            ctx.textAlign = 'right';
-            ctx.font = '11px sans-serif';
+            // Πλέγμα & Κλίμακα Μέτρων
+            ctxSim.strokeStyle = '#f0f0f0'; 
+            ctxSim.lineWidth = 1; 
+            ctxSim.fillStyle = '#888'; 
+            ctxSim.textAlign = 'right';
+            ctxSim.font = '11px sans-serif';
             
-            for(let i = 40; i < 480; i += 40) { 
-                ctx.beginPath(); 
-                ctx.moveTo(50, i); 
-                ctx.lineTo(380, i); 
-                ctx.stroke(); 
-                let mVal = -((i - originY) / scale);
-                ctx.fillText(mVal.toFixed(1) + " m", 45, i + 4); 
+            for (let mVal = 4.5; mVal >= -15.0; mVal -= 1.5) {
+                let i = originY - (mVal * scale);
+                if (i >= 35 && i <= 465) {
+                    ctxSim.beginPath(); 
+                    ctxSim.moveTo(40, i); 
+                    ctxSim.lineTo(230, i); 
+                    ctxSim.stroke(); 
+                    ctxSim.fillText(mVal.toFixed(1) + "m", 35, i + 4); 
+                }
             }
 
-            // 2. Πράσινη Διακεκομμένη Γραμμή -> Θέση Ισορροπίας (Θ.Ι.)
-            ctx.strokeStyle = '#2e7d32'; 
-            ctx.setLineDash([5, 5]); 
-            ctx.lineWidth = 1.5;
-            ctx.beginPath(); 
-            ctx.moveTo(50, canvasY_eq); 
-            ctx.lineTo(380, canvasY_eq); 
-            ctx.stroke(); 
+            // --- 1. Γραμμή Φυσικού Μήκους (Φ.Μ.) ---
+            ctxSim.strokeStyle = '#ff9800'; 
+            ctxSim.setLineDash([4, 4]); 
+            ctxSim.lineWidth = 1.5;
+            ctxSim.beginPath(); 
+            ctxSim.moveTo(40, canvasY_fm); 
+            ctxSim.lineTo(230, canvasY_fm); 
+            ctxSim.stroke(); 
             
-            ctx.fillStyle = '#2e7d32';
-            ctx.textAlign = 'left';
-            ctx.fillText("Θ.Ι. (" + y_eq.toFixed(2) + "m)", 310, canvasY_eq - 5);
+            ctxSim.fillStyle = '#e65100';
+            ctxSim.font = 'bold 10px sans-serif';
+            ctxSim.textAlign = 'left';
+            ctxSim.fillText("Φ.Μ. (0.0m)", 150, canvasY_fm - 4);
 
-            // 3. Κόκκινες Διακεκομμένες Γραμμές -> Ακραίες Θέσεις
-            ctx.strokeStyle = '#d32f2f'; 
-            ctx.setLineDash([3, 4]); 
-            ctx.beginPath(); 
-            ctx.moveTo(50, originY - (yMaxPhys * scale)); 
-            ctx.lineTo(380, originY - (yMaxPhys * scale)); 
-            ctx.stroke(); 
+            // --- 2. Θέση Ισορροπίας (Θ.Ι.) ---
+            ctxSim.strokeStyle = '#2e7d32'; 
+            ctxSim.setLineDash([5, 5]); 
+            ctxSim.lineWidth = 1.5;
+            ctxSim.beginPath(); 
+            ctxSim.moveTo(40, canvasY_eq); 
+            ctxSim.lineTo(230, canvasY_eq); 
+            ctxSim.stroke(); 
             
-            ctx.beginPath(); 
-            ctx.moveTo(50, originY - (yMinPhys * scale)); 
-            ctx.lineTo(380, originY - (yMinPhys * scale)); 
-            ctx.stroke(); 
-            ctx.setLineDash([]); // Επαναφορά συνεχούς γραμμής
+            ctxSim.fillStyle = '#2e7d32';
+            ctxSim.font = 'bold 10px sans-serif';
+            ctxSim.textAlign = 'left';
+            ctxSim.fillText("Θ.Ι. (" + y_eq.toFixed(2) + "m)", 150, canvasY_eq + 12);
 
-            // 4. Οροφή
-            ctx.fillStyle = '#333'; 
-            ctx.fillRect(150, 10, 150, 10); 
+            // --- 3. Δείκτης Αρχικής Παραμόρφωσης (Δl₀) - Μετατοπισμένος Δεξιά ---
+            let dL0 = Math.abs(y_eq);
+            ctxSim.strokeStyle = '#e65100';
+            ctxSim.lineWidth = 1.2;
+            ctxSim.setLineDash([]);
+            
+            // Κάθετος βέλος μεταξύ Φ.Μ. και Θ.Ι. στο x = 185
+            ctxSim.beginPath();
+            ctxSim.moveTo(185, canvasY_fm);
+            ctxSim.lineTo(185, canvasY_eq);
+            ctxSim.stroke();
+            
+            // Ετικέτα Δl₀ στα δεξιά του βέλους (x = 190)
+            ctxSim.fillStyle = '#e65100';
+            ctxSim.font = 'bold 10px sans-serif';
+            ctxSim.textAlign = 'left';
+            ctxSim.fillText("Δl₀=" + dL0.toFixed(2) + "m", 190, (canvasY_fm + canvasY_eq) / 2 + 3);
 
-            // 5. Ελατήριο (Σχεδίαση Zig-Zag)
-            ctx.strokeStyle = '#555'; 
-            ctx.lineWidth = 2;
-            ctx.beginPath(); 
-            ctx.moveTo(225, 20);
+            // Ακραίες Θέσεις (Κόκκινες γραμμές)
+            ctxSim.strokeStyle = '#d32f2f'; 
+            ctxSim.setLineDash([3, 4]); 
+            ctxSim.beginPath(); 
+            ctxSim.moveTo(40, originY - (yMaxPhys * scale)); 
+            ctxSim.lineTo(230, originY - (yMaxPhys * scale)); 
+            ctxSim.stroke(); 
+            
+            ctxSim.beginPath(); 
+            ctxSim.moveTo(40, originY - (yMinPhys * scale)); 
+            ctxSim.lineTo(230, originY - (yMinPhys * scale)); 
+            ctxSim.stroke(); 
+            ctxSim.setLineDash([]); 
+
+            // Οροφή
+            ctxSim.fillStyle = '#333'; 
+            ctxSim.fillRect(70, 10, 100, 10); 
+
+            // Ελατήριο
+            ctxSim.strokeStyle = '#555'; 
+            ctxSim.lineWidth = 2;
+            ctxSim.beginPath(); 
+            ctxSim.moveTo(120, 20);
             let coils = 20;
             for (let i = 1; i <= coils; i++) { 
-                let px = 225 + (i % 2 === 0 ? 12 : -12);
+                let px = 120 + (i % 2 === 0 ? 10 : -10);
                 let py = 20 + (canvasY - 20) * (i / coils);
-                ctx.lineTo(px, py); 
+                ctxSim.lineTo(px, py); 
             } 
-            ctx.stroke();
+            ctxSim.stroke();
 
-            // 6. Σώμα (Μάζα) - Το μέγεθος αλλάζει ελαφρώς ανάλογα με τη μάζα
-            let radius = 14 + m * 2;
-            ctx.beginPath(); 
-            ctx.arc(225, canvasY, radius, 0, 2 * Math.PI); 
-            ctx.fillStyle = '#1976d2'; 
-            ctx.fill(); 
-            ctx.strokeStyle = '#0d47a1';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
+            // Σώμα (Μάζα)
+            let radius = 12 + m * 2;
+            ctxSim.beginPath(); 
+            ctxSim.arc(120, canvasY, radius, 0, 2 * Math.PI); 
+            ctxSim.fillStyle = '#1976d2'; 
+            ctxSim.fill(); 
+            ctxSim.strokeStyle = '#0d47a1';
+            ctxSim.lineWidth = 1.5;
+            ctxSim.stroke();
 
-            // 7. Χρονόμετρο
-            ctx.fillStyle = '#000'; 
-            ctx.font = 'bold 13px sans-serif';
-            ctx.textAlign = 'right';
-            ctx.fillText("t = " + t.toFixed(2) + " s", 370, 35);
+            // Χρονόμετρο
+            ctxSim.fillStyle = '#000'; 
+            ctxSim.font = 'bold 12px sans-serif';
+            ctxSim.textAlign = 'left';
+            ctxSim.fillText("t = " + t.toFixed(2) + " s", 175, 25);
+
+            // ==========================================
+            // 2. ΣΧΕΔΙΑΣΗ ΔΙΑΓΡΑΜΜΑΤΟΣ y(t) (graphCanvas)
+            // ==========================================
+            ctxGraph.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+
+            const gLeft = 45;
+            const gRight = 360;
+            const gTop = 40;
+            const gBottom = 440;
+            const gCenterY = (gTop + gBottom) / 2; 
+            const yScale = 40; 
+
+            ctxGraph.fillStyle = '#000';
+            ctxGraph.font = 'bold 13px sans-serif';
+            ctxGraph.textAlign = 'center';
+            ctxGraph.fillText("Διάγραμμα Απομάκρυνσης y(t)", (gLeft + gRight) / 2, 20);
+
+            ctxGraph.strokeStyle = '#333';
+            ctxGraph.lineWidth = 1.5;
+            
+            ctxGraph.beginPath();
+            ctxGraph.moveTo(gLeft, gTop);
+            ctxGraph.lineTo(gLeft, gBottom);
+            ctxGraph.stroke();
+
+            ctxGraph.strokeStyle = '#2e7d32'; 
+            ctxGraph.setLineDash([4, 4]);
+            ctxGraph.beginPath();
+            ctxGraph.moveTo(gLeft, gCenterY);
+            ctxGraph.lineTo(gRight, gCenterY);
+            ctxGraph.stroke();
+            ctxGraph.setLineDash([]);
+
+            ctxGraph.fillStyle = '#000';
+            ctxGraph.font = '11px sans-serif';
+            ctxGraph.textAlign = 'right';
+            ctxGraph.fillText("y (m)", gLeft - 8, gTop + 10);
+            ctxGraph.fillText("0 (Θ.Ι.)", gLeft - 5, gCenterY + 4);
+            ctxGraph.fillText("t (s)", gRight, gCenterY + 18);
+
+            ctxGraph.fillStyle = '#666';
+            ctxGraph.textAlign = 'right';
+            for (let val = -4; val <= 4; val += 2) {
+                if (val === 0) continue;
+                let py = gCenterY - val * yScale;
+                if (py >= gTop && py <= gBottom) {
+                    ctxGraph.strokeStyle = '#eee';
+                    ctxGraph.beginPath();
+                    ctxGraph.moveTo(gLeft, py);
+                    ctxGraph.lineTo(gRight, py);
+                    ctxGraph.stroke();
+                    ctxGraph.fillText(val.toFixed(1), gLeft - 5, py + 4);
+                }
+            }
+
+            if (historyData.length > 1) {
+                ctxGraph.strokeStyle = '#d32f2f';
+                ctxGraph.lineWidth = 2;
+                ctxGraph.beginPath();
+
+                let tLatest = historyData[historyData.length - 1].t;
+                let tMin = Math.max(0, tLatest - 8); 
+                let tMax = Math.max(8, tLatest);
+
+                for (let i = 0; i < historyData.length; i++) {
+                    let pt = historyData[i];
+                    if (pt.t < tMin) continue;
+
+                    let px = gLeft + ((pt.t - tMin) / (tMax - tMin)) * (gRight - gLeft);
+                    let py = gCenterY - pt.y_rel * yScale;
+                    py = Math.max(gTop, Math.min(gBottom, py));
+
+                    if (i === 0 || pt.t === tMin) {
+                        ctxGraph.moveTo(px, py);
+                    } else {
+                        ctxGraph.lineTo(px, py);
+                    }
+                }
+                ctxGraph.stroke();
+
+                let lastPt = historyData[historyData.length - 1];
+                let lastPx = gLeft + ((lastPt.t - tMin) / (tMax - tMin)) * (gRight - gLeft);
+                let lastPy = gCenterY - lastPt.y_rel * yScale;
+                lastPy = Math.max(gTop, Math.min(gBottom, lastPy));
+
+                ctxGraph.fillStyle = '#d32f2f';
+                ctxGraph.beginPath();
+                ctxGraph.arc(lastPx, lastPy, 4, 0, 2 * Math.PI);
+                ctxGraph.fill();
+            }
 
             requestAnimationFrame(loop);
         }
