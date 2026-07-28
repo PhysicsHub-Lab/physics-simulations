@@ -66,7 +66,7 @@
                     <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
                     <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
                     <a href="waves.html">Συμβολή κυμάτων</a>
-				    <a href="oriz_voli.html">Οριζόντια βολή</a>
+                    <a href="oriz_voli.html">Οριζόντια βολή</a>
                 </div>
             </div>
             <a href="physics_in_action.html">Φυσική στη πράξη</a>
@@ -200,6 +200,37 @@
             // Άξονες
             drawArrow(xMinPixels, yMaxPixels, xMinPixels, yMinPixels - 15, 'black', 2); 
             drawArrow(xMinPixels, yMaxPixels, xMaxPixels + 15, yMaxPixels, 'black', 2); 
+
+            // Βαθμονόμηση και Αριθμοί στους Άξονες (Ticks & Labels)
+            ctx.fillStyle = 'black';
+            ctx.font = '11px sans-serif';
+            ctx.lineWidth = 1;
+
+            // Άξονας X (0 έως 500m)
+            for (let val = 0; val <= 500; val += 100) {
+                let px = xMinPixels + val;
+                if (px <= xMaxPixels) {
+                    ctx.beginPath();
+                    ctx.moveTo(px, yMaxPixels);
+                    ctx.lineTo(px, yMaxPixels + 5);
+                    ctx.stroke();
+                    ctx.textAlign = 'center';
+                    ctx.fillText(val, px, yMaxPixels + 18);
+                }
+            }
+
+            // Άξονας Y (0 έως 400m)
+            for (let val = 0; val <= 400; val += 100) {
+                let py = yMaxPixels - val;
+                if (py >= yMinPixels) {
+                    ctx.beginPath();
+                    ctx.moveTo(xMinPixels, py);
+                    ctx.lineTo(xMinPixels - 5, py);
+                    ctx.stroke();
+                    ctx.textAlign = 'right';
+                    ctx.fillText(val, xMinPixels - 8, py + 4);
+                }
+            }
             
             // Διανύσματα Ταχύτητας και Δύναμης
             if (x > 0 && x < canvas.width) { 
