@@ -5,18 +5,196 @@
     <title>Φυσική εν Δράσει - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .content-wrapper { display: flex; flex-direction: column; padding: 40px; gap: 40px; max-width: 1200px; margin: auto; }
-        .row { display: flex; gap: 30px; align-items: flex-start; }
-        
-        .visuals-column { flex: 1.5; display: flex; flex-direction: column; gap: 20px; }
-        .visual-item { background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
-        .visual-item img { width: 100%; height: auto; border-radius: 4px; }
-        .visual-item p { font-weight: bold; margin-top: 10px; color: #333; text-align: center; font-size: 14px; }
-        
+        /* --- 1. DARK WARM CHARCOAL BACKGROUND --- */
+        body {
+            background-image: none !important;
+            background: #18181b !important; /* Βαθύς, ζεστός άνθρακας - ξεκούραστος */
+            background-attachment: fixed !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            color: #e2e8f0; /* Απαλό Off-White κείμενο */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- 2. ΤΑ ΔΥΟ ΦΩΤΑΚΙΑ (AMBIENT GLOWS) ΣΤΟ BACKGROUND --- */
+        body::before, body::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35; /* Αρκούντως εμφανή για ωραίο εφέ */
+            z-index: -1;
+            animation: floatGlow 12s infinite alternate ease-in-out;
+        }
+
+        /* Φωτάκι 1: Βυσσινί (πάνω δεξιά) */
+        body::before {
+            width: 500px;
+            height: 500px;
+            background: #800020; 
+            top: 80px;
+            right: -80px;
+        }
+
+        /* Φωτάκι 2: Ζεστό Crimson / Ροδί (κάτω αριστερά) */
+        body::after {
+            width: 550px;
+            height: 550px;
+            background: #be123c; 
+            bottom: 150px;
+            left: -100px;
+            animation-delay: -6s;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(40px) scale(1.08); }
+        }
+
+        /* CONTAINER & ΔΙΑΤΑΞΗ */
+        .content-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            padding: 40px 20px; 
+            gap: 40px; 
+            max-width: 1200px; 
+            margin: auto; 
+        }
+
+        .row { 
+            display: flex; 
+            gap: 30px; 
+            align-items: flex-start; 
+        }
+
+        /* 1η & 3η Ενότητα */
+        .row {
+            flex-direction: row-reverse;
+        }
+
+        /* 2η Ενότητα */
+        .row:nth-child(even) {
+            flex-direction: row;
+        }
+
+        /* ΣΤΗΛΗ ΕΙΚΟΝΩΝ */
+        .visuals-column { 
+            flex: 1.5; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
+
+        /* Σκοτεινές Κάρτες με ημιδιαφάνεια για να φαίνονται τα φωτάκια από πίσω */
+        .visual-item { 
+            background: rgba(39, 39, 42, 0.85); 
+            backdrop-filter: blur(8px);
+            padding: 12px; 
+            border-radius: 14px; 
+            border: 1px solid #3f3f46; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visual-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(128, 0, 32, 0.3);
+            border-color: #be123c;
+        }
+
+        .visual-item img { 
+            width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .visual-item:hover img {
+            transform: scale(1.015);
+        }
+
+        .visual-item p { 
+            font-weight: 500; 
+            margin-top: 10px; 
+            margin-bottom: 2px;
+            color: #a1a1aa; 
+            text-align: center; 
+            font-size: 13.5px; 
+        }
+
+        /* ΣΤΗΛΗ ΚΕΙΜΕΝΟΥ */
         .text-column { 
-            flex: 1; background: #fff; padding: 30px; border-radius: 8px; 
-            border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            line-height: 1.6; font-size: 14px;
+            flex: 1; 
+            background: rgba(39, 39, 42, 0.85); 
+            backdrop-filter: blur(8px);
+            padding: 32px; 
+            border-radius: 14px; 
+            border: 1px solid #3f3f46; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); 
+            line-height: 1.7; 
+            font-size: 14.5px;
+            color: #e2e8f0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* ΒΥΣΣΙΝΙ ACCENT LINE HIGHLIGHT */
+        .text-column::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0%;
+            background: linear-gradient(180deg, #800020, #f43f5e);
+            border-radius: 14px 0 0 14px;
+            transition: height 0.3s ease;
+        }
+
+        .text-column:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border-color: #52525b;
+        }
+
+        .text-column:hover::before {
+            height: 100%;
+        }
+
+        .text-column h2 {
+            margin-top: 0;
+            color: #fb7185; /* Απαλό Ροδί για να διαβάζεται τέλεια στο σκούρο */
+            font-size: 21px;
+            margin-bottom: 14px;
+        }
+
+        .text-column h3 {
+            font-size: 16px;
+            color: #f43f5e;
+            margin-top: 20px;
+        }
+
+        .text-column a {
+            color: #fb7185;
+            text-decoration: underline;
+        }
+
+        .text-column b {
+            color: #ffffff;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .row, .row:nth-child(even) {
+                flex-direction: column-reverse;
+                gap: 20px;
+            }
+            .visuals-column, .text-column {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -25,16 +203,18 @@
     <div class="navbar">
         <a href="index.html">Αρχική</a>
         <div class="dropdown">
-            <span>Τυπολόγιο ▼</span>
+            <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
             <div class="dropdown-content">
-                <div class="nested-menu"><span>Γυμνάσιο ▶</span>
+                <div class="nested-menu">
+                    <a href="#">Γυμνάσιο ▶</a>
                     <div class="dropdown-content">
                         <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
                         <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
                         <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
                     </div>
                 </div>
-                <div class="nested-menu"><span>Λύκειο ▶</span>
+                <div class="nested-menu">
+                    <a href="#">Λύκειο ▶</a>
                     <div class="dropdown-content">
                         <a href="typologiaAlyk.html">Α' Λυκείου</a>
                         <a href="typologiaBlyk.html">Β' Λυκείου</a>
@@ -44,7 +224,7 @@
             </div>
         </div>
         <div class="dropdown">
-            <span>Προσομοιώσεις ▼</span>
+            <a href="#" class="dropbtn">Προσομοιώσεις ▼</a>
             <div class="dropdown-content">
                 <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
                 <a href="Krouseis.html">Κρούσεις</a>
@@ -53,7 +233,7 @@
                 <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
                 <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
                 <a href="waves.html">Συμβολή κυμάτων</a>
-				<a href="oriz_voli.html">Οριζόντια βολή</a>
+                <a href="oriz_voli.html">Οριζόντια βολή</a>
             </div>
         </div>
         <a href="physics_in_action.html">Φυσική στη πράξη</a>
@@ -63,6 +243,7 @@
 
     <div class="content-wrapper">
         
+        <!-- 1η Ενότητα -->
         <div class="row">
             <div class="visuals-column">
                 <div class="visual-item">
@@ -77,10 +258,11 @@
             <div class="text-column">
                 <h2>Φθίνουσα ταλάντωση και αμορτισέρ</h2>
                 <p>Έστω πως βρίσκεστε στο αυτοκίνητο καθ’ οδόν για το μάθημα Φυσικής σας. Παρατηρείτε μπροστά ότι ο δρόμος είναι γεμάτος λακκούβες. Έχετε αναρωτηθεί ποτέ τι μηχανισμούς έχει το αυτοκίνητο ώστε να μην αναπηδά λες και είστε σε rave πάρτι; Η απάντηση κρύβεται στις φθίνουσες ταλαντώσεις. Το αυτοκίνητο συνδέεται με τον τροχό με ένα ελατήριο και με ένα μηχάνημα το οποίο αποσβένει τις ταλαντώσεις και είναι γνωστό ως αμορτισέρ (όπως φαίνεται στην πρώτη εικόνα).</p>
-                <p>Η καθαρή σύνδεση μεταξύ της πραγματικότητας και του φυσικού μοντέλου γίνεται στη δεύτερη εικόνα. Τώρα που καταλάβατε το πόση Φυσική κρύβεται μέσα σε κάτι τόσο καθημερινό, πιστεύουμε πως είναι η καλύτερη ευκαιρία να πάτε πίσω στην <a href="oscilator.html" style="color: blue; text-decoration: underline;">προσομοίωση των ταλαντώσεων</a> για να επιβεβαιώσετε και μόνοι τα συμπεράσματά σας.</p>
+                <p>Η καθαρή σύνδεση μεταξύ της πραγματικότητας και του φυσικού μοντέλου γίνεται στη δεύτερη εικόνα. Τώρα που καταλάβατε το πόση Φυσική κρύβεται μέσα σε κάτι τόσο καθημερινό, πιστεύουμε πως είναι η καλύτερη ευκαιρία να πάτε πίσω στην <a href="oscilator.html">προσομοίωση των ταλαντώσεων</a> για να επιβεβαιώσετε και μόνοι τα συμπεράσματά σας.</p>
             </div>
         </div>
 
+        <!-- 2η Ενότητα -->
         <div class="row">
             <div class="visuals-column">
                 <div class="visual-item">
@@ -100,6 +282,7 @@
             </div>
         </div>
 
+        <!-- 3η Ενότητα -->
         <div class="row">
             <div class="visuals-column">
                 <div class="visual-item">
