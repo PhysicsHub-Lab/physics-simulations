@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Προσομοίωση Κρούσεων - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
-    
     <style>
         /* Στοίχιση στο κέντρο της σελίδας */
         .page-content { 
@@ -19,11 +18,41 @@
         }
 
         .sim-container { display: flex; flex-direction: column; }
-        .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 12px; width: 550px; border: 1px solid #ddd; }
+        
+        /* Τίτλος σε λευκό χρώμα */
+        .sim-container h2 {
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .controls { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+            margin-bottom: 15px; 
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 15px; 
+            border-radius: 12px; 
+            width: 550px; 
+            border: 1px solid #ddd; 
+            box-sizing: border-box;
+        }
+
         canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; margin-top: 10px; }
         
         /* Πλαίσιο κειμένου */
-        .info-box { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 8px; width: 350px; border: 1px solid #ddd; line-height: 1.6; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .info-box { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 20px; 
+            border-radius: 8px; 
+            width: 350px; 
+            border: 1px solid #ddd; 
+            line-height: 1.6; 
+            font-size: 14px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        }
+        
         .info-box h3 { color: #800020; margin-top: 0; }
 
         label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
@@ -35,16 +64,18 @@
     <div class="navbar">
         <a href="index.html">Αρχική</a>
         <div class="dropdown">
-            <span>Τυπολόγιο ▼</span>
+            <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
             <div class="dropdown-content">
-                <div class="nested-menu"><span>Γυμνάσιο ▶</span>
+                <div class="nested-menu">
+                    <a href="#">Γυμνάσιο ▶</a>
                     <div class="dropdown-content">
                         <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
                         <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
                         <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
                     </div>
                 </div>
-                <div class="nested-menu"><span>Λύκειο ▶</span>
+                <div class="nested-menu">
+                    <a href="#">Λύκειο ▶</a>
                     <div class="dropdown-content">
                         <a href="typologiaAlyk.html">Α' Λυκείου</a>
                         <a href="typologiaBlyk.html">Β' Λυκείου</a>
@@ -54,7 +85,7 @@
             </div>
         </div>
         <div class="dropdown">
-            <span>Προσομοιώσεις ▼</span>
+            <a href="#" class="dropbtn">Προσομοιώσεις ▼</a>
             <div class="dropdown-content">
                 <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
                 <a href="Krouseis.html">Κρούσεις</a>
@@ -63,7 +94,7 @@
                 <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
                 <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
                 <a href="waves.html">Συμβολή κυμάτων</a>
-				<a href="oriz_voli.html">Οριζόντια βολή</a>
+                <a href="oriz_voli.html">Οριζόντια βολή</a>
             </div>
         </div>
         <a href="physics_in_action.html">Φυσική στη πράξη</a>
@@ -91,8 +122,7 @@
             <h3>Προσομοίωση Ελαστικών Κρούσεων (1D)</h3>
             <p>Στην ελαστική κρούση ισχύουν ταυτόχρονα η Αρχή Διατήρησης της Ορμής (ΑΔΟ) και η Αρχή Διατήρησης της Κινητικής Ενέργειας.</p>
             <p>Η ορμή του συστήματος διατηρείται: <strong>m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'</strong></p>
-            <p>Η κινητική ενέργεια διατηρείται: <strong>½m₁v₁² + ½m₂v₂² = ½m₁(v₁')² + ½m₂(v₂')²</strong></p>
-            <p>Από τον συνδυασμό των εξισώσεων προκύπτουν οι τελικές ταχύτητες:<br>
+            <p>Η κινητική ενέργεια διατηρείται: <strong>½m₁v₁² + ½m₂v₂² = ½m₁(v₁')² + ½m₂(v₂')²</strong></p>            <p>Από τον συνδυασμό των εξισώσεων προκύπτουν οι τελικές ταχύτητες:<br>
             <strong>v₁' = [(m₁ − m₂)/(m₁ + m₂)]·v₁ + [2m₂/(m₁ + m₂)]·v₂</strong><br>
             <strong>v₂' = [2m₁/(m₁ + m₂)]·v₁ + [(m₂ − m₁)/(m₁ + m₂)]·v₂</strong></p>
             <p>Η προσομοίωση επιβεβαιώνει ότι στην ελαστική κρούση η ενέργεια δεν χάνεται, αλλά μεταφέρεται μεταξύ των σωμάτων ανάλογα με τη μάζα και την αρχική τους ταχύτητα.</p>
@@ -105,7 +135,7 @@
         const trackY = 180;
         const size = 40;
         let x1, v1, m1, x2, v2, m2, t = 0, isPlaying = false;
-        
+
         const playBtn = document.getElementById('playBtn');
         const resetBtn = document.getElementById('resetBtn');
         const m1Slider = document.getElementById('m1Slider'), v1Slider = document.getElementById('v1Slider');
@@ -143,9 +173,10 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.strokeStyle = '#aaa'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, trackY + size); ctx.lineTo(canvas.width, trackY + size); ctx.stroke();
             ctx.fillStyle = 'blue'; ctx.fillRect(x1, trackY, size, size);
-            ctx.fillStyle = 'black'; ctx.fillText("v₁ = " + v1.toFixed(2) + " m/s", x1 + size/2, trackY - 10);
+            ctx.fillStyle = 'black'; ctx.fillText("v₁ = " + v1.toFixed(2) + " m/s", x1 + size/2 - 25, trackY - 10);
             ctx.fillStyle = 'red'; ctx.fillRect(x2, trackY, size, size);
-            ctx.fillText("v₂ = " + v2.toFixed(2) + " m/s", x2 + size/2, trackY - 10);
+            ctx.fillText("v₂ = " + v2.toFixed(2) + " m/s", x2 + size/2 - 25, trackY - 10);
+            ctx.fillStyle = 'black';
             ctx.fillText("t = " + t.toFixed(2) + " s", 30, 40);
             requestAnimationFrame(loop);
         }
