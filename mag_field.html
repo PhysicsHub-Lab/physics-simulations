@@ -4,77 +4,50 @@
     <meta charset="UTF-8">
     <title>Προσομοίωση Δύναμης Lorentz - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        body { margin: 0; padding: 0; background: url('math1.jpg') fixed center; background-size: cover; font-family: sans-serif; }
-        .overlay { min-height: 100vh; padding: 20px; }
-        
-        .main-layout { 
-            display: flex; 
-            gap: 20px; 
-            align-items: flex-start; 
-            justify-content: center; 
-            flex-wrap: wrap; 
-            max-width: 1200px;
-            margin: 0 auto; 
-        }
-
-        .simulation-section { display: flex; flex-direction: column; }
-        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 8px; width: 620px; border: 1px solid #ddd; }
-        .btn-container { grid-column: span 3; display: flex; justify-content: center; gap: 15px; margin-bottom: 5px; }
-        canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; }
-        
-        .info-box { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 8px; width: 350px; border: 1px solid #ddd; line-height: 1.6; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .info-box h3 { color: #800020; margin-top: 0; }
-        
-        label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 500; }
-        .slider-container { display: flex; align-items: center; gap: 8px; }
-        span { font-weight: bold; min-width: 35px; }
-        select { padding: 4px; font-weight: bold; width: 100%; border-radius: 4px; border: 1px solid #ccc; }
-        input[type="range"] { width: 100%; }
-    </style>
 </head>
 <body>
-    <div class="overlay">
-        <div class="navbar">
-            <a href="index.html">Αρχική</a>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
-                <div class="dropdown-content">
-                    <div class="nested-menu"><a href="#">Γυμνάσιο ▶</a>
-                        <div class="dropdown-content">
-                            <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
-                            <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
-                            <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
-                        </div>
-                    </div>
-                    <div class="nested-menu"><a href="#">Λύκειο ▶</a>
-                        <div class="dropdown-content">
-                            <a href="typologiaAlyk.html">Α' Λυκείου</a>
-                            <a href="typologiaBlyk.html">Β' Λυκείου</a>
-                            <a href="typologiaGlyk.html">Γ' Λυκείου</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="dropdown">
-                <a class="dropbtn">Προσομοιώσεις ▼</a>
-                <div class="dropdown-content">
-                    <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
-                    <a href="Krouseis.html">Κρούσεις</a>
-                    <a href="mag_field.html">Μαγνητικό Πεδίο</a>
-                    <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
-                    <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
-                    <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
-                    <a href="waves.html">Συμβολή κυμάτων</a>
-                    <a href="oriz_voli.html">Οριζόντια βολή</a>
-                </div>
-            </div>
-            <a href="physics_in_action.html">Φυσική στη πράξη</a>
-            <a href="about_us.html">Σχετικά με εμάς</a>
-            <a href="feedback.html">Αξιολόγησε μας</a>
-        </div>
 
-        <h2 style="text-align: center;">Κίνηση Φορτίου σε Μαγνητικό Πεδίο (2D)</h2>
+    <div class="navbar">
+        <a href="index.html">Αρχική</a>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
+            <div class="dropdown-content">
+                <div class="nested-menu"><a href="#">Γυμνάσιο ▶</a>
+                    <div class="dropdown-content">
+                        <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                        <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                        <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                    </div>
+                </div>
+                <div class="nested-menu"><a href="#">Λύκειο ▶</a>
+                    <div class="dropdown-content">
+                        <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                        <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                        <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a class="dropbtn">Προσομοιώσεις ▼</a>
+            <div class="dropdown-content">
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                <a href="Krouseis.html">Κρούσεις</a>
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
+                <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
+                <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
+                <a href="waves.html">Συμβολή κυμάτων</a>
+                <a href="oriz_voli.html">Οριζόντια βολή</a>
+            </div>
+        </div>
+        <a href="physics_in_action.html">Φυσική στη πράξη</a>
+        <a href="about_us.html">Σχετικά με εμάς</a>
+        <a href="feedback.html">Αξιολόγησε μας</a>
+    </div>
+
+    <div class="main-wrapper">
+        <h2 class="page-title">Κίνηση Φορτίου σε Μαγνητικό Πεδίο (2D)</h2>
         
         <div class="main-layout">
             <div class="simulation-section">
@@ -83,14 +56,48 @@
                         <button id="playBtn">Play</button>
                         <button id="resetBtn">Reset</button>
                     </div>
-                    <label>Τύπος Φορτίου: <select id="qSign"><option value="1">Θετικό (+q)</option><option value="-1">Αρνητικό (-q)</option></select></label>
-                    <label>Φορά Πεδίου B: <select id="bDir"><option value="1">Προς τα Μέσα (X)</option><option value="-1">Προς τα Έξω (•)</option></select></label>
-                    <!-- ΝΕΑ ΕΥΡΗ ΤΙΜΩΝ -->
-                    <label>Ένταση B (T): <div class="slider-container"><input type="range" id="bSlider" min="0.1" max="1.0" value="0.3" step="0.05"><span id="bVal">0.3</span></div></label>
-                    <label>Φορτίο q (μC): <div class="slider-container"><input type="range" id="qSlider" min="1" max="5" value="2" step="0.5"><span id="qVal">2.0</span></div></label>
-                    <label>Ταχύτητα v₀ (m/s): <div class="slider-container"><input type="range" id="vSlider" min="20" max="100" value="50" step="5"><span id="vVal">50</span></div></label>
-                    <label>Μάζα m (kg): <div class="slider-container"><input type="range" id="mSlider" min="1" max="10" value="3" step="0.5"><span id="mVal">3.0</span></div></label>
-                    <label style="grid-column: span 3; color: blue;">Ύψος Εισόδου y_in (m): <div class="slider-container"><input type="range" id="yInSlider" min="50" max="350" value="200" step="10"><span id="yInVal">200</span></div></label>
+                    <label>Τύπος Φορτίου: 
+                        <select id="qSign">
+                            <option value="1">Θετικό (+q)</option>
+                            <option value="-1">Αρνητικό (-q)</option>
+                        </select>
+                    </label>
+                    <label>Φορά Πεδίου B: 
+                        <select id="bDir">
+                            <option value="1">Προς τα Μέσα (X)</option>
+                            <option value="-1">Προς τα Έξω (•)</option>
+                        </select>
+                    </label>
+                    <label>Ένταση B (T): 
+                        <div class="slider-container">
+                            <input type="range" id="bSlider" min="0.1" max="1.0" value="0.3" step="0.05">
+                            <span id="bVal">0.3</span>
+                        </div>
+                    </label>
+                    <label>Φορτίο q (μC): 
+                        <div class="slider-container">
+                            <input type="range" id="qSlider" min="1" max="5" value="2" step="0.5">
+                            <span id="qVal">2.0</span>
+                        </div>
+                    </label>
+                    <label>Ταχύτητα v₀ (m/s): 
+                        <div class="slider-container">
+                            <input type="range" id="vSlider" min="20" max="100" value="50" step="5">
+                            <span id="vVal">50</span>
+                        </div>
+                    </label>
+                    <label>Μάζα m (kg): 
+                        <div class="slider-container">
+                            <input type="range" id="mSlider" min="1" max="10" value="3" step="0.5">
+                            <span id="mVal">3.0</span>
+                        </div>
+                    </label>
+                    <label class="full-width">Ύψος Εισόδου y_in (m): 
+                        <div class="slider-container">
+                            <input type="range" id="yInSlider" min="50" max="350" value="200" step="10">
+                            <span id="yInVal">200</span>
+                        </div>
+                    </label>
                 </div>
                 <canvas id="simCanvas" width="650" height="480"></canvas>
             </div>
@@ -116,7 +123,7 @@
         const bSlider = document.getElementById('bSlider'), qSlider = document.getElementById('qSlider'); 
         const vSlider = document.getElementById('vSlider'), mSlider = document.getElementById('mSlider'); 
         const yInSlider = document.getElementById('yInSlider');
-        
+
         function initPhysics() { 
             x = 50; 
             y = yMaxPixels - parseFloat(yInSlider.value); 
@@ -132,11 +139,11 @@
             document.getElementById('mVal').innerText = parseFloat(mSlider.value).toFixed(1); 
             document.getElementById('yInVal').innerText = yInSlider.value; 
         }
-        
+
         playBtn.onclick = () => { isPlaying = !isPlaying; playBtn.innerText = isPlaying ? "Pause" : "Play"; }; 
         resetBtn.onclick = initPhysics; 
         [qSignSelect, bDirSelect, bSlider, qSlider, vSlider, mSlider, yInSlider].forEach(el => el.onchange = el.oninput = initPhysics);
-        
+
         function drawArrow(fromX, fromY, toX, toY, color, lineWidth = 2) { 
             let headlen = 10, dx = toX - fromX, dy = toY - fromY, angle = Math.atan2(dy, dx); 
             ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lineWidth; 
@@ -146,25 +153,22 @@
             ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6)); 
             ctx.fill(); 
         }
-        
+
         initPhysics();
-        
+
         function loop() { 
             let B = parseFloat(bSlider.value) * parseInt(bDirSelect.value);
             let q = parseFloat(qSlider.value) * parseInt(qSignSelect.value);
             let m = parseFloat(mSlider.value); 
             
-            // Συντελεστής κλίμακας για ομαλή εμφάνιση στο canvas
             const scale = 2.0; 
 
             if (isPlaying) { 
-                // Υπο-βήματα (sub-stepping) για ακριβή υπολογισμό της κυκλικής τροχιάς
                 let subSteps = 10;
                 let dt = 0.05 / subSteps; 
 
                 for (let step = 0; step < subSteps; step++) {
                     if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) { 
-                        // Δύναμη Lorentz: Fx = q*vy*B, Fy = -q*vx*B
                         let ax = (q * vy * B * scale) / m;
                         let ay = -(q * vx * B * scale) / m;
                         
@@ -196,18 +200,22 @@
                     ctx.fillText((B > 0) ? "X" : "•", px, py); 
                 }
             }
-            
+
             // Άξονες
             drawArrow(xMinPixels, yMaxPixels, xMinPixels, yMinPixels - 15, 'black', 2); 
             drawArrow(xMinPixels, yMaxPixels, xMaxPixels + 15, yMaxPixels, 'black', 2); 
 
-            // Βαθμονόμηση και Αριθμοί στους Άξονες (Ticks & Labels)
+            // Βαθμονόμηση στους Άξονες
             ctx.fillStyle = 'black';
             ctx.font = '11px sans-serif';
             ctx.lineWidth = 1;
 
-            // Άξονας X (0 έως 500m)
-            for (let val = 0; val <= 500; val += 100) {
+            // Κοινό μηδέν στην αρχή των αξόνων
+            ctx.textAlign = 'right';
+            ctx.fillText('0', xMinPixels - 8, yMaxPixels + 15);
+
+            // Οριζόντιος Άξονας (X)
+            for (let val = 100; val <= 500; val += 100) {
                 let px = xMinPixels + val;
                 if (px <= xMaxPixels) {
                     ctx.beginPath();
@@ -219,8 +227,8 @@
                 }
             }
 
-            // Άξονας Y (0 έως 400m)
-            for (let val = 0; val <= 400; val += 100) {
+            // Κατακόρυφος Άξονας (Y)
+            for (let val = 100; val <= 400; val += 100) {
                 let py = yMaxPixels - val;
                 if (py >= yMinPixels) {
                     ctx.beginPath();
@@ -231,8 +239,8 @@
                     ctx.fillText(val, xMinPixels - 8, py + 4);
                 }
             }
-            
-            // Διανύσματα Ταχύτητας και Δύναμης
+
+            // Διανύσματα
             if (x > 0 && x < canvas.width) { 
                 drawArrow(x, y, x + vx * 0.8, y + vy * 0.8, 'blue');
                 if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) { 
@@ -241,7 +249,7 @@
                     drawArrow(x, y, x + Fx, y + Fy, 'red'); 
                 } 
             } 
-            
+
             // Σχεδίαση Τροχιάς & Σωματιδίου
             ctx.strokeStyle = 'black'; ctx.lineWidth = 2; ctx.beginPath(); 
             if(trajectory.length > 0) { 
@@ -250,11 +258,11 @@
                 ctx.stroke(); 
             } 
             ctx.beginPath(); ctx.arc(x, y, 8, 0, 2 * Math.PI); ctx.fillStyle = (q > 0) ? 'red' : 'blue'; ctx.fill(); 
-            
+
             // Υπόμνημα
             ctx.fillStyle = 'blue'; ctx.fillText("➔ Ταχύτητα (v)", 480, 20); 
             ctx.fillStyle = 'red'; ctx.fillText("➔ Δύναμη Lorentz (F)", 480, 43); 
-            
+
             requestAnimationFrame(loop); 
         } 
         loop();
