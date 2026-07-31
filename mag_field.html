@@ -4,6 +4,151 @@
     <meta charset="UTF-8">
     <title>Προσομοίωση Δύναμης Lorentz - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .sim-page-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 20px;
+            gap: 20px;
+            flex-wrap: nowrap;
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        .simulation-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px 15px;
+            margin-bottom: 15px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 650px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .controls label {
+            display: flex;
+            flex-direction: column;
+            font-weight: bold;
+        }
+
+        .controls select, .controls input[type="range"] {
+            margin-top: 4px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-container {
+            grid-column: span 3;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .full-width {
+            grid-column: span 3;
+        }
+
+        canvas {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            display: block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Πλαίσιο Θεωρίας (Δεξιά) */
+        .info-box {
+            width: 330px;
+            flex-shrink: 0;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            line-height: 1.5;
+            font-size: 13.5px;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .info-box h3 {
+            margin-top: 0;
+            color: #1976d2;
+            font-size: 17px;
+            margin-bottom: 12px;
+        }
+
+        /* Πλαίσιο Πραγματικού Φαινομένου (Αριστερά) */
+        .real-world-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 12px;
+            width: 280px;
+            flex-shrink: 0;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .real-world-card {
+            background: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+
+        .real-world-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .real-world-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .real-world-card p {
+            margin: 6px 0 2px 0;
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        .real-world-desc {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #444;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
@@ -46,70 +191,86 @@
         <a href="feedback.html">Αξιολόγησε μας</a>
     </div>
 
-    <div class="main-wrapper">
-        <h2 class="page-title">Κίνηση Φορτίου σε Μαγνητικό Πεδίο (2D)</h2>
-        
-        <div class="main-layout">
-            <div class="simulation-section">
-                <div class="controls">
-                    <div class="btn-container">
-                        <button id="playBtn">Play</button>
-                        <button id="resetBtn">Reset</button>
-                    </div>
-                    <label>Τύπος Φορτίου: 
-                        <select id="qSign">
-                            <option value="1">Θετικό (+q)</option>
-                            <option value="-1">Αρνητικό (-q)</option>
-                        </select>
-                    </label>
-                    <label>Φορά Πεδίου B: 
-                        <select id="bDir">
-                            <option value="1">Προς τα Μέσα (X)</option>
-                            <option value="-1">Προς τα Έξω (•)</option>
-                        </select>
-                    </label>
-                    <label>Ένταση B (T): 
-                        <div class="slider-container">
-                            <input type="range" id="bSlider" min="0.1" max="1.0" value="0.3" step="0.05">
-                            <span id="bVal">0.3</span>
-                        </div>
-                    </label>
-                    <label>Φορτίο q (μC): 
-                        <div class="slider-container">
-                            <input type="range" id="qSlider" min="1" max="5" value="2" step="0.5">
-                            <span id="qVal">2.0</span>
-                        </div>
-                    </label>
-                    <label>Ταχύτητα v₀ (m/s): 
-                        <div class="slider-container">
-                            <input type="range" id="vSlider" min="20" max="100" value="50" step="5">
-                            <span id="vVal">50</span>
-                        </div>
-                    </label>
-                    <label>Μάζα m (kg): 
-                        <div class="slider-container">
-                            <input type="range" id="mSlider" min="1" max="10" value="3" step="0.5">
-                            <span id="mVal">3.0</span>
-                        </div>
-                    </label>
-                    <label class="full-width">Ύψος Εισόδου y_in (m): 
-                        <div class="slider-container">
-                            <input type="range" id="yInSlider" min="50" max="350" value="200" step="10">
-                            <span id="yInVal">200</span>
-                        </div>
-                    </label>
-                </div>
-                <canvas id="simCanvas" width="650" height="480"></canvas>
-            </div>
+    <h2 class="page-title" style="text-align: center; color: white; margin-top: 20px;">Κίνηση Φορτίου σε Μαγνητικό Πεδίο (2D)</h2>
 
-            <div class="info-box">
-                <h3>Κίνηση Φορτίου σε Μαγνητικό Πεδίο (Δύναμη Lorentz)</h3>
-                <p>Βάσει της προσομοίωσης, παρατηρείται ότι η κίνηση του φορτισμένου σωματιδίου επηρεάζεται από τη μάζα, το φορτίο, την ταχύτητα και την ένταση καθώς και τη φορά του μαγνητικού πεδίου.</p>
-                <p>Η δύναμη Lorentz δίνεται από τον τύπο: <strong>F = q·v·B·sinθ</strong>. Όταν η ταχύτητα είναι κάθετη στο μαγνητικό πεδίο (θ = 90°), ο τύπος γίνεται: <strong>F = q·v·B</strong>.</p>
-                <p>Όταν αυξάνεται η ένταση του μαγνητικού πεδίου, η δύναμη Lorentz αυξάνεται, με αποτέλεσμα το σωματίδιο να καμπυλώνει περισσότερο. Αντίθετα, όταν αυξάνεται η ταχύτητα ή η μάζα, η ακτίνα της τροχιάς μεγαλώνει. Όσο μεγαλύτερο είναι το φορτίο, τόσο ισχυρότερη η δύναμη.</p>
-                <p>Τέλος, όταν αλλάζει το πρόσημο του φορτίου ή η φορά του μαγνητικού πεδίου, αντιστρέφεται η κατεύθυνση της εκτροπής. Το μαγνητικό πεδίο μεταβάλλει μόνο την κατεύθυνση της κίνησης και όχι το μέτρο της ταχύτητας.</p>
+    <div class="sim-page-wrapper">
+        
+        <!-- 1. ΑΡΙΣΤΕΡΑ: Εικόνα πραγματικού φαινομένου -->
+        <div class="real-world-box">
+            <div class="real-world-card">
+                <img src="northern_lights.jpg" alt="Βόρειο Σέλας">
+                <p>Το Σέλας στην Φύση 🌌✨</p>
             </div>
+            <p class="real-world-desc">
+                Το <strong>μαγνητικό πεδίο της Γης</strong> παγιδεύει και εκτρέψει τα φορτισμένα σωματίδια (ηλιακός άνεμος) που καταφθάνουν από τον Ήλιο, κατευθύνοντάς τα προς τους πόλους μέσω της δύναμης Lorentz.
+                <br><br>
+                Ύστερα από σκεδάσεις (κρούσεις στο μικρόκοσμο) με τα μόρια της ατμόσφαιρας, εκπέμπεται φως και δημιουργείται αυτό το πανέμορφο θέαμα!
+            </p>
         </div>
+
+        <!-- 2. ΚΕΝΤΡΟ: Προσομοίωση & Controls -->
+        <div class="simulation-section">
+            <div class="controls">
+                <div class="btn-container">
+                    <button id="playBtn">Play</button>
+                    <button id="resetBtn">Reset</button>
+                </div>
+                <label>Τύπος Φορτίου: 
+                    <select id="qSign">
+                        <option value="1">Θετικό (+q)</option>
+                        <option value="-1">Αρνητικό (-q)</option>
+                    </select>
+                </label>
+                <label>Φορά Πεδίου B: 
+                    <select id="bDir">
+                        <option value="1">Προς τα Μέσα (X)</option>
+                        <option value="-1">Προς τα Έξω (•)</option>
+                    </select>
+                </label>
+                <label>Ένταση B (T): 
+                    <div class="slider-container">
+                        <input type="range" id="bSlider" min="0.1" max="1.0" value="0.3" step="0.05">
+                        <span id="bVal">0.3</span>
+                    </div>
+                </label>
+                <label>Φορτίο q (μC): 
+                    <div class="slider-container">
+                        <input type="range" id="qSlider" min="1" max="5" value="2" step="0.5">
+                        <span id="qVal">2.0</span>
+                    </div>
+                </label>
+                <label>Ταχύτητα v₀ (m/s): 
+                    <div class="slider-container">
+                        <input type="range" id="vSlider" min="20" max="100" value="50" step="5">
+                        <span id="vVal">50</span>
+                    </div>
+                </label>
+                <label>Μάζα m (kg): 
+                    <div class="slider-container">
+                        <input type="range" id="mSlider" min="1" max="10" value="3" step="0.5">
+                        <span id="mVal">3.0</span>
+                    </div>
+                </label>
+                <label class="full-width">Ύψος Εισόδου y_in (m): 
+                    <div class="slider-container">
+                        <input type="range" id="yInSlider" min="50" max="350" value="200" step="10">
+                        <span id="yInVal">200</span>
+                    </div>
+                </label>
+            </div>
+            
+            <canvas id="simCanvas" width="650" height="480"></canvas>
+        </div>
+
+        <!-- 3. ΔΕΞΙΑ: Θεωρητικό Πλαίσιο -->
+        <div class="info-box">
+            <h3>Κίνηση Φορτίου σε Μαγνητικό Πεδίο (Δύναμη Lorentz)</h3>
+            <p>Βάσει της προσομοίωσης, παρατηρείται ότι η κίνηση του φορτισμένου σωματιδίου επηρεάζεται από τη μάζα, το φορτίο, την ταχύτητα και την ένταση καθώς και τη φορά του μαγνητικού πεδίου.</p>
+            <p>Η δύναμη Lorentz δίνεται από τον τύπο: <strong>F = q·v·B·sinθ</strong>. Όταν η ταχύτητα είναι κάθετη στο μαγνητικό πεδίο (θ = 90°), ο τύπος γίνεται: <strong>F = q·v·B</strong>.</p>
+            <p>Όταν αυξάνεται η ένταση του μαγνητικού πεδίου, η δύναμη Lorentz αυξάνεται, με αποτέλεσμα το σωματίδιο να καμπυλώνει περισσότερο. Αντίθετα, όταν αυξάνεται η ταχύτητα ή η μάζα, η ακτίνα της τροχιάς μεγαλώνει. Όσο μεγαλύτερο είναι το φορτίο, τόσο ισχυρότερη η δύναμη.</p>
+            <p>Τέλος, όταν αλλάζει το πρόσημο του φορτίου ή η φορά του μαγνητικού πεδίου, αντιστρέφεται η κατεύθυνση της εκτροπής. Το μαγνητικό πεδίο μεταβάλλει μόνο την κατεύθυνση της κίνησης και όχι το μέτρο της ταχύτητας.</p>
+        </div>
+
     </div>
 
     <script>
