@@ -10,11 +10,11 @@
             display: flex; 
             gap: 20px; 
             align-items: flex-start; 
-            justify-content: center; /* Φέρνει την προσομοίωση και το κείμενο στο κέντρο */
+            justify-content: center; 
             padding: 30px 20px; 
             flex-wrap: wrap; 
-            max-width: 1200px;
-            margin: 0 auto; /* Κεντράρισμα του container στην οθόνη */
+            max-width: 1400px; /* Διεύρυνση για να χωράει άνετα τα 3 blocks */
+            margin: 0 auto;
         }
 
         .sim-container { display: flex; flex-direction: column; }
@@ -41,12 +41,12 @@
 
         canvas { border: 1px solid #ccc; background: #fff; border-radius: 8px; margin-top: 10px; }
         
-        /* Πλαίσιο κειμένου */
+        /* Πλαίσιο κειμένου θεωρίας */
         .info-box { 
             background: rgba(255, 255, 255, 0.95); 
             padding: 20px; 
-            border-radius: 8px; 
-            width: 350px; 
+            border-radius: 12px; 
+            width: 320px; 
             border: 1px solid #ddd; 
             line-height: 1.6; 
             font-size: 14px; 
@@ -54,6 +54,56 @@
         }
         
         .info-box h3 { color: #800020; margin-top: 0; }
+
+        /* Πλαίσιο πραγματικού φαινομένου (Αριστερά) */
+        .real-world-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 12px;
+            width: 280px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .real-world-card {
+            background: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: rotate(-3deg); /* Ελαφριά κλίση όπως τα polaroid/stickers στην αρχική */
+            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+
+        .real-world-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .real-world-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .real-world-card p {
+            margin: 6px 0 2px 0;
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        .real-world-desc {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #444;
+            margin: 0;
+        }
 
         label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
         input[type="range"] { width: 100%; margin-top: 5px; }
@@ -103,6 +153,21 @@
     </div>
 
     <div class="page-content">
+        <!-- ΑΡΙΣΤΕΡΑ: Εικόνα πραγματικού φαινομένου & Επεξήγηση -->
+        <div class="real-world-box">
+            <div class="real-world-card">
+                <img src="car_crash.jpg" alt="Πραγματική κρούση αυτοκινήτου">
+                <p>Κρούση στην πραγματικότητα 🚗💥</p>
+            </div>
+            <p class="real-world-desc">
+                Στον πραγματικό κόσμο, όπως σε μια σύγκρουση αυτοκινήτου, η κρούση <strong>δεν είναι ελαστική</strong>. 
+                Ένα μεγάλο μέρος της αρχικής κινητικής ενέργειας μετατρέπεται σε θερμότητα, παραμόρφωση των υλικών και ήχο.
+                <br><br>
+                Αντίθετα, στην ιδανική <strong>ελαστική προσομοίωση</strong> δεξιά, υποθέτουμε ότι δεν υπάρχει καμία απώλεια ενέργειας!
+            </p>
+        </div>
+
+        <!-- ΚΕΝΤΡΟ: Προσομοίωση & Χειριστήρια -->
         <div class="sim-container">
             <h2>Προσομοίωση Ελαστικών Κρούσεων (1D)</h2>
             <div class="controls">
@@ -118,11 +183,13 @@
             <canvas id="simCanvas" width="600" height="300"></canvas>
         </div>
 
+        <!-- ΔΕΞΙΑ: Θεωρητικό Πλαίσιο -->
         <div class="info-box">
             <h3>Προσομοίωση Ελαστικών Κρούσεων (1D)</h3>
             <p>Στην ελαστική κρούση ισχύουν ταυτόχρονα η Αρχή Διατήρησης της Ορμής (ΑΔΟ) και η Αρχή Διατήρησης της Κινητικής Ενέργειας.</p>
             <p>Η ορμή του συστήματος διατηρείται: <strong>m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'</strong></p>
-            <p>Η κινητική ενέργεια διατηρείται: <strong>½m₁v₁² + ½m₂v₂² = ½m₁(v₁')² + ½m₂(v₂')²</strong></p>            <p>Από τον συνδυασμό των εξισώσεων προκύπτουν οι τελικές ταχύτητες:<br>
+            <p>Η κινητική ενέργεια διατηρείται: <strong>½m₁v₁² + ½m₂v₂² = ½m₁(v₁')² + ½m₂(v₂')²</strong></p>
+            <p>Από τον συνδυασμό των εξισώσεων προκύπτουν οι τελικές ταχύτητες:<br>
             <strong>v₁' = [(m₁ − m₂)/(m₁ + m₂)]·v₁ + [2m₂/(m₁ + m₂)]·v₂</strong><br>
             <strong>v₂' = [2m₁/(m₁ + m₂)]·v₁ + [(m₂ − m₁)/(m₁ + m₂)]·v₂</strong></p>
             <p>Η προσομοίωση επιβεβαιώνει ότι στην ελαστική κρούση η ενέργεια δεν χάνεται, αλλά μεταφέρεται μεταξύ των σωμάτων ανάλογα με τη μάζα και την αρχική τους ταχύτητα.</p>
