@@ -7,7 +7,6 @@
     <style>
         body { font-family: sans-serif; margin: 0; }
         
-        /* Διάταξη περιεχομένου */
         #page-wrapper { 
             display: flex; 
             justify-content: center; 
@@ -19,16 +18,15 @@
             flex-direction: row; 
             align-items: flex-start; 
             gap: 15px; 
-            max-width: 1600px; 
+            max-width: 1650px; 
             margin: 0 auto;
         }
 
-        /* Πλαίσιο Πραγματικού Φαινομένου / Εικόνας (Αριστερά) */
         .real-world-box {
             background: white;
             padding: 15px;
             border-radius: 15px;
-            width: 260px;
+            width: 250px;
             flex-shrink: 0;
             border: 1px solid #ddd;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -44,7 +42,7 @@
             padding: 8px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            transform: rotate(2deg); /* Κλίση προς την άλλη μεριά */
+            transform: rotate(2deg);
             transition: transform 0.3s ease;
             margin-bottom: 12px;
             border: 1px solid #eee;
@@ -70,13 +68,12 @@
         }
 
         .real-world-desc {
-            font-size: 13px;
+            font-size: 12.5px;
             line-height: 1.5;
             color: #444;
             margin: 0;
         }
         
-        /* Στήλη Προσομοίωσης (Κέντρο) */
         #canvas-col { 
             display: flex; 
             flex-direction: column; 
@@ -86,10 +83,13 @@
             border-radius: 15px; 
             border: 1px solid #ddd; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 570px;
+            box-sizing: border-box;
         }
 
         #dashboard { 
             display: flex; 
+            flex-wrap: wrap;
             align-items: center; 
             justify-content: center;
             gap: 10px; 
@@ -100,25 +100,61 @@
             font-size: 13px;
         }
 
+        .preset-btn {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            color: #0d47a1;
+            padding: 4px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .preset-btn:hover { background: #bbdefb; }
+
         #sim-canvas { 
             border: 1px solid #ccc; 
             border-radius: 8px; 
-            background: white; 
+            background: #0b0e14; 
             display: block; 
         }
 
-        #v-info { 
+        #v-info-box {
             background: #f9f9f9; 
             border: 1px solid #ddd; 
             border-radius: 8px; 
             padding: 8px; 
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        #v-info { 
+            display: flex;
+            justify-content: space-around;
             font-weight: bold; 
-            font-size: 14px;
+            font-size: 13px;
+        }
+
+        .sim-note {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+            font-style: italic;
+        }
+
+        #fact-box {
+            background: #eef6ff; 
+            border: 1px solid #b6d4fe; 
+            padding: 10px; 
+            border-radius: 8px; 
+            font-size: 12px; 
+            color: #084298; 
+            line-height: 1.4;
         }
         
-        /* Πλαίσιο Θεωρίας */
         .theory-panel { 
-            width: 280px; 
+            width: 270px; 
             flex-shrink: 0;
             background: white; 
             padding: 20px; 
@@ -126,7 +162,7 @@
             border: 1px solid #ddd; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             line-height: 1.5;
-            font-size: 13.5px;
+            font-size: 13px;
             color: #333;
             box-sizing: border-box;
         }
@@ -137,9 +173,8 @@
             color: #1976d2;
         }
         
-        /* Panel Αποστολής */
         #mission-col { 
-            width: 260px; 
+            width: 250px; 
             flex-shrink: 0;
         }
 
@@ -241,7 +276,7 @@
     <div id="page-wrapper">
         <div id="sim-layout">
             
-            <!-- 1. ΑΡΙΣΤΕΡΑ: Εικόνα Δορυφόρου & Εφαρμογές -->
+            <!-- 1. ΑΡΙΣΤΕΡΑ -->
             <div class="real-world-box">
                 <div class="real-world-card">
                     <img src="satellite.png" alt="Τεχνητός Δορυφόρος σε Τροχιά">
@@ -252,28 +287,50 @@
                     <br><br>
                     <strong>Πού χρησιμεύουν;</strong>
                     <br>
-                    • <strong>Τηλεπικοινωνίες & Ίντερνετ</strong> στις πιο απομακρυσμένες περιοχές.
+                    • <strong>Τηλεπικοινωνίες & Ίντερνετ</strong> σε απομακρυσμένες περιοχές.
                     <br>
-                    • <strong>Εγκαίρη ανίχνευση πυρκαγιών</strong> και παρακολούθηση της κλιματικής αλλαγής.
+                    • <strong>Εγκαίρη ανίχνευση πυρκαγιών</strong> & περιβαλλοντική παρακολούθηση.
                     <br>
-                    • <strong>Πρόγνωση καιρού</strong> και παρακολούθηση καταιγίδων/τυφώνων.
+                    • <strong>Πρόγνωση καιρού</strong> και παρακολούθηση καταιγίδων.
                     <br>
-                    • <strong>Συστήματα Πλοήγησης (GPS)</strong> για αεροπλάνα, πλοία και οχήματα.
+                    • <strong>Συστήματα Πλοήγησης (GPS)</strong>.
                 </p>
             </div>
 
-            <!-- 2. ΚΕΝΤΡΟ: Προσομοίωση -->
+            <!-- 2. ΚΕΝΤΡΟ -->
             <div id="canvas-col">
                 <div id="dashboard">
-                    M: <input type="range" id="m-slider" min="50" max="200" value="100"> <span id="m-val">100</span>
-                    r: <input type="range" id="r-slider" min="50" max="150" value="100"> <span id="r-val">100</span>
-                    <button id="play-btn">Play</button> <button id="stop-btn">Stop</button>
+                    <div>M: <input type="range" id="m-slider" min="50" max="200" value="100"> <span id="m-val">100</span></div>
+                    <div>r: <input type="range" id="r-slider" min="50" max="150" value="100"> <span id="r-val">100</span></div>
+                    <button id="play-btn">Play</button> 
+                    <button id="stop-btn">Stop</button>
+                    
+                    <!-- Presets -->
+                    <div style="width: 100%; text-align: center; margin-top: 4px; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; align-items: center;">
+                        <span style="font-size:11px; color:#555;">Presets:</span>
+                        <button class="preset-btn" onclick="setPreset(60, 100, 'iss')">🛰️ ISS (LEO)</button>
+                        <button class="preset-btn" onclick="setPreset(100, 100, 'gps')">🛰️ GPS (MEO)</button>
+                        <button class="preset-btn" onclick="setPreset(140, 100, 'geo')">🛰️ GEO (Υψηλή)</button>
+                    </div>
                 </div>
+
                 <canvas id="sim-canvas" width="540" height="400"></canvas>
-                <div id="v-info">Ταχύτητα (v): <span id="v-val">1.00</span> m/s</div>
+                
+                <div id="v-info-box">
+                    <div id="v-info">
+                        <span>Ταχύτητα (v): <span id="v-val">1.00</span> m/s</span>
+                        <span>Περίοδος (T): <span id="t-val">0.00</span> s</span>
+                    </div>
+                    <div class="sim-note">*Για απλοποίηση των υπολογισμών έχει θεωρηθεί G = 1</div>
+                </div>
+
+                <!-- SPACE FACTS CARD -->
+                <div id="fact-box">
+                    💡 <strong>Did you know?</strong> Επιλέξτε ένα Preset παραπάνω για να μάθετε πραγματικά διαστημικά δεδομένα!
+                </div>
             </div>
 
-            <!-- 3. ΔΕΞΙΑ: Θεωρία -->
+            <!-- 3. ΔΕΞΙΑ -->
             <div class="theory-panel">
                 <h2>Βαρυτικό Πεδίο – Θεωρία</h2>
                 <p>Κάθε σώμα με μάζα δημιουργεί γύρω του βαρυτικό πεδίο. Ο νόμος του Νεύτωνα: <b>F = G(M·m)/r²</b></p>
@@ -291,7 +348,7 @@
                 </ul>
             </div>
 
-            <!-- 4. ΑΚΡΕΣ ΔΕΞΙΑ: Panel Αποστολής -->
+            <!-- 4. ΑΚΡΕΣ ΔΕΞΙΑ -->
             <div id="mission-col">
                 <button id="start-mission-btn">ΕΝΑΡΞΗ ΣΕΝΑΡΙΟΥ</button>
                 <div id="mission-panel">
@@ -310,11 +367,45 @@
         let step = 1; let angle = 0, isRunning = false, r = 100, M = 100;
         const canvas = document.getElementById('sim-canvas'); 
         const ctx = canvas.getContext('2d');
+        const centerX = 270, centerY = 200;
+
+        // Δημιουργία τυχαίων στατικών αστεριών για το φόντο
+        const stars = [];
+        for (let i = 0; i < 40; i++) {
+            stars.push({
+                x: Math.random() * 540,
+                y: Math.random() * 400,
+                size: Math.random() * 1.2 + 0.5,
+                opacity: Math.random() * 0.5 + 0.2
+            });
+        }
+
+        function setPreset(newR, newM, type) {
+            r = newR;
+            M = newM;
+            document.getElementById('r-slider').value = r;
+            document.getElementById('m-slider').value = M;
+            
+            const factBox = document.getElementById('fact-box');
+            if (type === 'iss') {
+                factBox.innerHTML = "💡 <strong>ISS (LEO - Χαμηλή Τροχιά):</strong> Ο Διεθνής Διαστημικός Σταθμός κινείται τόσο γρήγορα (~27.600 km/h) που συμπληρώνει μια πλήρη περιφορά γύρω από τη Γη σε μόλις 90 λεπτά (16 ανατολές ηλίου την ημέρα)!";
+            } else if (type === 'gps') {
+                factBox.innerHTML = "💡 <strong>GPS (MEO - Μεσαία Τροχιά):</strong> Οι δορυφόροι πλοήγησης βρίσκονται σε ύψος ~20.200 km και χρειάζονται ακριβώς 12 ώρες για μια περιφορά, επιτρέποντας στο κινητό σου να υπολογίζει ακριβώς τη θέση σου!";
+            } else if (type === 'geo') {
+                factBox.innerHTML = "💡 <strong>GEO (Γεωστατική Τροχιά):</strong> Στα ~35.786 km, ο δορυφόρος περιστρέφεται με την ίδια ακριβώς γωνιακή ταχύτητα με τη Γη. Έτσι φαίνεται εντελώς \"ακίνητος\" πάνω από το ίδιο σημείο!";
+            }
+            
+            updateDisplay();
+        }
 
         function updateDisplay() { 
             document.getElementById('m-val').innerText = M; 
             document.getElementById('r-val').innerText = r; 
-            document.getElementById('v-val').innerText = Math.sqrt(M/r).toFixed(2); 
+            let v = Math.sqrt(M/r);
+            document.getElementById('v-val').innerText = v.toFixed(2); 
+            
+            let T = (2 * Math.PI * r) / (v * 5); 
+            document.getElementById('t-val').innerText = T.toFixed(1);
         }
 
         document.getElementById('start-mission-btn').addEventListener('click', () => { 
@@ -323,14 +414,7 @@
 
         document.getElementById('check-btn').addEventListener('click', () => {
             const ans = document.getElementById('ans-input').value.replace(/\s+/g, '').toLowerCase();
-
-            const validAnswersStep1 = [
-                "(m/r1)^1/2", 
-                "(m/r1)^(1/2)", 
-                "sqrt(m/r1)", 
-                "sqrt(m/r_1)", 
-                "(m/r_1)^1/2"
-            ];
+            const validAnswersStep1 = ["(m/r1)^1/2", "(m/r1)^(1/2)", "sqrt(m/r1)", "sqrt(m/r_1)", "(m/r_1)^1/2"];
 
             if (step === 1 && validAnswersStep1.includes(ans)) {
                 alert("Σωστά!");
@@ -346,22 +430,104 @@
             }
         });
 
+        function drawArrow(fromX, fromY, toX, toY, color, label) {
+            let headlen = 8;
+            let dx = toX - fromX;
+            let dy = toY - fromY;
+            let arrowAngle = Math.atan2(dy, dx);
+
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(arrowAngle - Math.PI / 6), toY - headlen * Math.sin(arrowAngle - Math.PI / 6));
+            ctx.lineTo(toX - headlen * Math.cos(arrowAngle + Math.PI / 6), toY - headlen * Math.sin(arrowAngle + Math.PI / 6));
+            ctx.fill();
+
+            if (label) {
+                ctx.font = "bold 12px sans-serif";
+                ctx.fillText(label, toX + Math.cos(arrowAngle)*10, toY + Math.sin(arrowAngle)*10);
+            }
+        }
+
         function draw() { 
-            ctx.clearRect(0,0,540,400); 
-            // Το κέντρο του canvas είναι πλέον στο x=270 (540/2)
-            ctx.setLineDash([5,5]); ctx.strokeStyle="red"; ctx.beginPath(); ctx.arc(270,200,r,0,Math.PI*2); ctx.stroke(); 
-            ctx.beginPath(); ctx.arc(270,200,20,0,Math.PI*2); ctx.fillStyle="#1E90FF"; ctx.fill(); 
-            ctx.fillStyle="#228B22"; ctx.beginPath(); ctx.ellipse(265,195,12,18,Math.PI/4,0,Math.PI*2); ctx.fill();
-            ctx.fillStyle="black"; ctx.beginPath(); ctx.arc(270+Math.cos(angle)*r, 200+Math.sin(angle)*r, 6, 0, Math.PI*2); ctx.fill(); 
-            if(isRunning) angle += (Math.sqrt(M)/Math.pow(r, 1.5))*5; 
+            ctx.clearRect(0, 0, 540, 400); 
+
+            // 0. Σχεδίαση Αστεριών στο Φόντο
+            for (let s of stars) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // 1. Τροχιά (Διακεκομμένη)
+            ctx.setLineDash([4, 4]); 
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.25)"; 
+            ctx.beginPath(); 
+            ctx.arc(centerX, centerY, r, 0, Math.PI * 2); 
+            ctx.stroke(); 
+            ctx.setLineDash([]);
+
+            // 2. Γη
+            ctx.beginPath(); 
+            ctx.arc(centerX, centerY, 22, 0, Math.PI * 2); 
+            ctx.fillStyle = "#1E90FF"; 
+            ctx.fill(); 
+            ctx.fillStyle = "#228B22"; 
+            ctx.beginPath(); 
+            ctx.ellipse(centerX - 5, centerY - 5, 12, 18, Math.PI / 4, 0, Math.PI * 2); 
+            ctx.fill();
+
+            // Υπολογισμός Θέσης Δορυφόρου
+            let satX = centerX + Math.cos(angle) * r;
+            let satY = centerY + Math.sin(angle) * r;
+
+            // 3. Διανύσματα
+            let currentV = Math.sqrt(M / r);
+            let vArrowLen = currentV * 40; 
+            let FgMagnitude = (M * 100) / (r * r); 
+            let fArrowLen = Math.min(Math.max(FgMagnitude * 40, 25), r - 25); 
+
+            // Fg (Κόκκινο)
+            drawArrow(satX, satY, satX - Math.cos(angle) * fArrowLen, satY - Math.sin(angle) * fArrowLen, "#ff4d4d", "Fg");
+            // v (Μπλε)
+            drawArrow(satX, satY, satX - Math.sin(angle) * vArrowLen, satY + Math.cos(angle) * vArrowLen, "#3399ff", "v");
+
+            // 4. Δορυφόρος
+            ctx.fillStyle = "#ffffff"; 
+            ctx.beginPath(); 
+            ctx.arc(satX, satY, 6, 0, Math.PI * 2); 
+            ctx.fill(); 
+            ctx.strokeStyle = "#ffcc00";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Υπόμνημα
+            ctx.font = "12px sans-serif";
+            ctx.fillStyle = "#3399ff";
+            ctx.fillText("➔ Ταχύτητα (v)", 15, 25);
+            ctx.fillStyle = "#ff4d4d";
+            ctx.fillText("➔ Βαρυτική Δύναμη (Fg)", 15, 45);
+
+            if(isRunning) angle += (Math.sqrt(M) / Math.pow(r, 1.5)) * 5; 
             requestAnimationFrame(draw); 
         }
 
-        document.getElementById('r-slider').addEventListener('input', (e) => { r=parseInt(e.target.value); updateDisplay(); });
-        document.getElementById('m-slider').addEventListener('input', (e) => { M=parseInt(e.target.value); updateDisplay(); });
-        document.getElementById('play-btn').addEventListener('click', () => isRunning=true);
-        document.getElementById('stop-btn').addEventListener('click', () => isRunning=false);
-        updateDisplay(); draw();
+        document.getElementById('r-slider').addEventListener('input', (e) => { r = parseInt(e.target.value); updateDisplay(); });
+        document.getElementById('m-slider').addEventListener('input', (e) => { M = parseInt(e.target.value); updateDisplay(); });
+        document.getElementById('play-btn').addEventListener('click', () => isRunning = true);
+        document.getElementById('stop-btn').addEventListener('click', () => isRunning = false);
+        
+        updateDisplay(); 
+        draw();
     </script>
 </body>
 </html>
