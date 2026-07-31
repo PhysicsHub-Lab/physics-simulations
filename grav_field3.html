@@ -8,34 +8,191 @@
         body { font-family: sans-serif; margin: 0; }
         
         /* Διάταξη περιεχομένου */
-        #page-wrapper { display: flex; justify-content: center; padding: 20px; }
-        #sim-layout { display: flex; flex-direction: row; align-items: flex-start; gap: 20px; max-width: 1300px; }
+        #page-wrapper { 
+            display: flex; 
+            justify-content: center; 
+            padding: 20px 10px; 
+        }
+
+        #sim-layout { 
+            display: flex; 
+            flex-direction: row; 
+            align-items: flex-start; 
+            gap: 15px; 
+            max-width: 1600px; 
+            margin: 0 auto;
+        }
+
+        /* Πλαίσιο Πραγματικού Φαινομένου / Εικόνας (Αριστερά) */
+        .real-world-box {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            width: 260px;
+            flex-shrink: 0;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .real-world-card {
+            background: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: rotate(2deg); /* Κλίση προς την άλλη μεριά */
+            transition: transform 0.3s ease;
+            margin-bottom: 12px;
+            border: 1px solid #eee;
+        }
+
+        .real-world-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .real-world-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .real-world-card p {
+            margin: 6px 0 2px 0;
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        .real-world-desc {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #444;
+            margin: 0;
+        }
         
-        #canvas-col { display: flex; flex-direction: column; gap: 10px; background: white; padding: 15px; border-radius: 15px; border: 1px solid #ddd; }
-        #dashboard { display: flex; align-items: center; gap: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 10px; }
-        #sim-canvas { border: 1px solid #ccc; border-radius: 8px; background: white; display: block; }
-        #v-info { background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 8px; font-weight: bold; }
+        /* Στήλη Προσομοίωσης (Κέντρο) */
+        #canvas-col { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            background: white; 
+            padding: 15px; 
+            border-radius: 15px; 
+            border: 1px solid #ddd; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #dashboard { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: 10px; 
+            background: #f9f9f9; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            padding: 10px; 
+            font-size: 13px;
+        }
+
+        #sim-canvas { 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            background: white; 
+            display: block; 
+        }
+
+        #v-info { 
+            background: #f9f9f9; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            padding: 8px; 
+            font-weight: bold; 
+            font-size: 14px;
+        }
         
         /* Πλαίσιο Θεωρίας */
         .theory-panel { 
-            width: 300px; 
+            width: 280px; 
+            flex-shrink: 0;
             background: white; 
             padding: 20px; 
             border-radius: 15px; 
             border: 1px solid #ddd; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             line-height: 1.5;
-            font-size: 14px;
+            font-size: 13.5px;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .theory-panel h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #1976d2;
         }
         
-        /* Panel αποστολής */
-        #mission-col { width: 280px; }
-        #start-mission-btn { background-color: white; color: #800020; border: 2px solid #800020; border-radius: 10px; padding: 14px; font-weight: bold; cursor: pointer; width: 100%; }
-        #start-mission-btn:hover { background-color: #800020; color: white; }
-        #mission-panel { display: none; background: white; border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin-top: 10px; }
-        #ans-input { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        #check-btn { background-color: white; color: #800020; border: 2px solid #800020; border-radius: 6px; padding: 8px 16px; font-weight: bold; cursor: pointer; }
-        #check-btn:hover { background-color: #800020; color: white; }
+        /* Panel Αποστολής */
+        #mission-col { 
+            width: 260px; 
+            flex-shrink: 0;
+        }
+
+        #start-mission-btn { 
+            background-color: white; 
+            color: #800020; 
+            border: 2px solid #800020; 
+            border-radius: 10px; 
+            padding: 14px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: all 0.2s ease;
+        }
+
+        #start-mission-btn:hover { 
+            background-color: #800020; 
+            color: white; 
+        }
+
+        #mission-panel { 
+            display: none; 
+            background: white; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            padding: 16px; 
+            margin-top: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #ans-input { 
+            width: 100%; 
+            padding: 8px; 
+            margin: 10px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+        }
+
+        #check-btn { 
+            background-color: white; 
+            color: #800020; 
+            border: 2px solid #800020; 
+            border-radius: 6px; 
+            padding: 8px 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+
+        #check-btn:hover { 
+            background-color: #800020; 
+            color: white; 
+        }
     </style>
 </head>
 <body>
@@ -83,16 +240,40 @@
 
     <div id="page-wrapper">
         <div id="sim-layout">
+            
+            <!-- 1. ΑΡΙΣΤΕΡΑ: Εικόνα Δορυφόρου & Εφαρμογές -->
+            <div class="real-world-box">
+                <div class="real-world-card">
+                    <img src="satellite.png" alt="Τεχνητός Δορυφόρος σε Τροχιά">
+                    <p>Τεχνητοί Δορυφόροι 🛰️🌍</p>
+                </div>
+                <p class="real-world-desc">
+                    Οι τεχνητοί δορυφόροι περιφέρονται σε σταθερή τροχιά γύρω από τη Γη χάρη στη κεντρομόλο δύναμη που παρέχει η βαρύτητα.
+                    <br><br>
+                    <strong>Πού χρησιμεύουν;</strong>
+                    <br>
+                    • <strong>Τηλεπικοινωνίες & Ίντερνετ</strong> στις πιο απομακρυσμένες περιοχές.
+                    <br>
+                    • <strong>Εγκαίρη ανίχνευση πυρκαγιών</strong> και παρακολούθηση της κλιματικής αλλαγής.
+                    <br>
+                    • <strong>Πρόγνωση καιρού</strong> και παρακολούθηση καταιγίδων/τυφώνων.
+                    <br>
+                    • <strong>Συστήματα Πλοήγησης (GPS)</strong> για αεροπλάνα, πλοία και οχήματα.
+                </p>
+            </div>
+
+            <!-- 2. ΚΕΝΤΡΟ: Προσομοίωση -->
             <div id="canvas-col">
                 <div id="dashboard">
                     M: <input type="range" id="m-slider" min="50" max="200" value="100"> <span id="m-val">100</span>
                     r: <input type="range" id="r-slider" min="50" max="150" value="100"> <span id="r-val">100</span>
                     <button id="play-btn">Play</button> <button id="stop-btn">Stop</button>
                 </div>
-                <canvas id="sim-canvas" width="630" height="400"></canvas>
+                <canvas id="sim-canvas" width="540" height="400"></canvas>
                 <div id="v-info">Ταχύτητα (v): <span id="v-val">1.00</span> m/s</div>
             </div>
 
+            <!-- 3. ΔΕΞΙΑ: Θεωρία -->
             <div class="theory-panel">
                 <h2>Βαρυτικό Πεδίο – Θεωρία</h2>
                 <p>Κάθε σώμα με μάζα δημιουργεί γύρω του βαρυτικό πεδίο. Ο νόμος του Νεύτωνα: <b>F = G(M·m)/r²</b></p>
@@ -110,6 +291,7 @@
                 </ul>
             </div>
 
+            <!-- 4. ΑΚΡΕΣ ΔΕΞΙΑ: Panel Αποστολής -->
             <div id="mission-col">
                 <button id="start-mission-btn">ΕΝΑΡΞΗ ΣΕΝΑΡΙΟΥ</button>
                 <div id="mission-panel">
@@ -120,12 +302,14 @@
                     <button id="check-btn">Έλεγχος</button>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script>
         let step = 1; let angle = 0, isRunning = false, r = 100, M = 100;
-        const canvas = document.getElementById('sim-canvas'); const ctx = canvas.getContext('2d');
+        const canvas = document.getElementById('sim-canvas'); 
+        const ctx = canvas.getContext('2d');
 
         function updateDisplay() { 
             document.getElementById('m-val').innerText = M; 
@@ -163,11 +347,12 @@
         });
 
         function draw() { 
-            ctx.clearRect(0,0,630,400); 
-            ctx.setLineDash([5,5]); ctx.strokeStyle="red"; ctx.beginPath(); ctx.arc(315,200,r,0,Math.PI*2); ctx.stroke(); 
-            ctx.beginPath(); ctx.arc(315,200,20,0,Math.PI*2); ctx.fillStyle="#1E90FF"; ctx.fill(); 
-            ctx.fillStyle="#228B22"; ctx.beginPath(); ctx.ellipse(310,195,12,18,Math.PI/4,0,Math.PI*2); ctx.fill();
-            ctx.fillStyle="black"; ctx.beginPath(); ctx.arc(315+Math.cos(angle)*r, 200+Math.sin(angle)*r, 6, 0, Math.PI*2); ctx.fill(); 
+            ctx.clearRect(0,0,540,400); 
+            // Το κέντρο του canvas είναι πλέον στο x=270 (540/2)
+            ctx.setLineDash([5,5]); ctx.strokeStyle="red"; ctx.beginPath(); ctx.arc(270,200,r,0,Math.PI*2); ctx.stroke(); 
+            ctx.beginPath(); ctx.arc(270,200,20,0,Math.PI*2); ctx.fillStyle="#1E90FF"; ctx.fill(); 
+            ctx.fillStyle="#228B22"; ctx.beginPath(); ctx.ellipse(265,195,12,18,Math.PI/4,0,Math.PI*2); ctx.fill();
+            ctx.fillStyle="black"; ctx.beginPath(); ctx.arc(270+Math.cos(angle)*r, 200+Math.sin(angle)*r, 6, 0, Math.PI*2); ctx.fill(); 
             if(isRunning) angle += (Math.sqrt(M)/Math.pow(r, 1.5))*5; 
             requestAnimationFrame(draw); 
         }
