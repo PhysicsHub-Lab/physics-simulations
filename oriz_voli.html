@@ -8,16 +8,26 @@
         .sim-page-wrapper { 
             display: flex; 
             justify-content: center; 
-            padding: 30px; 
+            align-items: flex-start;
+            padding: 30px 20px; 
             gap: 20px; 
-            align-items: flex-start; 
+            flex-wrap: nowrap; /* Εξασφαλίζει ότι δεν θα πέσει η θεωρία από κάτω */
+            max-width: 1600px; 
+            margin: 0 auto;
         }
         
         .sim-content {
-	    color: #ffffff; 
+            color: #ffffff; 
             display: flex; 
             flex-direction: column; 
-            align-items: center; 
+            align-items: center;
+            margin-top: 0; 
+        }
+
+        .sim-content h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #ffffff;
         }
         
         .controls { 
@@ -32,6 +42,7 @@
             max-width: 500px;
             border: 1px solid #ddd; 
             box-sizing: border-box;
+            color: #333;
         }
         
         .btn-container { 
@@ -64,15 +75,19 @@
         label { display: flex; flex-direction: column; font-size: 13px; font-weight: bold; }
         input[type="range"] { width: 100%; margin-top: 5px; }
 
+        /* Πλαίσιο Θεωρίας (Δεξιά) */
         .theory-panel { 
             width: 320px; 
+            flex-shrink: 0;
             background: white; 
             padding: 20px; 
             border-radius: 12px; 
             border: 1px solid #ddd; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08); 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
             line-height: 1.5; 
             font-size: 13.5px;
+            color: #333;
+            box-sizing: border-box;
         }
 
         .theory-panel h2 { margin-top: 0; color: #1976d2; font-size: 18px; }
@@ -85,55 +100,122 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 13px;
         }
+
+        /* Πλαίσιο Πραγματικού Φαινομένου (Αριστερά) */
+        .real-world-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 12px;
+            width: 270px;
+            flex-shrink: 0;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .real-world-card {
+            background: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: rotate(-3deg);
+            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+
+        .real-world-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .real-world-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .real-world-card p {
+            margin: 6px 0 2px 0;
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        .real-world-desc {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #444;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
-    <a href="index.html">Αρχική</a>
-    
-    <div class="dropdown">
-        <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
-        <div class="dropdown-content">
-            <div class="nested-menu">
-                <a href="#">Γυμνάσιο ▶</a>
-                <div class="dropdown-content">
-                    <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
-                    <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
-                    <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+        <a href="index.html">Αρχική</a>
+        
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
+            <div class="dropdown-content">
+                <div class="nested-menu">
+                    <a href="#">Γυμνάσιο ▶</a>
+                    <div class="dropdown-content">
+                        <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                        <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                        <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                    </div>
                 </div>
-            </div>
-            <div class="nested-menu">
-                <a href="#">Λύκειο ▶</a>
-                <div class="dropdown-content">
-                    <a href="typologiaAlyk.html">Α' Λυκείου</a>
-                    <a href="typologiaBlyk.html">Β' Λυκείου</a>
-                    <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                <div class="nested-menu">
+                    <a href="#">Λύκειο ▶</a>
+                    <div class="dropdown-content">
+                        <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                        <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                        <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="dropdown">
-        <a href="#" class="dropbtn">Προσομοιώσεις ▼</a>
-        <div class="dropdown-content">
-            <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
-            <a href="Krouseis.html">Κρούσεις</a>
-            <a href="mag_field.html">Μαγνητικό Πεδίο</a>
-            <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
-            <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
-            <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
-            <a href="waves.html">Συμβολή κυμάτων</a>
-            <a href="oriz_voli.html">Οριζόντια βολή</a>
+        
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Προσομοιώσεις ▼</a>
+            <div class="dropdown-content">
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                <a href="Krouseis.html">Κρούσεις</a>
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
+                <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
+                <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
+                <a href="waves.html">Συμβολή κυμάτων</a>
+                <a href="oriz_voli.html">Οριζόντια βολή</a>
+            </div>
         </div>
+        
+        <a href="physics_in_action.html">Φυσική στη πράξη</a>
+        <a href="about_us.html">Σχετικά με εμάς</a>
+        <a href="feedback.html">Αξιολόγησε μας</a>
     </div>
-    
-    <a href="physics_in_action.html">Φυσική στη πράξη</a>
-    <a href="about_us.html">Σχετικά με εμάς</a>
-    <a href="feedback.html">Αξιολόγησε μας</a>
-</div>
 
     <div class="sim-page-wrapper">
         
+        <!-- 1. ΑΡΙΣΤΕΡΑ: Εικόνα πραγματικού φαινομένου -->
+        <div class="real-world-box">
+            <div class="real-world-card">
+                <img src="fire_ext.jpg" alt="Εκτόξευση νερού από πυροσβεστικό όχημα">
+                <p>Η Φυσική στην Πυρόσβεση 🚒💧</p>
+            </div>
+            <p class="real-world-desc">
+                Όταν οι πυροσβέστες εκτοξεύουν νερό υπό γωνία ή οριζόντια από μεγάλο ύψος, κάθε σταγόνα και μόριο νερού ξεχωριστά διαγράφει προσεγγιστικά μια <strong>παραβολική τροχιά οριζόντιας βολής</strong>. 
+                <br><br>
+                Υποσυνείδητα, υπολογίζουν την αρχική ταχύτητα εκτόξευσης και το ύψος, ρυθμίζοντας την πίεση ώστε η δέσμη του νερού να φτάσει ακριβώς στην εστία της φωτιάς!
+            </p>
+        </div>
+
+        <!-- 2. ΚΕΝΤΡΟ: Προσομοίωση & Διαγράμματα -->
         <div class="sim-content">
             <h2>Προσομοίωση Οριζόντιας Βολής</h2>
             
@@ -168,6 +250,7 @@
             </div>
         </div>
 
+        <!-- 3. ΔΕΞΙΑ: Θεωρητικό Πλαίσιο -->
         <div class="theory-panel">
             <h2>Θεωρία Οριζόντιας Βολής</h2>
             <p>Η οριζόντια βολή είναι μια <b>σύνθετη κίνηση</b> που πραγματοποιείται στο κατακόρυφο επίπεδο υπό την επίδραση μόνο του βάρους του σώματος (αντίσταση αέρα = 0).</p>
@@ -175,14 +258,14 @@
             <p>Σύμφωνα με την <i>Αρχή Ανεξαρτησίας των Κινήσεων</i>, η κίνηση αναλύεται σε δύο ανεξάρτητες συνιστώσες:</p>
 
             <h3>1. Οριζόντιος Άξονας (Ox)</h3>
-            <p>Εκτελεί <b>Ευθύγραμμη Ομαλή Κίνηση</b> με σταθερή ταχύτητα $v_x = v_0$.</p>
+            <p>Εκτελεί <b>Ευθύγραμμη Ομαλή Κίνηση</b> με σταθερή ταχύτητα v<sub>x</sub> = v<sub>0</sub>.</p>
             <div class="formula-box">
                 v<sub>x</sub> = v<sub>0</sub><br>
                 x = v<sub>0</sub> · t
             </div>
 
             <h3>2. Κατακόρυφος Άξονας (Oy)</h3>
-            <p>Εκτελεί <b>Ελεύθερη Πτώση</b> χωρίς αρχική ταχύτητα ($v_{y0} = 0$) με επιτάχυνση $g$.</p>
+            <p>Εκτελεί <b>Ελεύθερη Πτώση</b> χωρίς αρχική ταχύτητα (v<sub>y0</sub> = 0) με επιτάχυνση g.</p>
             <div class="formula-box">
                 v<sub>y</sub> = g · t<br>
                 y = ½ · g · t²
@@ -194,9 +277,9 @@
                 v = √(v<sub>x</sub>² + v<sub>y</sub>²)
             </div>
             <p><small><b>Υπόμνημα Διανυσμάτων:</b><br>
-            <span style="color:#2e7d32;">■</span> Οριζόντια $v_x$ (Σταθερή)<br>
-            <span style="color:#d32f2f;">■</span> Κατακόρυφη $v_y$ (Αυξανόμενη)<br>
-            <span style="color:#1976d2;">■</span> Συνισταμένη $v$</small></p>
+            <span style="color:#2e7d32;">■</span> Οριζόντια v<sub>x</sub> (Σταθερή)<br>
+            <span style="color:#d32f2f;">■</span> Κατακόρυφη v<sub>y</sub> (Αυξανόμενη)<br>
+            <span style="color:#1976d2;">■</span> Συνισταμένη v</small></p>
         </div>
 
     </div>
@@ -283,12 +366,11 @@
             }
         }
 
-        // Συνάρτηση για υπολογισμό στρογγυλεμένου μέγιστου ορίου Y (πολλαπλάσια του 20)
         function getNiceMaxY(rawMax) {
-            if (rawMax <= 20) return 20;  // Τιμές: 0, 5, 10, 15, 20
-            if (rawMax <= 40) return 40;  // Τιμές: 0, 10, 20, 30, 40
-            if (rawMax <= 60) return 60;  // Τιμές: 0, 15, 30, 45, 60
-            if (rawMax <= 80) return 80;  // Τιμές: 0, 20, 40, 60, 80
+            if (rawMax <= 20) return 20; 
+            if (rawMax <= 40) return 40; 
+            if (rawMax <= 60) return 60; 
+            if (rawMax <= 80) return 80; 
             return Math.ceil(rawMax / 20) * 20;
         }
 
@@ -461,7 +543,7 @@
             ctx.textAlign = 'center';
             ctx.fillText("t (s)", gRight + 12, gBottom + 4);
 
-            // Πλέγμα & Τιμές στον κατακόρυφο άξονα (Στρογγυλοποιημένοι Αριθμοί)
+            // Πλέγμα & Τιμές στον κατακόρυφο άξονα
             ctx.font = '10px sans-serif';
             ctx.textAlign = 'right';
             for (let step = 0; step <= 4; step++) {
