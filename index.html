@@ -213,7 +213,9 @@
            ========================================== */
         @media screen and (max-width: 768px) {
             .top-header {
-                margin-left: 0;
+                margin-left: 0 !important;
+                flex-direction: column !important;
+                align-items: center !important;
                 text-align: center;
                 padding: 0 10px;
             }
@@ -317,9 +319,13 @@
             <span class="caption">Στο εργαστήριο! 🧪</span>
         </div>
 
-        <div class="top-header">
-            <div class="main-title">PhysicsHub Interactive Simulations & Learning</div>
-            <div class="sub-title">by Mikroi einsteins</div>
+        <!-- TOP HEADER ME ΤΟ ΛΟΓΟΤΥΠΟ -->
+        <div class="top-header" style="display: flex; align-items: center; gap: 20px;">
+            <img src="PhysicsHub.png" alt="PhysicsHub Logo" style="width: 85px; height: 85px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.18); border: 2px solid #800020;">
+            <div>
+                <div class="main-title">PhysicsHub Interactive Simulations & Learning</div>
+                <div class="sub-title">by Mikroi einsteins</div>
+            </div>
         </div>
 
         <div class="navbar">
