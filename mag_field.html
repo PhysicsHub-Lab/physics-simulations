@@ -58,12 +58,31 @@
             grid-column: span 3;
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 10px;
             margin-bottom: 5px;
+            flex-wrap: wrap;
         }
 
-        .full-width {
-            grid-column: span 3;
+        .btn-preset {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #90caf9;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-preset:hover {
+            background-color: #bbdefb;
+            color: #0d47a1;
+        }
+
+        .half-width {
+            grid-column: span 1;
         }
 
         canvas {
@@ -214,6 +233,7 @@
                 <div class="btn-container">
                     <button id="playBtn">Play</button>
                     <button id="resetBtn">Reset</button>
+                    <button id="circleBtn" class="btn-preset">💫 Κυκλική Τροχιά</button>
                 </div>
                 <label>Τύπος Φορτίου: 
                     <select id="qSign">
@@ -251,10 +271,16 @@
                         <span id="mVal">3.0</span>
                     </div>
                 </label>
-                <label class="full-width">Ύψος Εισόδου y_in (m): 
+                <label class="half-width">Ύψος Εισόδου y_in (m): 
                     <div class="slider-container">
                         <input type="range" id="yInSlider" min="50" max="350" value="200" step="10">
                         <span id="yInVal">200</span>
+                    </div>
+                </label>
+                <label class="half-width">Γωνία Εισόδου θ (°): 
+                    <div class="slider-container">
+                        <input type="range" id="angleSlider" min="-90" max="90" value="0" step="5">
+                        <span id="angleVal">0°</span>
                     </div>
                 </label>
             </div>
@@ -278,32 +304,87 @@
         const ctx = canvas.getContext('2d'); 
         const xMinPixels = 100, xMaxPixels = 600, yMinPixels = 30, yMaxPixels = 430; 
         
-        let x, y, vx, vy, t = 0, isPlaying = false, trajectory = []; 
+        let x, y, vx, vy, t = 0, isPlaying = false, isCircularMode = false, trajectory = []; 
         const playBtn = document.getElementById('playBtn'), resetBtn = document.getElementById('resetBtn'); 
+        const circleBtn = document.getElementById('circleBtn');
         const qSignSelect = document.getElementById('qSign'), bDirSelect = document.getElementById('bDir'); 
         const bSlider = document.getElementById('bSlider'), qSlider = document.getElementById('qSlider'); 
         const vSlider = document.getElementById('vSlider'), mSlider = document.getElementById('mSlider'); 
-        const yInSlider = document.getElementById('yInSlider');
+        const yInSlider = document.getElementById('yInSlider'), angleSlider = document.getElementById('angleSlider');
 
-        function initPhysics() { 
-            x = 50; 
-            y = yMaxPixels - parseFloat(yInSlider.value); 
-            vx = parseFloat(vSlider.value); 
-            vy = 0; 
-            t = 0; 
-            trajectory = []; 
-            isPlaying = false; 
-            playBtn.innerText = "Play"; 
+        function updateLabels() {
             document.getElementById('bVal').innerText = parseFloat(bSlider.value).toFixed(2); 
             document.getElementById('qVal').innerText = parseFloat(qSlider.value).toFixed(1); 
             document.getElementById('vVal').innerText = vSlider.value; 
             document.getElementById('mVal').innerText = parseFloat(mSlider.value).toFixed(1); 
             document.getElementById('yInVal').innerText = yInSlider.value; 
+            document.getElementById('angleVal').innerText = angleSlider.value + "°";
+        }
+
+        function updateVelocityVector() {
+            let speed = Math.hypot(vx, vy);
+            if (speed === 0) speed = 1;
+            let targetSpeed = parseFloat(vSlider.value);
+            vx = (vx / speed) * targetSpeed;
+            vy = (vy / speed) * targetSpeed;
+        }
+
+        function initPhysics() { 
+            isCircularMode = false;
+            x = 50; 
+            y = yMaxPixels - parseFloat(yInSlider.value); 
+            
+            let v0 = parseFloat(vSlider.value);
+            let angleRad = parseFloat(angleSlider.value) * Math.PI / 180;
+            vx = v0 * Math.cos(angleRad); 
+            vy = -v0 * Math.sin(angleRad); 
+            
+            t = 0; 
+            trajectory = []; 
+            isPlaying = false; 
+            playBtn.innerText = "Play"; 
+            updateLabels();
+        }
+
+        function handleControlChange() {
+            updateLabels();
+            if (isCircularMode) {
+                updateVelocityVector();
+            } else {
+                initPhysics();
+            }
+        }
+
+        function setCircularMotionPreset() {
+            isCircularMode = true;
+            qSignSelect.value = "1";
+            bDirSelect.value = "1";
+            bSlider.value = "0.3";
+            qSlider.value = "3.0";
+            vSlider.value = "30";
+            mSlider.value = "1.5";
+            yInSlider.value = "200";
+            angleSlider.value = "0";
+
+            updateLabels();
+
+            vx = parseFloat(vSlider.value);
+            vy = 0;
+            x = 350; 
+            y = 230;
+            t = 0;
+            trajectory = [];
+            isPlaying = false;
+            playBtn.innerText = "Play";
         }
 
         playBtn.onclick = () => { isPlaying = !isPlaying; playBtn.innerText = isPlaying ? "Pause" : "Play"; }; 
         resetBtn.onclick = initPhysics; 
-        [qSignSelect, bDirSelect, bSlider, qSlider, vSlider, mSlider, yInSlider].forEach(el => el.onchange = el.oninput = initPhysics);
+        circleBtn.onclick = setCircularMotionPreset;
+        
+        [qSignSelect, bDirSelect, bSlider, qSlider, vSlider, mSlider, yInSlider, angleSlider].forEach(el => {
+            el.onchange = el.oninput = handleControlChange;
+        });
 
         function drawArrow(fromX, fromY, toX, toY, color, lineWidth = 2) { 
             let headlen = 10, dx = toX - fromX, dy = toY - fromY, angle = Math.atan2(dy, dx); 
@@ -342,6 +423,9 @@
                 }
 
                 trajectory.push({x: x, y: y}); 
+
+                if (trajectory.length > 2000) trajectory.shift();
+
                 if (x > canvas.width || x < 0 || y > canvas.height || y < 0) { 
                     isPlaying = false; 
                     playBtn.innerText = "Play"; 
@@ -371,7 +455,6 @@
             ctx.font = '11px sans-serif';
             ctx.lineWidth = 1;
 
-            // Κοινό μηδέν στην αρχή των αξόνων
             ctx.textAlign = 'right';
             ctx.fillText('0', xMinPixels - 8, yMaxPixels + 15);
 
@@ -411,14 +494,33 @@
                 } 
             } 
 
-            // Σχεδίαση Τροχιάς & Σωματιδίου
+            // Σχεδίαση Τροχιάς
             ctx.strokeStyle = 'black'; ctx.lineWidth = 2; ctx.beginPath(); 
             if(trajectory.length > 0) { 
                 ctx.moveTo(trajectory[0].x, trajectory[0].y); 
                 for(let p of trajectory) ctx.lineTo(p.x, p.y); 
                 ctx.stroke(); 
             } 
-            ctx.beginPath(); ctx.arc(x, y, 8, 0, 2 * Math.PI); ctx.fillStyle = (q > 0) ? 'red' : 'blue'; ctx.fill(); 
+
+            // Σχεδίαση Σωματιδίου με Πρόσημο (+/-) και Διακριτά Χρώματα (Πορτοκαλί / Μωβ)
+            const radius = 10;
+            ctx.beginPath(); 
+            ctx.arc(x, y, radius, 0, 2 * Math.PI); 
+            ctx.fillStyle = (q > 0) ? '#ff8c00' : '#8a2be2'; // Πορτοκαλί για (+), Μωβ για (-)
+            ctx.fill(); 
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Σύμβολο + / - στο κέντρο του σωματιδίου
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 13px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText((q > 0) ? '+' : '-', x, y + 0.5);
+
+            // Επαναφορά textBaseline για την υπόλοιπη σχεδίαση
+            ctx.textBaseline = 'alphabetic';
 
             // Υπόμνημα
             ctx.fillStyle = 'blue'; ctx.fillText("➔ Ταχύτητα (v)", 480, 20); 
