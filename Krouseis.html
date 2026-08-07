@@ -228,7 +228,7 @@
             Τα σώματα συγκολλώνται και κινούνται με κοινή ταχύτητα <strong>v'</strong>:<br>
             <strong>v' = (m₁v₁ + m₂v₂) / (m₁ + m₂)</strong></p>
             
-            <p>Παρατηρήστε πώς το μέγεθος κάθε σφαίρας εκφράζει τη μάζα της και πώς τα διανύσματα (βέλη) δείχνουν τη φορά της ταχύτητας.</p>
+            <p>Παρατηρήστε πώς το μέγεθος κάθε σώματος εκφράζει τη μάζα του και πώς τα διανύσματα (βέλη) δείχνουν τη φορά της ταχύτητας.</p>
         </div>
     </div>
 
@@ -238,10 +238,10 @@
         const groundY = 240; 
         const wallThickness = 10;
         
-        let x1, v1, m1, r1;
-        let x2, v2, m2, r2;
+        let x1, v1, m1, size1;
+        let x2, v2, m2, size2;
         let t = 0, isPlaying = false, isStuck = false;
-        let flashEffect = { active: false, x: 0, y: 0, timer: 0 };
+        let flashEffect = { active: false, x: 0, y: 0, timer: 0, maxTimer: 12 };
 
         const playBtn = document.getElementById('playBtn');
         const resetBtn = document.getElementById('resetBtn');
@@ -249,24 +249,23 @@
         const m1Slider = document.getElementById('m1Slider'), v1Slider = document.getElementById('v1Slider');
         const m2Slider = document.getElementById('m2Slider'), v2Slider = document.getElementById('v2Slider');
 
-        function getRadius(mass) {
-            return 16 + mass * 2.2; 
+        function getSize(mass) {
+            return 32 + mass * 4; // Μέγεθος πλευράς για τα κουτιά
         }
 
         function triggerFlash(x, y) {
-            // Μικρότερη διάρκεια (timer: 2) για πιο γρήγορο σβήσιμο
-            flashEffect = { active: true, x: x, y: y, timer: 2 };
+            flashEffect = { active: true, x: x, y: y, timer: 12, maxTimer: 12 };
         }
 
         function initPhysics() {
             m1 = parseFloat(m1Slider.value); v1 = parseFloat(v1Slider.value);
             m2 = parseFloat(m2Slider.value); v2 = parseFloat(v2Slider.value);
             
-            r1 = getRadius(m1);
-            r2 = getRadius(m2);
+            size1 = getSize(m1);
+            size2 = getSize(m2);
 
             x1 = 120; 
-            x2 = 480; 
+            x2 = 440; 
             t = 0;
             isStuck = false;
 
@@ -315,10 +314,10 @@
             ctx.strokeRect(canvas.width - wallThickness, groundY - 100, wallThickness, 100);
         }
 
-        function drawShadow(x, radius) {
+        function drawShadow(x, size) {
             ctx.save();
             ctx.beginPath();
-            ctx.ellipse(x, groundY + 2, radius * 0.8, radius * 0.25, 0, 0, Math.PI * 2);
+            ctx.ellipse(x + size / 2, groundY + 2, size * 0.45, 4, 0, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fill();
             ctx.restore();
@@ -347,27 +346,21 @@
             ctx.fill();
         }
 
-        function drawSphere(x, radius, color, massText) {
-            let centerY = groundY - radius;
+        function drawBox(x, size, color, massText) {
+            let y = groundY - size;
 
-            let grad = ctx.createRadialGradient(x - radius*0.3, centerY - radius*0.3, radius*0.1, x, centerY, radius);
-            grad.addColorStop(0, '#ffffff');
-            grad.addColorStop(0.3, color);
-            grad.addColorStop(1, '#000000');
-
-            ctx.beginPath();
-            ctx.arc(x, centerY, radius, 0, Math.PI * 2);
-            ctx.fillStyle = grad;
-            ctx.fill();
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 1;
-            ctx.stroke();
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, size, size);
+            
+            ctx.strokeStyle = '#222';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(x, y, size, size);
 
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 12px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(massText, x, centerY);
+            ctx.fillText(massText, x + size / 2, y + size / 2);
             ctx.textBaseline = 'alphabetic';
         }
 
@@ -391,15 +384,20 @@
 
         function drawFlashEffect() {
             if (!flashEffect.active) return;
+            
+            let alpha = flashEffect.timer / flashEffect.maxTimer;
             ctx.save();
+            
             ctx.beginPath();
-            ctx.arc(flashEffect.x, flashEffect.y, 12, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255, 235, 59, 0.75)';
+            ctx.arc(flashEffect.x, flashEffect.y, 16, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 215, 0, ${alpha * 0.8})`;
             ctx.fill();
+
             ctx.beginPath();
-            ctx.arc(flashEffect.x, flashEffect.y, 5, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
+            ctx.arc(flashEffect.x, flashEffect.y, 8, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
             ctx.fill();
+            
             ctx.restore();
             
             flashEffect.timer--;
@@ -415,14 +413,18 @@
                 x2 += v2 * dt * 25; 
                 t += dt;
 
-                // Έλεγχος Σύγκρουσης μεταξύ των δύο σφαιρών
-                if (x1 + r1 >= x2 - r2) {
+                // Έλεγχος Σύγκρουσης μεταξύ των δύο κουτιών
+                if (x1 + size1 >= x2) {
                     let type = collisionTypeSelect.value;
-                    let contactX = (x1 + r1 + x2 - r2) / 2;
-                    triggerFlash(contactX, groundY - r1);
+                    let contactX = x2;
+                    let contactY = groundY - Math.max(size1, size2) / 2;
+                    
+                    if (!isStuck) {
+                        triggerFlash(contactX, contactY);
+                    }
 
                     if (type === "elastic") {
-                        let overlap = (x1 + r1) - (x2 - r2);
+                        let overlap = (x1 + size1) - x2;
                         x1 -= overlap / 2;
                         x2 += overlap / 2;
 
@@ -435,28 +437,28 @@
                         let v_common = (m1 * v1 + m2 * v2) / (m1 + m2);
                         v1 = v_common;
                         v2 = v_common;
-                        x1 = x2 - (r1 + r2);
+                        x1 = x2 - size1;
                     }
                 }
 
                 // Όρια πλαισίου (Τοίχοι)
-                if (x1 - r1 <= wallThickness) { 
-                    x1 = wallThickness + r1; 
+                if (x1 <= wallThickness) { 
+                    x1 = wallThickness; 
                     v1 = -v1; 
-                    triggerFlash(wallThickness, groundY - r1);
+                    triggerFlash(wallThickness, groundY - size1 / 2);
                     if (isStuck) {
                         v2 = v1;
-                        x2 = x1 + r1 + r2;
+                        x2 = x1 + size1;
                     }
                 }
 
-                if (x2 + r2 >= canvas.width - wallThickness) { 
-                    x2 = canvas.width - wallThickness - r2; 
+                if (x2 + size2 >= canvas.width - wallThickness) { 
+                    x2 = canvas.width - wallThickness - size2; 
                     v2 = -v2; 
-                    triggerFlash(canvas.width - wallThickness, groundY - r2);
+                    triggerFlash(canvas.width - wallThickness, groundY - size2 / 2);
                     if (isStuck) {
                         v1 = v2;
-                        x1 = x2 - (r1 + r2);
+                        x1 = x2 - size1;
                     }
                 }
             }
@@ -466,37 +468,37 @@
             // Σχεδίαση Ράγας & Τοίχων
             drawTrackAndWalls();
 
-            // Σκιές κάτω από τις σφαίρες
-            drawShadow(x1, r1);
-            drawShadow(x2, r2);
+            // Σκιές κάτω από τα κουτιά
+            drawShadow(x1, size1);
+            drawShadow(x2, size2);
 
-            // Σχεδίαση Σφαιρών
-            drawSphere(x1, r1, '#1e88e5', m1.toFixed(1) + 'kg');
-            drawSphere(x2, r2, '#e53935', m2.toFixed(1) + 'kg');
+            // Σχεδίαση Κουτιών
+            drawBox(x1, size1, '#1e88e5', m1.toFixed(1) + 'kg');
+            drawBox(x2, size2, '#e53935', m2.toFixed(1) + 'kg');
 
             // Σχεδίαση Flash Εφέ αν υπάρχει σύγκρουση
             drawFlashEffect();
 
             // Διανύσματα Ταχύτητας & Επιγραφές
-            let y1Head = groundY - 2 * r1;
-            let y2Head = groundY - 2 * r2;
+            let y1Head = groundY - size1;
+            let y2Head = groundY - size2;
             
-            drawArrow(x1, y1Head - 12, v1, '#1565c0');
-            drawArrow(x2, y2Head - 12, v2, '#c62828');
+            drawArrow(x1 + size1 / 2, y1Head - 12, v1, '#1565c0');
+            drawArrow(x2 + size2 / 2, y2Head - 12, v2, '#c62828');
 
             ctx.font = 'bold 12px sans-serif';
             ctx.textAlign = 'center';
 
             if (isStuck) {
                 ctx.fillStyle = '#1565c0';
-                ctx.fillText("v₁ = " + v1.toFixed(2) + " m/s", x1, y1Head - 34);
+                ctx.fillText("v₁ = " + v1.toFixed(2) + " m/s", x1 + size1 / 2, y1Head - 34);
                 ctx.fillStyle = '#c62828';
-                ctx.fillText("v₂ = " + v2.toFixed(2) + " m/s", x2, y2Head - 18);
+                ctx.fillText("v₂ = " + v2.toFixed(2) + " m/s", x2 + size2 / 2, y2Head - 18);
             } else {
                 ctx.fillStyle = '#1565c0';
-                ctx.fillText("v₁ = " + v1.toFixed(2) + " m/s", x1, y1Head - 24);
+                ctx.fillText("v₁ = " + v1.toFixed(2) + " m/s", x1 + size1 / 2, y1Head - 24);
                 ctx.fillStyle = '#c62828';
-                ctx.fillText("v₂ = " + v2.toFixed(2) + " m/s", x2, y2Head - 24);
+                ctx.fillText("v₂ = " + v2.toFixed(2) + " m/s", x2 + size2 / 2, y2Head - 24);
             }
 
             // Χρόνος & Κατάσταση
