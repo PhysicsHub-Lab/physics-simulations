@@ -2,7 +2,7 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Προσομοίωση Δύναμης Lorentz - PhysicsHub</title>
+    <title>Προσομοίωση Δύναμης Lorentz (RK4) - PhysicsHub</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .sim-page-wrapper {
@@ -93,7 +93,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* Πλαίσιο Θεωρίας (Δεξιά) */
         .info-box {
             width: 330px;
             flex-shrink: 0;
@@ -115,7 +114,6 @@
             margin-bottom: 12px;
         }
 
-        /* Πλαίσιο Πραγματικού Φαινομένου (Αριστερά) */
         .real-world-box {
             background: rgba(255, 255, 255, 0.95);
             padding: 15px;
@@ -210,11 +208,11 @@
         <a href="feedback.html">Αξιολόγησε μας</a>
     </div>
 
-    <h2 class="page-title" style="text-align: center; color: white; margin-top: 20px;">Κίνηση Φορτίου σε Μαγνητικό Πεδίο (2D)</h2>
+    <h2 class="page-title" style="text-align: center; color: white; margin-top: 20px;">Κίνηση Φορτίου σε Μαγνητικό Πεδίο (RK4)</h2>
 
     <div class="sim-page-wrapper">
         
-        <!-- 1. ΑΡΙΣΤΕΡΑ: Εικόνα πραγματικού φαινομένου -->
+        <!-- 1. ΑΡΙΣΤΕΡΑ -->
         <div class="real-world-box">
             <div class="real-world-card">
                 <img src="northern_lights.jpg" alt="Βόρειο Σέλας">
@@ -227,13 +225,13 @@
             </p>
         </div>
 
-        <!-- 2. ΚΕΝΤΡΟ: Προσομοίωση & Controls -->
+        <!-- 2. ΚΕΝΤΡΟ -->
         <div class="simulation-section">
             <div class="controls">
                 <div class="btn-container">
                     <button id="playBtn">Play</button>
                     <button id="resetBtn">Reset</button>
-                    <button id="circleBtn" class="btn-preset">💫 Κυκλική Τροχιά</button>
+                    <button id="circleBtn" class="btn-preset">💫 Κυκλική Τροχιά (m)</button>
                 </div>
                 <label>Τύπος Φορτίου: 
                     <select id="qSign">
@@ -249,32 +247,32 @@
                 </label>
                 <label>Ένταση B (T): 
                     <div class="slider-container">
-                        <input type="range" id="bSlider" min="0.1" max="1.0" value="0.3" step="0.05">
-                        <span id="bVal">0.3</span>
+                        <input type="range" id="bSlider" min="0.1" max="1.0" value="0.5" step="0.05">
+                        <span id="bVal">0.5</span>
                     </div>
                 </label>
                 <label>Φορτίο q (μC): 
-                    <div class="slider-container">
-                        <input type="range" id="qSlider" min="1" max="5" value="2" step="0.5">
-                        <span id="qVal">2.0</span>
-                    </div>
-                </label>
+    <div class="slider-container">
+        <input type="range" id="qSlider" min="1" max="10" value="5" step="0.5">
+        <span id="qVal">5.0</span>
+    </div>
+</label>
                 <label>Ταχύτητα v₀ (m/s): 
                     <div class="slider-container">
-                        <input type="range" id="vSlider" min="20" max="100" value="50" step="5">
-                        <span id="vVal">50</span>
+                        <input type="range" id="vSlider" min="1" max="20" value="10" step="1">
+                        <span id="vVal">10</span>
                     </div>
                 </label>
                 <label>Μάζα m (kg): 
                     <div class="slider-container">
-                        <input type="range" id="mSlider" min="1" max="10" value="3" step="0.5">
-                        <span id="mVal">3.0</span>
+                        <input type="range" id="mSlider" min="1" max="10" value="2" step="0.5">
+                        <span id="mVal">2.0</span>
                     </div>
                 </label>
                 <label class="half-width">Ύψος Εισόδου y_in (m): 
                     <div class="slider-container">
-                        <input type="range" id="yInSlider" min="50" max="350" value="200" step="10">
-                        <span id="yInVal">200</span>
+                        <input type="range" id="yInSlider" min="5" max="35" value="20" step="1">
+                        <span id="yInVal">20</span>
                     </div>
                 </label>
                 <label class="half-width">Γωνία Εισόδου θ (°): 
@@ -289,13 +287,14 @@
         </div>
 
         <!-- 3. ΔΕΞΙΑ: Θεωρητικό Πλαίσιο -->
-        <div class="info-box">
-            <h3>Κίνηση Φορτίου σε Μαγνητικό Πεδίο (Δύναμη Lorentz)</h3>
-            <p>Βάσει της προσομοίωσης, παρατηρείται ότι η κίνηση του φορτισμένου σωματιδίου επηρεάζεται από τη μάζα, το φορτίο, την ταχύτητα και την ένταση καθώς και τη φορά του μαγνητικού πεδίου.</p>
-            <p>Η δύναμη Lorentz δίνεται από τον τύπο: <strong>F = q·v·B·sinθ</strong>. Όταν η ταχύτητα είναι κάθετη στο μαγνητικό πεδίο (θ = 90°), ο τύπος γίνεται: <strong>F = q·v·B</strong>.</p>
-            <p>Όταν αυξάνεται η ένταση του μαγνητικού πεδίου, η δύναμη Lorentz αυξάνεται, με αποτέλεσμα το σωματίδιο να καμπυλώνει περισσότερο. Αντίθετα, όταν αυξάνεται η ταχύτητα ή η μάζα, η ακτίνα της τροχιάς μεγαλώνει. Όσο μεγαλύτερο είναι το φορτίο, τόσο ισχυρότερη η δύναμη.</p>
-            <p>Τέλος, όταν αλλάζει το πρόσημο του φορτίου ή η φορά του μαγνητικού πεδίου, αντιστρέφεται η κατεύθυνση της εκτροπής. Το μαγνητικό πεδίο μεταβάλλει μόνο την κατεύθυνση της κίνησης και όχι το μέτρο της ταχύτητας.</p>
-        </div>
+<div class="info-box">
+    <h3>Κίνηση Φορτίου σε Μαγνητικό Πεδίο</h3>
+    <p>Βάσει της προσομοίωσης, παρατηρείται ότι η κίνηση του φορτισμένου σωματιδίου επηρεάζεται από τη μάζα, το φορτίο, την ταχύτητα και την ένταση καθώς και τη φορά του μαγνητικού πεδίου.</p>
+    <p>Η δύναμη Lorentz δίνεται από τον τύπο: <strong>F = q·v·B·sinθ</strong>. Όταν η ταχύτητα είναι κάθετη στο μαγνητικό πεδίο (θ = 90°), ο τύπος γίνεται: <strong>F = q·v·B</strong>.</p>
+    <p>Όταν αυξάνεται η ένταση του μαγνητικού πεδίου, η δύναμη Lorentz αυξάνεται, με αποτέλεσμα το σωματίδιο να καμπυλώνει περισσότερο. Αντίθετα, όταν αυξάνεται η ταχύτητα ή η μάζα, η ακτίνα της τροχιάς μεγαλώνει. Όσο μεγαλύτερο είναι το φορτίο, τόσο ισχυρότερη η δύναμη.</p>
+    <p>Τέλος, όταν αλλάζει το πρόσημο του φορτίου ή η φορά του μαγνητικού πεδίου, αντιστρέφεται η κατεύθυνση της εκτροπής. Το μαγνητικό πεδίο μεταβάλλει μόνο την κατεύθυνση της κίνησης και όχι το μέτρο της ταχύτητας.</p>
+    <p><em>Σημείωση: Οι άξονες είναι σε μέτρα (m) και το φορτίο σε μικροκουλόμπ (μC). Για λόγους εύκολης οπτικοποίησης στον καμβά, οι τιμές των παραμέτρων έχουν προσαρμοστεί ώστε η καμπύλωση να είναι καθαρά ορατή.</em></p>
+</div>
 
     </div>
 
@@ -304,7 +303,11 @@
         const ctx = canvas.getContext('2d'); 
         const xMinPixels = 100, xMaxPixels = 600, yMinPixels = 30, yMaxPixels = 430; 
         
-        let x, y, vx, vy, t = 0, isPlaying = false, isCircularMode = false, trajectory = []; 
+        // Φυσικές διαστάσεις πεδίου σε μέτρα
+        const fieldWidthMeters = 50.0;
+        const fieldHeightMeters = 40.0;
+
+        let posX, posY, velX, velY, t = 0, isPlaying = false, isCircularMode = false, trajectory = []; 
         const playBtn = document.getElementById('playBtn'), resetBtn = document.getElementById('resetBtn'); 
         const circleBtn = document.getElementById('circleBtn');
         const qSignSelect = document.getElementById('qSign'), bDirSelect = document.getElementById('bDir'); 
@@ -321,23 +324,24 @@
             document.getElementById('angleVal').innerText = angleSlider.value + "°";
         }
 
-        function updateVelocityVector() {
-            let speed = Math.hypot(vx, vy);
-            if (speed === 0) speed = 1;
-            let targetSpeed = parseFloat(vSlider.value);
-            vx = (vx / speed) * targetSpeed;
-            vy = (vy / speed) * targetSpeed;
+        function metersToPixelsX(m) {
+            return xMinPixels + (m / fieldWidthMeters) * (xMaxPixels - xMinPixels);
+        }
+
+        function metersToPixelsY(m) {
+            // Ορθός μετασχηματισμός: Y=0 κάτω, Y=max πάνω
+            return yMaxPixels - (m / fieldHeightMeters) * (yMaxPixels - yMinPixels);
         }
 
         function initPhysics() { 
             isCircularMode = false;
-            x = 50; 
-            y = yMaxPixels - parseFloat(yInSlider.value); 
+            posX = -5.0; // Ξεκινά εκτός πεδίου (x < 0)
+            posY = parseFloat(yInSlider.value); 
             
             let v0 = parseFloat(vSlider.value);
             let angleRad = parseFloat(angleSlider.value) * Math.PI / 180;
-            vx = v0 * Math.cos(angleRad); 
-            vy = -v0 * Math.sin(angleRad); 
+            velX = v0 * Math.cos(angleRad); 
+            velY = v0 * Math.sin(angleRad); 
             
             t = 0; 
             trajectory = []; 
@@ -349,7 +353,11 @@
         function handleControlChange() {
             updateLabels();
             if (isCircularMode) {
-                updateVelocityVector();
+                let speed = Math.hypot(velX, velY);
+                if (speed === 0) speed = 1;
+                let targetSpeed = parseFloat(vSlider.value);
+                velX = (velX / speed) * targetSpeed;
+                velY = (velY / speed) * targetSpeed;
             } else {
                 initPhysics();
             }
@@ -359,19 +367,23 @@
             isCircularMode = true;
             qSignSelect.value = "1";
             bDirSelect.value = "1";
-            bSlider.value = "0.3";
-            qSlider.value = "3.0";
-            vSlider.value = "30";
-            mSlider.value = "1.5";
-            yInSlider.value = "200";
+            bSlider.value = "0.5"; 
+            qSlider.value = "5.0"; 
+            vSlider.value = "10";   
+            mSlider.value = "2.5"; 
+            yInSlider.value = "20"; 
             angleSlider.value = "0";
 
             updateLabels();
 
-            vx = parseFloat(vSlider.value);
-            vy = 0;
-            x = 350; 
-            y = 230;
+            let m = 2.5, v = 10.0, q = 5.0, B = 0.5;
+            let R = (m * v) / (q * B); // R = 10m
+
+            posX = 25.0; 
+            posY = 20.0 - R; // Ξεκινά 10m κάτω από το κέντρο, ώστε με v_x > 0 να διαγράψει κύκλο προς τα πάνω
+            velX = 10.0; 
+            velY = 0;
+            
             t = 0;
             trajectory = [];
             isPlaying = false;
@@ -387,7 +399,9 @@
         });
 
         function drawArrow(fromX, fromY, toX, toY, color, lineWidth = 2) { 
-            let headlen = 10, dx = toX - fromX, dy = toY - fromY, angle = Math.atan2(dy, dx); 
+            let headlen = 8, dx = toX - fromX, dy = toY - fromY, angle = Math.atan2(dy, dx); 
+            if (Math.hypot(dx, dy) < 1) return;
+
             ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lineWidth; 
             ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(toX, toY); ctx.stroke(); 
             ctx.beginPath(); ctx.moveTo(toX, toY); 
@@ -396,37 +410,94 @@
             ctx.fill(); 
         }
 
+        // Φυσική Επιτάχυνση Lorentz: F = q * (v x B)
+        // B_z = -B_mag (όταν bDirSelect = 1 -> "X" / προς τα μέσα)
+        // Fx = q * vy * B_z
+        // Fy = -q * vx * B_z
+        function acceleration(state) {
+            if (state.x < 0 || state.x > fieldWidthMeters || state.y < 0 || state.y > fieldHeightMeters) {
+                return { ax: 0, ay: 0 }; 
+            }
+
+            let B_mag = parseFloat(bSlider.value);
+            let bDir = parseInt(bDirSelect.value); // 1: X (Bz < 0), -1: Dot (Bz > 0)
+            let Bz = -B_mag * bDir; 
+
+            let qVal = parseFloat(qSlider.value) * parseInt(qSignSelect.value); 
+            let mVal = parseFloat(mSlider.value); 
+
+            return {
+                ax: (qVal * state.vy * Bz) / mVal,
+                ay: (-qVal * state.vx * Bz) / mVal
+            };
+        }
+
+        function rk4Step(x, y, vx, vy, dt) {
+            let state = { x, y, vx, vy };
+
+            let k1_v = acceleration(state);
+            let k1_pos = { vx: state.vx, vy: state.vy };
+
+            let k2_state = {
+                x: state.x + k1_pos.vx * dt / 2,
+                y: state.y + k1_pos.vy * dt / 2,
+                vx: state.vx + k1_v.ax * dt / 2,
+                vy: state.vy + k1_v.ay * dt / 2
+            };
+            let k2_v = acceleration(k2_state);
+            let k2_pos = { vx: k2_state.vx, vy: k2_state.vy };
+
+            let k3_state = {
+                x: state.x + k2_pos.vx * dt / 2,
+                y: state.y + k2_pos.vy * dt / 2,
+                vx: state.vx + k2_v.ax * dt / 2,
+                vy: state.vy + k2_v.ay * dt / 2
+            };
+            let k3_v = acceleration(k3_state);
+            let k3_pos = { vx: k3_state.vx, vy: k3_state.vy };
+
+            let k4_state = {
+                x: state.x + k3_pos.vx * dt,
+                y: state.y + k3_pos.vy * dt,
+                vx: state.vx + k3_v.ax * dt,
+                vy: state.vy + k3_v.ay * dt
+            };
+            let k4_v = acceleration(k4_state);
+            let k4_pos = { vx: k4_state.vx, vy: k4_state.vy };
+
+            return {
+                nx: state.x + (dt / 6) * (k1_pos.vx + 2 * k2_pos.vx + 2 * k3_pos.vx + k4_pos.vx),
+                ny: state.y + (dt / 6) * (k1_pos.vy + 2 * k2_pos.vy + 2 * k3_pos.vy + k4_pos.vy),
+                nvx: state.vx + (dt / 6) * (k1_v.ax + 2 * k2_v.ax + 2 * k3_v.ax + k4_v.ax),
+                nvy: state.vy + (dt / 6) * (k1_v.ay + 2 * k2_v.ay + 2 * k3_v.ay + k4_v.ay)
+            };
+        }
+
         initPhysics();
 
         function loop() { 
-            let B = parseFloat(bSlider.value) * parseInt(bDirSelect.value);
-            let q = parseFloat(qSlider.value) * parseInt(qSignSelect.value);
-            let m = parseFloat(mSlider.value); 
-            
-            const scale = 2.0; 
+            let bDir = parseInt(bDirSelect.value);
+            let q_raw = parseFloat(qSlider.value) * parseInt(qSignSelect.value);
 
             if (isPlaying) { 
-                let subSteps = 10;
+                let subSteps = 5;
                 let dt = 0.05 / subSteps; 
 
                 for (let step = 0; step < subSteps; step++) {
-                    if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) { 
-                        let ax = (q * vy * B * scale) / m;
-                        let ay = -(q * vx * B * scale) / m;
-                        
-                        vx += ax * dt; 
-                        vy += ay * dt; 
-                    } 
-                    x += vx * dt; 
-                    y += vy * dt; 
+                    let next = rk4Step(posX, posY, velX, velY, dt);
+                    posX = next.nx;
+                    posY = next.ny;
+                    velX = next.nvx;
+                    velY = next.nvy;
                     t += dt; 
                 }
 
-                trajectory.push({x: x, y: y}); 
+                trajectory.push({x: posX, y: posY}); 
+                if (trajectory.length > 3000) trajectory.shift();
 
-                if (trajectory.length > 2000) trajectory.shift();
-
-                if (x > canvas.width || x < 0 || y > canvas.height || y < 0) { 
+                let pxX = metersToPixelsX(posX);
+                let pxY = metersToPixelsY(posY);
+                if (pxX > canvas.width + 100 || pxX < -100 || pxY > canvas.height + 100 || pxY < -100) { 
                     isPlaying = false; 
                     playBtn.innerText = "Play"; 
                 } 
@@ -439,90 +510,83 @@
             ctx.strokeRect(xMinPixels, yMinPixels, xMaxPixels - xMinPixels, yMaxPixels - yMinPixels); 
             ctx.setLineDash([]); 
             
+            // Σύμβολα B
             ctx.fillStyle = 'rgba(255, 0, 0, 0.25)'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; 
             for (let px = xMinPixels + 40; px < xMaxPixels; px += 80) {
                 for (let py = yMinPixels + 40; py < yMaxPixels; py += 80) {
-                    ctx.fillText((B > 0) ? "X" : "•", px, py); 
+                    ctx.fillText((bDir === 1) ? "X" : "•", px, py); 
                 }
             }
 
             // Άξονες
-            drawArrow(xMinPixels, yMaxPixels, xMinPixels, yMinPixels - 15, 'black', 2); 
-            drawArrow(xMinPixels, yMaxPixels, xMaxPixels + 15, yMaxPixels, 'black', 2); 
+            drawArrow(metersToPixelsX(0), metersToPixelsY(0), metersToPixelsX(0), yMinPixels - 15, 'black', 2); 
+            drawArrow(metersToPixelsX(0), metersToPixelsY(0), xMaxPixels + 15, metersToPixelsY(0), 'black', 2); 
 
-            // Βαθμονόμηση στους Άξονες
-            ctx.fillStyle = 'black';
-            ctx.font = '11px sans-serif';
-            ctx.lineWidth = 1;
-
+            // Βαθμονόμηση
+            ctx.fillStyle = 'black'; ctx.font = '11px sans-serif'; ctx.lineWidth = 1;
             ctx.textAlign = 'right';
-            ctx.fillText('0', xMinPixels - 8, yMaxPixels + 15);
+            ctx.fillText('0', metersToPixelsX(0) - 8, metersToPixelsY(0) + 15);
+            ctx.fillText('(m)', xMaxPixels + 10, metersToPixelsY(0) + 18); 
+            ctx.fillText('(m)', metersToPixelsX(0) - 5, yMinPixels - 10);   
 
-            // Οριζόντιος Άξονας (X)
-            for (let val = 100; val <= 500; val += 100) {
-                let px = xMinPixels + val;
+            for (let val = 5; val <= fieldWidthMeters; val += 5) {
+                let px = metersToPixelsX(val);
                 if (px <= xMaxPixels) {
-                    ctx.beginPath();
-                    ctx.moveTo(px, yMaxPixels);
-                    ctx.lineTo(px, yMaxPixels + 5);
-                    ctx.stroke();
-                    ctx.textAlign = 'center';
-                    ctx.fillText(val, px, yMaxPixels + 18);
+                    ctx.beginPath(); ctx.moveTo(px, metersToPixelsY(0)); ctx.lineTo(px, metersToPixelsY(0) + 5); ctx.stroke();
+                    ctx.textAlign = 'center'; ctx.fillText(val, px, metersToPixelsY(0) + 18);
                 }
             }
-
-            // Κατακόρυφος Άξονας (Y)
-            for (let val = 100; val <= 400; val += 100) {
-                let py = yMaxPixels - val;
+            for (let val = 5; val <= fieldHeightMeters; val += 5) {
+                let py = metersToPixelsY(val);
                 if (py >= yMinPixels) {
-                    ctx.beginPath();
-                    ctx.moveTo(xMinPixels, py);
-                    ctx.lineTo(xMinPixels - 5, py);
-                    ctx.stroke();
-                    ctx.textAlign = 'right';
-                    ctx.fillText(val, xMinPixels - 8, py + 4);
+                    ctx.beginPath(); ctx.moveTo(metersToPixelsX(0), py); ctx.lineTo(metersToPixelsX(0) - 5, py); ctx.stroke();
+                    ctx.textAlign = 'right'; ctx.fillText(val, metersToPixelsX(0) - 8, py + 4);
                 }
             }
 
-            // Διανύσματα
-            if (x > 0 && x < canvas.width) { 
-                drawArrow(x, y, x + vx * 0.8, y + vy * 0.8, 'blue');
-                if (x >= xMinPixels && x <= xMaxPixels && y >= yMinPixels && y <= yMaxPixels) { 
-                    let Fx = (q * vy * B * scale) * 0.3; 
-                    let Fy = -(q * vx * B * scale) * 0.3;
-                    drawArrow(x, y, x + Fx, y + Fy, 'red'); 
-                } 
-            } 
+            let curPxX = metersToPixelsX(posX);
+            let curPxY = metersToPixelsY(posY);
 
-            // Σχεδίαση Τροχιάς
-            ctx.strokeStyle = 'black'; ctx.lineWidth = 2; ctx.beginPath(); 
+            // Τροχιά
+            ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.lineWidth = 1.5; ctx.beginPath(); 
             if(trajectory.length > 0) { 
-                ctx.moveTo(trajectory[0].x, trajectory[0].y); 
-                for(let p of trajectory) ctx.lineTo(p.x, p.y); 
+                ctx.moveTo(metersToPixelsX(trajectory[0].x), metersToPixelsY(trajectory[0].y)); 
+                for(let p of trajectory) ctx.lineTo(metersToPixelsX(p.x), metersToPixelsY(p.y)); 
                 ctx.stroke(); 
             } 
 
-            // Σχεδίαση Σωματιδίου με Πρόσημο (+/-) και Διακριτά Χρώματα (Πορτοκαλί / Μωβ)
+            // Διανύσματα v και F
+            if (curPxX > 0 && curPxX < canvas.width && curPxY > 0 && curPxY < canvas.height) { 
+                let scalePixels = (xMaxPixels - xMinPixels) / fieldWidthMeters;
+                
+                // Διάνυσμα Ταχύτητας (v) - Μπλε
+                let vScale = 2.0; 
+                let vPxX = velX * vScale;
+                let vPxY = -velY * vScale; // Αρνητικό λόγω canvas Y-axis
+                drawArrow(curPxX, curPxY, curPxX + vPxX, curPxY + vPxY, 'blue', 2);
+
+                // Διάνυσμα Δύναμης Lorentz (F) - Κόκκινο
+                if (posX >= 0 && posX <= fieldWidthMeters && posY >= 0 && posY <= fieldHeightMeters) { 
+                    let acc = acceleration({x: posX, y: posY, vx: velX, vy: velY});
+                    let fScale = 1.5; 
+                    let fPxX = acc.ax * fScale;
+                    let fPxY = -acc.ay * fScale; // Αρνητικό λόγω canvas Y-axis
+                    drawArrow(curPxX, curPxY, curPxX + fPxX, curPxY + fPxY, 'red', 2); 
+                } 
+            } 
+
+            // Σωματίδιο
             const radius = 10;
             ctx.beginPath(); 
-            ctx.arc(x, y, radius, 0, 2 * Math.PI); 
-            ctx.fillStyle = (q > 0) ? '#ff8c00' : '#8a2be2'; // Πορτοκαλί για (+), Μωβ για (-)
-            ctx.fill(); 
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
+            ctx.arc(curPxX, curPxY, radius, 0, 2 * Math.PI); 
+            ctx.fillStyle = (q_raw > 0) ? '#ff8c00' : '#8a2be2'; 
+            ctx.fill(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.stroke();
 
-            // Σύμβολο + / - στο κέντρο του σωματιδίου
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 13px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText((q > 0) ? '+' : '-', x, y + 0.5);
-
-            // Επαναφορά textBaseline για την υπόλοιπη σχεδίαση
-            ctx.textBaseline = 'alphabetic';
+            ctx.fillStyle = '#ffffff'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText((q_raw > 0) ? '+' : '-', curPxX, curPxY + 0.5); ctx.textBaseline = 'alphabetic'; 
 
             // Υπόμνημα
+            ctx.font = '13px sans-serif'; ctx.textAlign = 'left';
             ctx.fillStyle = 'blue'; ctx.fillText("➔ Ταχύτητα (v)", 480, 20); 
             ctx.fillStyle = 'red'; ctx.fillText("➔ Δύναμη Lorentz (F)", 480, 43); 
 
