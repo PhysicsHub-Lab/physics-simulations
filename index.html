@@ -103,7 +103,7 @@
             z-index: 1;
         }
 
-        /* Chalk Doodle: Αριστερά (Μετατοπισμένο πιο κάτω για να μην επικαλύπτει το κείμενο) */
+        /* Chalk Doodle: Αριστερά */
         .chalk-doodle-left {
             position: absolute;
             top: 410px;
@@ -112,7 +112,7 @@
             opacity: 0.9;
             pointer-events: none;
             z-index: 1;
-            transform: rotate(-3deg); /* Πλάγια κλίση για ζωντανιά */
+            transform: rotate(-3deg);
         }
 
         /* ==========================================
@@ -123,6 +123,7 @@
             width: 100%;
             margin-top: 10px;
             padding: 10px 20px;
+            box-sizing: border-box;
         }
 
         /* Τίτλος ενότητας σε Σκούρο Πράσινο */
@@ -136,11 +137,14 @@
             letter-spacing: 0.5px;
         }
 
+        /* Πλέγμα 3x2 Κεντραρισμένο */
         .sims-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            align-items: start;
+            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .sim-card {
@@ -191,10 +195,10 @@
         }
 
         .sim-card:nth-child(1) { transform: rotate(-2deg); }
-        .sim-card:nth-child(2) { transform: rotate(1.5deg) translateY(8px); }
+        .sim-card:nth-child(2) { transform: rotate(1.5deg) translateY(4px); }
         .sim-card:nth-child(3) { transform: rotate(-1deg); }
-        .sim-card:nth-child(4) { transform: rotate(2deg) translateY(-5px); }
-        .sim-card:nth-child(5) { transform: rotate(-1.5deg) translateY(6px); }
+        .sim-card:nth-child(4) { transform: rotate(2deg) translateY(-2px); }
+        .sim-card:nth-child(5) { transform: rotate(-1.5deg) translateY(3px); }
         .sim-card:nth-child(6) { transform: rotate(1deg); }
 
         .sim-card:hover {
@@ -211,6 +215,18 @@
         /* ==========================================
            RESPONSIVE DESIGN (ΓΙΑ ΚΙΝΗΤΑ & TABLETS)
            ========================================== */
+        @media screen and (max-width: 850px) {
+            .sims-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 ανά γραμμή σε tablets */
+            }
+        }
+
+        @media screen and (max-width: 580px) {
+            .sims-grid {
+                grid-template-columns: 1fr; /* 1 ανά γραμμή σε κινητά */
+            }
+        }
+
         @media screen and (max-width: 768px) {
             .top-header {
                 margin-left: 0 !important;
@@ -228,7 +244,6 @@
                 font-size: 1.3rem;
             }
 
-            /* Απόκρυψη στοιχείων που επικαλύπτουν το περιεχόμενο στις μικρές οθόνες */
             .chalk-doodle-top,
             .chalk-doodle-left,
             .experiment-polaroid {
@@ -252,11 +267,6 @@
                 padding: 15px;
             }
 
-            .sims-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
             .sim-card {
                 transform: none !important;
             }
@@ -266,7 +276,7 @@
 <body>
     <div class="overlay">
         
-        <!-- Chalk Doodle Δεξιά (Einstein) σε Σκούρο Γκρι / Pencil Look (#3A3A3A) -->
+        <!-- Chalk Doodle Δεξιά (Einstein) -->
         <div class="chalk-doodle-top">
             <svg width="240" height="150" viewBox="0 0 240 150" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <text x="10" y="32" fill="#3A3A3A" font-family="'Courier New', monospace" font-weight="bold" font-size="22">E = mc²</text>
@@ -277,39 +287,25 @@
             </svg>
         </div>
 
-        <!-- Chalk Doodle Αριστερά σε Σκούρο Γκρι / Pencil Look (#3A3A3A) -->
+        <!-- Chalk Doodle Αριστερά -->
         <div class="chalk-doodle-left">
             <svg width="250" height="220" viewBox="0 0 250 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-                
-                <!-- Εξισώσεις -->
                 <text x="10" y="28" fill="#3A3A3A" font-family="serif" font-weight="bold" font-size="19">Δx · Δp ≥ ℏ/2</text>
                 <text x="10" y="62" fill="#3A3A3A" font-family="serif" font-weight="bold" font-size="19">F = G(Mm)/r²</text>
                 <text x="160" y="28" fill="#3A3A3A" font-family="serif" font-weight="bold" font-size="19">τ = r × F</text>
                 
-                <!-- --- ΣΧΕΔΙΟ: ΒΑΡΥΤΙΚΗ ΤΡΟΧΙΑ / ΠΑΓΚΟΣΜΙΑ ΕΛΞΗ --- -->
                 <g transform="translate(120, 145)">
-                    
-                    <!-- Group με την τροχιά, τη μάζα m και το βέλος, όλα υπό την ίδια κλίση -12 μοιρών -->
                     <g transform="rotate(-12)">
-                        <!-- Ελλειπτική Τροχιά (rx=80, ry=35) -->
                         <ellipse cx="0" cy="0" rx="80" ry="35" stroke="#3A3A3A" stroke-width="2" stroke-dasharray="5 3" fill="none" />
-                        
-                        <!-- Περιστρεφόμενο Σώμα m (Ακριβώς στο άκρο της έλλειψης cx=80, cy=0) -->
                         <circle cx="80" cy="0" r="7" fill="#3A3A3A" />
                         <text x="92" y="-2" fill="#3A3A3A" font-family="sans-serif" font-weight="bold" font-size="13">m</text>
-                        
-                        <!-- Δάνυσμα Βαρυτικής Δύναμης Fg προς την κεντρική μάζα -->
                         <path d="M 73 0 L 12 0" stroke="#3A3A3A" stroke-width="2" />
                         <polygon points="18,-4 8,0 18,4" fill="#3A3A3A" />
                         <text x="35" y="-8" fill="#3A3A3A" font-family="serif" font-style="italic" font-weight="bold" font-size="14">Fg</text>
                     </g>
-                    
-                    <!-- Κεντρική Μάζα M -->
                     <circle cx="-25" cy="5" r="14" stroke="#3A3A3A" stroke-width="2.5" fill="none" />
                     <text x="-29" y="10" fill="#3A3A3A" font-family="sans-serif" font-weight="bold" font-size="14">M</text>
-
                 </g>
-                
             </svg>
         </div>
 
