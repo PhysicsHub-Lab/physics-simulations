@@ -183,6 +183,7 @@
                     <label style="color: #16a34a;"><input type="checkbox" id="showVcm" checked> v_cm (Μεταφορική)</label>
                     <label style="color: #2563eb;"><input type="checkbox" id="showVper" checked> v_περιφ (Περιστροφική)</label>
                     <label style="color: #dc2626;"><input type="checkbox" id="showVtot" checked> v_συν (Συνολική)</label>
+                    <label style="color: #4b5563;"><input type="checkbox" id="showExtraPoints"> Διανύσματα σε όλα τα σημεία</label>
                     <label style="color: #9333ea;"><input type="checkbox" id="showTrace" checked> Τροχιά (Cycloid)</label>
                 </div>
             </div>
@@ -213,9 +214,10 @@ const resetTraceBtn = document.getElementById('resetTraceBtn');
 const showVcm = document.getElementById('showVcm');
 const showVper = document.getElementById('showVper');
 const showVtot = document.getElementById('showVtot');
+const showExtraPoints = document.getElementById('showExtraPoints');
 const showTrace = document.getElementById('showTrace');
 
-const R = 55;            
+const R = 55;         
 const R_real = 0.5;      
 const scale = R / R_real;
 
@@ -245,7 +247,7 @@ function draw() {
         x += v_cm_px * dt;
         angle += omega * dt;
 
-        let traceX = x + R * Math.sin(angle);
+        let traceX = x - R * Math.sin(angle);
         let traceY = y + R * Math.cos(angle);
         
         tracePoints.push({x: traceX, y: traceY});
@@ -302,7 +304,7 @@ function draw() {
     ctx.stroke();
     ctx.restore();
 
-    let px = R * Math.sin(angle);
+    let px = -R * Math.sin(angle);
     let py = R * Math.cos(angle);
 
     ctx.beginPath();
@@ -322,31 +324,74 @@ function draw() {
     ctx.fill();
 
     // 4. Σχεδίαση Διανυσμάτων
-    let v_per_px = omega * R;
     let arrowScale = 0.75;
 
+    // Βασικά σημεία: Πάνω, Κάτω, Κέντρο
     let points = [
-        { px: x, py: y - R, type: 'top' },
-        { px: x, py: y + R, type: 'bottom' },
-        { px: x, py: y, type: 'center' }
+        { px: x, py: y - R, angleOffset: -Math.PI / 2, type: 'top' },
+        { px: x, py: y + R, angleOffset: Math.PI / 2, type: 'bottom' },
+        { px: x, py: y, angleOffset: 0, type: 'center' }
     ];
+
+    // Προσθήκη έξτρα σημείων αν είναι ενεργοποιημένο το αντίστοιχο checkbox
+    if (showExtraPoints.checked) {
+        // Δεξί οριζόντιο άκρο (κάθετη v_per)
+        points.push({ px: x + R, py: y, angleOffset: 0, type: 'right' });
+        // Αριστερό οριζόντιο άκρο (κάθετη v_per)
+        points.push({ px: x - R, py: y, angleOffset: Math.PI, type: 'left' });
+        
+        // Τυχαίο/Ενδιάμεσο σημείο (π.χ. στις 45 μοίρες / επάνω δεξιά)
+        let randomAngle = -Math.PI / 4; 
+        points.push({ 
+            px: x + R * Math.cos(randomAngle), 
+            py: y + R * Math.sin(randomAngle), 
+            angleOffset: randomAngle, 
+            type: 'random' 
+        });
+    }
 
     points.forEach(p => {
         let v_cx = v_cm_px;
-        let v_px = (p.type === 'top') ? v_per_px : (p.type === 'bottom' ? -v_per_px : 0);
+        let v_cy = 0;
 
+        let v_px = 0;
+        let v_py = 0;
+
+        if (p.type === 'top') {
+            v_px = omega * R;
+            v_py = 0;
+        } else if (p.type === 'bottom') {
+            v_px = -omega * R;
+            v_py = 0;
+        } else if (p.type === 'right') {
+            v_px = 0;
+            v_py = omega * R;
+        } else if (p.type === 'left') {
+            v_px = 0;
+            v_py = -omega * R;
+        } else if (p.type === 'random') {
+            // Εφαπτομενικό διάνυσμα
+            let tangentAngle = p.angleOffset + Math.PI / 2;
+            v_px = omega * R * Math.cos(tangentAngle);
+            v_py = omega * R * Math.sin(tangentAngle);
+        }
+
+        // Σχεδίαση Μεταφορικής Ταχύτητας (v_cm)
         if (showVcm.checked) {
-            drawArrow(p.px, p.py, p.px + v_cx * arrowScale, p.py, '#16a34a', 2);
+            drawArrow(p.px, p.py, p.px + v_cx * arrowScale, p.py + v_cy * arrowScale, '#16a34a', 2);
         }
 
+        // Σχεδίαση Περιφερειακής Ταχύτητας (v_περιφ)
         if (showVper.checked && p.type !== 'center') {
-            drawArrow(p.px, p.py, p.px + v_px * arrowScale, p.py, '#2563eb', 2);
+            drawArrow(p.px, p.py, p.px + v_px * arrowScale, p.py + v_py * arrowScale, '#2563eb', 2);
         }
 
+        // Σχεδίαση Συνολικής Ταχύτητας (v_συν)
         if (showVtot.checked) {
             let v_tot_x = v_cx + v_px;
-            if (Math.abs(v_tot_x) > 1) {
-                drawArrow(p.px, p.py, p.px + v_tot_x * arrowScale, p.py, '#dc2626', 3, p.type === 'top' ? 'v_συν' : '');
+            let v_tot_y = v_cy + v_py;
+            if (Math.hypot(v_tot_x, v_tot_y) > 1) {
+                drawArrow(p.px, p.py, p.px + v_tot_x * arrowScale, p.py + v_tot_y * arrowScale, '#dc2626', 3, p.type === 'top' ? 'v_συν' : '');
             }
         }
     });
