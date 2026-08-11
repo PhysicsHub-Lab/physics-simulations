@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Κίνηση σε Κεκλιμένο Επίπεδο - PhysicsHub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-content { 
+            display: flex; 
+            gap: 15px; 
+            align-items: flex-start; 
+            justify-content: center; 
+            padding: 15px; 
+            flex-wrap: wrap; 
+            max-width: 1650px; 
+            margin: 0 auto; 
+        }
+        .sim-container { display: flex; flex-direction: column; align-items: center; }
+        
+        /* Dropdown Τίτλος Σεναρίων (Γκρι - Μπλε) */
+        .scenario-title-select {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #455a64;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            max-width: 680px;
+            width: 100%;
+            box-sizing: border-box;
+            height: auto;
+            line-height: 1.3;
+            display: block;
+        }
+        .scenario-title-select option {
+            background-color: #ffffff;
+            color: #222222;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 8px;
+        }
+
+        /* Controls Box */
+        .controls { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 6px 12px; 
+            margin-bottom: 10px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 8px 15px; 
+            border-radius: 10px; 
+            width: 680px; 
+            border: 1px solid #ddd; 
+            box-sizing: border-box; 
+            color: #333; 
+        }
+        .full-row { grid-column: span 2; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .btn-action { 
+            font-size: 13px; 
+            font-weight: bold; 
+            padding: 5px 20px; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            border: 1px solid #ccc; 
+            background-color: #f8f9fa; 
+            transition: all 0.2s; 
+        }
+        .btn-action:hover { background-color: #e2e6ea; }
+        canvas { border: 1px solid #ccc; background: #fff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
+        .info-box { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 15px; 
+            border-radius: 12px; 
+            width: 300px; 
+            border: 1px solid #ddd; 
+            line-height: 1.5; 
+            font-size: 13px; 
+            color: #333; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        }
+        .info-box h3 { color: #800020; margin-top: 0; font-size: 16px; margin-bottom: 8px; }
+        
+        .graphs-box { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 10px; 
+            border-radius: 12px; 
+            width: 290px; 
+            border: 1px solid #ddd; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            gap: 8px;
+        }
+        .graphs-box h3 {
+            margin: 0 0 2px 0;
+            color: #800020;
+            font-size: 15px;
+            text-align: center;
+        }
+        .graph-card {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .graph-card span {
+            font-size: 11px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 2px;
+        }
+        .graph-card canvas {
+            box-shadow: none;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        label { display: flex; flex-direction: column; font-size: 12px; font-weight: bold; }
+        input[type="range"] { width: 100%; margin-top: 2px; height: 20px; }
+        
+        select { 
+            width: 100%; 
+            margin-top: 3px; 
+            height: 34px; 
+            padding: 4px 8px; 
+            font-size: 13px; 
+            font-weight: bold; 
+            border-radius: 5px; 
+            border: 1px solid #aaa; 
+            background-color: #fff; 
+            box-sizing: border-box; 
+            line-height: 1.2;
+        }
+        
+        .alert-banner {
+            display: none;
+            background: #ffebe9;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 2px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .disabled-label {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">Αρχική</a>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
+            <div class="dropdown-content">
+                <div class="nested-menu">
+                    <a href="#">Γυμνάσιο ▶</a>
+                    <div class="dropdown-content">
+                        <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                        <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                        <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                    </div>
+                </div>
+                <div class="nested-menu">
+                    <a href="#">Λύκειο ▶</a>
+                    <div class="dropdown-content">
+                        <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                        <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                        <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Προσομοιώσεις ▼</a>
+            <div class="dropdown-content">
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                <a href="Krouseis.html">Κρούσεις</a>
+                <a href="inclined_plane.html">Κεκλιμένο Επίπεδο</a>
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
+                <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
+                <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
+                <a href="waves.html">Συμβολή κυμάτων</a>
+                <a href="oriz_voli.html">Οριζόντια βολή</a>
+            </div>
+        </div>
+        <a href="physics_in_action.html">Φυσική στη πράξη</a>
+        <a href="about_us.html">Σχετικά με εμάς</a>
+        <a href="feedback.html">Αξιολόγησε μας</a>
+    </div>
+
+    <div class="page-content">
+        <!-- ΑΡΙΣΤΕΡΑ: Live Διαγράμματα -->
+        <div class="graphs-box">
+            <h3>Διαγράμματα Κίνησης</h3>
+            <div class="graph-card">
+                <span>Διάστημα - Χρόνος (d - t)</span>
+                <canvas id="dtCanvas" width="270" height="115"></canvas>
+            </div>
+            <div class="graph-card">
+                <span>Μετατόπιση - Χρόνος (x - t)</span>
+                <canvas id="xtCanvas" width="270" height="115"></canvas>
+            </div>
+            <div class="graph-card">
+                <span>Ταχύτητα - Χρόνος (v - t)</span>
+                <canvas id="vtCanvas" width="270" height="115"></canvas>
+            </div>
+            <div class="graph-card">
+                <span>Επιτάχυνση - Χρόνος (a - t)</span>
+                <canvas id="atCanvas" width="270" height="115"></canvas>
+            </div>
+        </div>
+
+        <!-- ΚΕΝΤΡΟ: Προσομοίωση & Χειριστήρια -->
+        <div class="sim-container">
+            <select id="scenarioSelect" class="scenario-title-select">
+                <option value="horizontal_f">1. Αρχική Επιτάχυνση στο Οριζόντιο Δάπεδο & Άνοδος στο Κεκλιμένο</option>
+                <option value="top_down">2. Κίνηση Σώματος από την Κορυφή του Κεκλιμένου</option>
+            </select>
+
+            <div class="controls">
+                <div class="full-row">
+                    <button id="playBtn" class="btn-action">Play</button>
+                    <button id="resetBtn" class="btn-action">Reset</button>
+                </div>
+
+                <label id="fLabel" style="color: #1e88e5;">Δύναμη F (N) [στο Οριζόντιο]: 
+                    <input type="range" id="fSlider" min="0" max="30" value="22.5" step="0.5">
+                    <span id="fVal">22.5 N</span>
+                </label>
+
+                <label style="color: #800020;">Γωνία φ (°): 
+                    <select id="angleSelect">
+                        <option value="30">30°</option>
+                        <option value="36">36°</option>
+                        <option value="45" selected>45°</option>
+                        <option value="60">60°</option>
+                    </select>
+                </label>
+
+                <label style="color: #2e7d32;">Μάζα m (kg): 
+                    <input type="range" id="mSlider" min="1" max="10" value="2" step="0.5">
+                    <span id="mVal">2.0 kg</span>
+                </label>
+
+                <label style="color: #d81b60;">Συντ. Τριβής μ (Οριζόντιο): 
+                    <input type="range" id="muSlider" min="0" max="0.99" value="0.15" step="0.01">
+                    <span id="muVal">0.15</span>
+                </label>
+
+                <div class="full-row">
+                    <div id="alertMessage" class="alert-banner"></div>
+                </div>
+            </div>
+            <canvas id="simCanvas" width="680" height="480"></canvas>
+        </div>
+
+        <!-- ΔΕΞΙΑ: Θεωρητικό Πλαίσιο -->
+        <div class="info-box" id="infoBoxContent">
+            <!-- Ενημερώνεται δυναμικά -->
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const dtCanvas = document.getElementById('dtCanvas');
+        const dtCtx = dtCanvas.getContext('2d');
+        const xtCanvas = document.getElementById('xtCanvas');
+        const xtCtx = xtCanvas.getContext('2d');
+        const vtCanvas = document.getElementById('vtCanvas');
+        const vtCtx = vtCanvas.getContext('2d');
+        const atCanvas = document.getElementById('atCanvas');
+        const atCtx = atCanvas.getContext('2d');
+
+        const g = 10; 
+        const targetHeight = 13; 
+
+        let scale = 14; 
+        let originX = 280; 
+        let originY = 410;
+
+        let isPlaying = false;
+        let t = 0;
+        let x = 0; 
+        let d = 0; 
+        let v = 0; 
+        let a = 0; 
+        let friction = 0; 
+        let reachedPeak = false;
+
+        let history = []; 
+
+        const playBtn = document.getElementById('playBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const fSlider = document.getElementById('fSlider');
+        const fLabel = document.getElementById('fLabel');
+        const mSlider = document.getElementById('mSlider');
+        const muSlider = document.getElementById('muSlider');
+        const angleSelect = document.getElementById('angleSelect');
+        const scenarioSelect = document.getElementById('scenarioSelect');
+        const alertMessage = document.getElementById('alertMessage');
+        const infoBoxContent = document.getElementById('infoBoxContent');
+
+        let scenario = scenarioSelect.value;
+        let F = parseFloat(fSlider.value);
+        let m = parseFloat(mSlider.value);
+        let mu = parseFloat(muSlider.value);
+        let phiDeg = parseFloat(angleSelect.value);
+        let phiRad = phiDeg * Math.PI / 180;
+        let inclinedLength = targetHeight / Math.sin(phiRad);
+
+        function getRealStopDistanceScenario1() {
+            let dxAcc = 5.0; // Απόσταση επιτάχυνσης με F
+            let T_val = mu * m * g;
+            let vBaseSq = (2 / m) * (F - T_val) * dxAcc; // Ταχύτητα στη βάση πριν την άνοδο
+
+            if (vBaseSq <= 0) return 0; // Δεν έφτασε καν στη βάση του κεκλιμένου
+
+            // Επιστροφή στη βάση: Επειδή η κίνηση στο κεκλιμένο είναι συντηρητική (χωρίς τριβή), 
+            // το σώμα επιστρέφει στη βάση με την ίδια ταχύτητα vBaseSq.
+            // Στο οριζόντιο τμήμα αριστερά, η τριβή το σταματάει σε διάστημα d_left:
+            let d_left = vBaseSq / (2 * mu * g);
+            return d_left;
+        }
+
+        function updateTheoryInfo() {
+            if (scenario === 'horizontal_f') {
+                infoBoxContent.innerHTML = `
+                    <h3>Φυσική & Γεωμετρία (g = 10 m/s²)</h3>
+                    <p><strong>1. Γεωμετρία:</strong><br>
+                    • Σταθερό ύψος $h = 13\\text{ m}$.<br>
+                    • Μήκος κεκλιμένου $s_{\\text{inc}} = \\frac{13}{\\sin(\\phi)}$.</p>
+                    <p><strong>2. Οριζόντιο Τμήμα:</strong><br>
+                    • Αρχική θέση σώματος $x = 0\\text{ m}$.<br>
+                    • Βάση κεκλιμένου $x = 5\\text{ m}$.<br>
+                    • Δύναμη $F$ ασκείται στο $x \\in [0, 5\\text{ m}]$.<br>
+                    • Τριβή ολίσθησης $T = \\mu m g$.<br>
+                    • Όριο αριστερού δαπέδου $x = -15\\text{ m}$.</p>
+                    <p><strong>3. Κεκλιμένο Επίπεδο ($x > 5\\text{ m}$):</strong><br>
+                    • $F = 0$, $T = 0$.<br>
+                    • Επιβράδυνση λόγω $W_x = m g \\sin(\\phi)$.</p>
+                `;
+            } else {
+                infoBoxContent.innerHTML = `
+                    <h3>Φυσική & Γεωμετρία (g = 10 m/s²)</h3>
+                    <p><strong>1. Γεωμετρία:</strong><br>
+                    • Σταθερό ύψος $h = 13\\text{ m}$.<br>
+                    • Μήκος κεκλιμένου $s_{\\text{inc}} = \\frac{13}{\\sin(\\phi)}$.</p>
+                    <p><strong>2. Κεκλιμένο Επίπεδο:</strong><br>
+                    • Αρχική θέση: Κορυφή ($x = s_{\\text{inc}}$).<br>
+                    • Βάση κεκλιμένου: $x = 0\\text{ m}$.<br>
+                    • Επιτάχυνση $a = g \\sin(\\phi)$ (χωρίς τριβή).</p>
+                    <p><strong>3. Οριζόντιο Δάπεδο ($x \\le 0\\text{ m}$):</strong><br>
+                    • Μήκος δαπέδου $25\\text{ m}$ (έως $x = -25\\text{ m}$).<br>
+                    • Τριβή ολίσθησης $T = \\mu m g$.</p>
+                `;
+            }
+        }
+
+        function updateInputs() {
+            scenario = scenarioSelect.value;
+            F = parseFloat(fSlider.value);
+            m = parseFloat(mSlider.value);
+            mu = parseFloat(muSlider.value);
+            phiDeg = parseFloat(angleSelect.value);
+            phiRad = phiDeg * Math.PI / 180;
+            inclinedLength = targetHeight / Math.sin(phiRad);
+
+            if (scenario === 'top_down') {
+                fLabel.classList.add('disabled-label');
+            } else {
+                fLabel.classList.remove('disabled-label');
+            }
+
+            if (scenario === 'horizontal_f') {
+                if (phiDeg === 30) { scale = 11; originX = 260; originY = 415; }
+                else if (phiDeg === 36) { scale = 12.5; originX = 270; originY = 410; }
+                else if (phiDeg === 45) { scale = 14; originX = 280; originY = 405; }
+                else { scale = 15.5; originX = 290; originY = 400; }
+            } else {
+                if (phiDeg === 30) { scale = 11; originX = 350; originY = 415; }
+                else if (phiDeg === 36) { scale = 12.5; originX = 360; originY = 410; }
+                else if (phiDeg === 45) { scale = 14; originX = 370; originY = 405; }
+                else { scale = 15.5; originX = 380; originY = 400; }
+            }
+
+            document.getElementById('fVal').innerText = F.toFixed(1) + " N";
+            document.getElementById('mVal').innerText = m.toFixed(1) + " kg";
+            document.getElementById('muVal').innerText = mu.toFixed(2);
+
+            alertMessage.style.display = "none";
+            updateTheoryInfo();
+        }
+
+        function initPhysics() {
+            updateInputs();
+            t = 0;
+            v = 0;
+            a = 0;
+            friction = 0;
+
+            if (scenario === 'top_down') {
+                x = inclinedLength; 
+                d = 0;
+                reachedPeak = true; 
+            } else {
+                x = 0; 
+                d = 0;
+                reachedPeak = false;
+            }
+
+            history = [{ t: 0, d: d, x: x, v: 0, a: 0 }];
+            drawGraphs();
+        }
+
+        playBtn.onclick = () => {
+            isPlaying = !isPlaying;
+            playBtn.innerText = isPlaying ? "Pause" : "Play";
+        };
+
+        resetBtn.onclick = () => {
+            isPlaying = false;
+            playBtn.innerText = "Play";
+            initPhysics();
+        };
+
+        [fSlider, mSlider, muSlider, angleSelect, scenarioSelect].forEach(el => {
+            el.oninput = el.onchange = () => {
+                updateInputs();
+                if (!isPlaying) initPhysics();
+            };
+        });
+
+        function getPos(distX) {
+            if (scenario === 'horizontal_f') {
+                let basePos = 5.0; 
+                if (distX <= basePos) {
+                    return {
+                        x: originX + distX * scale,
+                        y: originY,
+                        angle: 0
+                    };
+                } else {
+                    let dInc = distX - basePos;
+                    return {
+                        x: originX + basePos * scale + dInc * scale * Math.cos(phiRad),
+                        y: originY - dInc * scale * Math.sin(phiRad),
+                        angle: phiRad
+                    };
+                }
+            } else {
+                if (distX <= 0) {
+                    return {
+                        x: originX + distX * scale,
+                        y: originY,
+                        angle: 0
+                    };
+                } else {
+                    return {
+                        x: originX + distX * scale * Math.cos(phiRad),
+                        y: originY - distX * scale * Math.sin(phiRad),
+                        angle: phiRad
+                    };
+                }
+            }
+        }
+
+        function drawArrow(fromX, fromY, length, angle, color, labelText) {
+            if (Math.abs(length) < 2) return;
+            let toX = fromX + length * Math.cos(angle);
+            let toY = fromY + length * Math.sin(angle);
+            let headlen = 8;
+
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2.2; 
+
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+
+            let aHead = Math.atan2(toY - fromY, toX - fromX);
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(aHead - Math.PI / 6), toY - headlen * Math.sin(aHead - Math.PI / 6));
+            ctx.lineTo(toX - headlen * Math.cos(aHead + Math.PI / 6), toY - headlen * Math.sin(aHead + Math.PI / 6));
+            ctx.fill();
+
+            if (labelText) {
+                let lx = toX + 9 * Math.cos(angle);
+                let ly = toY + 9 * Math.sin(angle);
+
+                ctx.font = 'bold 12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 3;
+                ctx.strokeText(labelText, lx, ly);
+
+                ctx.fillStyle = color;
+                ctx.fillText(labelText, lx, ly);
+            }
+            ctx.restore();
+        }
+
+        function drawScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            let baseOffsetX = (scenario === 'horizontal_f') ? 5.0 : 0.0;
+            let cornerX = originX + baseOffsetX * scale; 
+            let cornerY = originY;
+            let topX = cornerX + inclinedLength * scale * Math.cos(phiRad);
+            let topY = cornerY - targetHeight * scale;
+
+            ctx.beginPath();
+            ctx.moveTo(0, originY);
+            ctx.lineTo(cornerX, cornerY);
+            ctx.lineTo(topX, topY);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 3.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(cornerX, cornerY);
+            ctx.lineTo(topX, topY);
+            ctx.lineTo(topX, cornerY);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(210, 210, 210, 0.35)';
+            ctx.fill();
+
+            ctx.fillStyle = '#444';
+            ctx.strokeStyle = '#555';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+
+            let ticks = (scenario === 'horizontal_f') ? [0, 2.5, 5.0, -5, -10, -15] : [0, -5, -10, -15, -20, -25];
+            ticks.forEach(tickVal => {
+                let tx = originX + tickVal * scale;
+                if (tx >= 5 && tx <= canvas.width - 10) {
+                    ctx.beginPath(); ctx.moveTo(tx, originY - 4); ctx.lineTo(tx, originY + 4); ctx.stroke();
+                    ctx.fillText(tickVal + "m", tx, originY + 16);
+                }
+            });
+
+            ctx.strokeStyle = '#c62828';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(topX, topY);
+            ctx.lineTo(topX, cornerY);
+            ctx.stroke();
+            ctx.setLineDash([]); 
+
+            ctx.fillStyle = '#c62828';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText("h = 13m", Math.min(topX + 5, canvas.width - 50), (topY + cornerY) / 2);
+
+            let arcRadius = 26;
+            ctx.beginPath();
+            ctx.arc(cornerX, cornerY, arcRadius, 0, -phiRad, true);
+            ctx.strokeStyle = '#800020';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = '#800020';
+            ctx.fillText("φ=" + phiDeg + "°", cornerX + arcRadius + 10, cornerY - 5);
+
+            let pos = getPos(x);
+            let boxSize = 22 + m * 1.8;
+
+            ctx.save();
+            ctx.translate(pos.x, pos.y);
+            ctx.rotate(-pos.angle);
+
+            ctx.fillStyle = '#1e88e5';
+            ctx.fillRect(-boxSize / 2, -boxSize, boxSize, boxSize);
+            ctx.strokeStyle = '#0d47a1';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-boxSize / 2, -boxSize, boxSize, boxSize);
+
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(m.toFixed(1) + "kg", 0, -boxSize / 2 + 3);
+
+            let cx = 0;
+            let cy = -boxSize / 2;
+            let arrowScale = 1.8; 
+
+            let isOnHorizontal = (scenario === 'horizontal_f') ? (x <= 5.0) : (x <= 0);
+            if (isOnHorizontal) {
+                let N = m * g;
+                let T_val = friction;
+
+                if (scenario === 'horizontal_f' && x >= 0 && x <= 5.0 && F > 0 && !reachedPeak) {
+                    drawArrow(cx, cy, F * arrowScale, 0, '#2e7d32', 'F');
+                }
+                if (Math.abs(v) > 0.01 && T_val > 0) {
+                    let dirT = v > 0 ? Math.PI : 0;
+                    drawArrow(cx, cy, T_val * arrowScale, dirT, '#d81b60', 'T');
+                }
+                drawArrow(cx, cy, N * 1.2, -Math.PI / 2, '#00acc1', 'N');
+                drawArrow(cx, cy, (m * g) * 1.2, Math.PI / 2, '#333', 'W');
+            } else {
+                let W = m * g;
+                let Wx = W * Math.sin(phiRad);
+                let Wy = W * Math.cos(phiRad);
+
+                drawArrow(cx, cy, Wx * 1.8, Math.PI, '#e53935', 'Wx');
+                drawArrow(cx, cy, Wy * 1.2, Math.PI / 2, '#8e24aa', 'Wy');
+                drawArrow(cx, cy, Wy * 1.2, -Math.PI / 2, '#00acc1', 'N');
+            }
+            ctx.restore();
+
+            // HUD
+            ctx.fillStyle = 'rgba(245, 247, 250, 0.95)';
+            ctx.strokeStyle = '#bbb';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.roundRect(12, 10, 235, 92, 8);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#222';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText("t = " + t.toFixed(2) + " s", 20, 28);
+            ctx.fillText("d (διάστημα) = " + d.toFixed(2) + " m", 20, 46);
+            ctx.fillText("x (θέση) = " + x.toFixed(2) + " m", 20, 64);
+            
+            ctx.fillText("v = " + v.toFixed(2) + " m/s", 20, 82);
+            ctx.fillText("a = " + a.toFixed(2) + " m/s²", 130, 28);
+            ctx.fillStyle = '#d81b60';
+            ctx.fillText("T = " + friction.toFixed(2) + " N", 130, 82);
+        }
+
+        function updatePhysics(dt) {
+            let W = m * g;
+
+            if (scenario === 'horizontal_f') {
+                // Σενάριο 1
+                if (x < 5.0) {
+                    if (x >= 0 && !reachedPeak) {
+                        let T_val = mu * W;
+                        friction = T_val;
+                        a = (F - T_val) / m;
+                    } else { // x < 0
+                        let T_val = mu * W;
+                        friction = T_val;
+                        if (v < 0) {
+                            a = T_val / m;
+                        } else {
+                            a = 0; v = 0; friction = 0;
+                            isPlaying = false;
+                            playBtn.innerText = "Play";
+
+                            let realDist = getRealStopDistanceScenario1();
+                            alertMessage.innerText = "Το σώμα θα φτάσει σε απόσταση " + realDist.toFixed(2) + " m από τη βάση του κεκλιμένου.";
+                            alertMessage.style.display = "block";
+                        }
+                    }
+                } else { // x >= 5.0
+                    let Wx = W * Math.sin(phiRad);
+                    friction = 0;
+                    a = -Wx / m;
+
+                    if (v <= 0 && !reachedPeak) {
+                        reachedPeak = true;
+                    }
+                }
+
+                v += a * dt;
+                let dx = v * dt;
+                x += dx;
+                d += Math.abs(dx);
+
+                // Όριο -15m στο 1ο Σενάριο (οπτικό όριο)
+                if (x <= -15.0) {
+                    x = -15.0;
+                    isPlaying = false;
+                    playBtn.innerText = "Play";
+
+                    let realDist = getRealStopDistanceScenario1();
+                    alertMessage.innerText = "Το σώμα θα φτάσει σε απόσταση " + realDist.toFixed(2) + " m από τη βάση του κεκλιμένου.";
+                    alertMessage.style.display = "block";
+                }
+            } else {
+                // Σενάριο 2
+                if (x > 0) {
+                    let Wx = W * Math.sin(phiRad);
+                    friction = 0;
+                    a = -Wx / m; 
+                } else {
+                    let T_val = mu * W;
+                    friction = T_val;
+                    if (v < 0) {
+                        a = T_val / m;
+                    } else {
+                        a = 0; v = 0; friction = 0;
+                        isPlaying = false;
+                        playBtn.innerText = "Play";
+                        
+                        let vBase = Math.sqrt(2 * g * targetHeight);
+                        let realStopDistance = (vBase * vBase) / (2 * mu * g);
+                        alertMessage.innerText = "Το σώμα θα σταματήσει σε απόσταση " + realStopDistance.toFixed(2) + " m από τη βάση του κεκλιμένου.";
+                        alertMessage.style.display = "block";
+                    }
+                }
+
+                v += a * dt;
+                let dx = v * dt;
+                x += dx;
+                d += Math.abs(dx);
+
+                if (x <= -25.0) {
+                    x = -25.0;
+                    isPlaying = false;
+                    playBtn.innerText = "Play";
+
+                    let vBase = Math.sqrt(2 * g * targetHeight);
+                    let realStopDistance = (vBase * vBase) / (2 * mu * g);
+                    alertMessage.innerText = "Το σώμα θα σταματήσει σε απόσταση " + realStopDistance.toFixed(2) + " m από τη βάση του κεκλιμένου.";
+                    alertMessage.style.display = "block";
+                }
+            }
+
+            let maxPos = (scenario === 'horizontal_f') ? (5.0 + inclinedLength) : inclinedLength;
+            if (x >= maxPos) {
+                x = maxPos; v = 0; a = 0; friction = 0;
+                isPlaying = false;
+                playBtn.innerText = "Play";
+            }
+
+            t += dt;
+            history.push({ t: t, d: d, x: x, v: v, a: a });
+        }
+
+        function drawSingleGraph(gCtx, width, height, propKey, color, minYVal, maxYVal) {
+            gCtx.clearRect(0, 0, width, height);
+
+            const padLeft = 36;
+            const padBottom = 20;
+            const padTop = 10;
+            const graphW = width - padLeft - 10;
+            const graphH = height - padBottom - padTop;
+
+            let zeroY;
+            if (minYVal >= 0) {
+                zeroY = height - padBottom;
+            } else {
+                let ratio = Math.abs(minYVal) / (maxYVal - minYVal);
+                zeroY = (height - padBottom) - ratio * graphH;
+            }
+
+            gCtx.strokeStyle = '#f2f2f2';
+            gCtx.lineWidth = 1;
+            let ySteps = 5;
+            for (let i = 0; i <= ySteps; i++) {
+                let yPos = padTop + (graphH / ySteps) * i;
+                gCtx.beginPath();
+                gCtx.moveTo(padLeft, yPos);
+                gCtx.lineTo(width - 5, yPos);
+                gCtx.stroke();
+            }
+
+            gCtx.strokeStyle = '#666';
+            gCtx.lineWidth = 1.2;
+            gCtx.beginPath();
+            gCtx.moveTo(padLeft, zeroY);
+            gCtx.lineTo(width - 5, zeroY);
+            gCtx.moveTo(padLeft, padTop);
+            gCtx.lineTo(padLeft, height - padBottom);
+            gCtx.stroke();
+
+            gCtx.fillStyle = '#222';
+            gCtx.font = 'bold 9px sans-serif';
+            gCtx.textAlign = 'right';
+
+            let stepVal = (maxYVal - minYVal) / ySteps;
+            for (let i = 0; i <= ySteps; i++) {
+                let val = maxYVal - i * stepVal;
+                let yPos = padTop + (graphH / ySteps) * i;
+                
+                if (Math.abs(val) < 0.1 && minYVal < 0) {
+                    gCtx.fillText("0", padLeft - 4, zeroY + 3);
+                } else {
+                    gCtx.fillText(val.toFixed(0), padLeft - 4, yPos + 3);
+                }
+            }
+
+            let maxT = Math.max(t, 4);
+            gCtx.textAlign = 'center';
+            let xSteps = 4;
+            for (let i = 0; i <= xSteps; i++) {
+                let xVal = (maxT / xSteps) * i;
+                let xPos = padLeft + (graphW / xSteps) * i;
+                gCtx.fillText(xVal.toFixed(1) + "s", xPos, height - 4);
+            }
+
+            if (history.length < 2) return;
+
+            gCtx.strokeStyle = color;
+            gCtx.lineWidth = 2.0;
+
+            for (let i = 1; i < history.length; i++) {
+                let prevPt = history[i - 1];
+                let currPt = history[i];
+
+                let x1 = padLeft + (prevPt.t / maxT) * graphW;
+                let y1 = zeroY - (prevPt[propKey] / (maxYVal - (minYVal < 0 ? minYVal : 0))) * graphH;
+
+                let x2 = padLeft + (currPt.t / maxT) * graphW;
+                let y2 = zeroY - (currPt[propKey] / (maxYVal - (minYVal < 0 ? minYVal : 0))) * graphH;
+
+                let deltaVal = Math.abs(currPt[propKey] - prevPt[propKey]);
+
+                gCtx.beginPath();
+                gCtx.moveTo(x1, y1);
+
+                if (propKey === 'a' && deltaVal > 1.0) {
+                    gCtx.setLineDash([3, 3]);
+                } else if (propKey === 'v' && deltaVal > 2.0 && Math.abs(x2 - x1) < 2) {
+                    gCtx.setLineDash([3, 3]);
+                } else {
+                    gCtx.setLineDash([]);
+                }
+
+                gCtx.lineTo(x2, y2);
+                gCtx.stroke();
+            }
+            gCtx.setLineDash([]);
+        }
+
+        function drawGraphs() {
+            let minXGraph = (scenario === 'horizontal_f') ? -15 : -25;
+            drawSingleGraph(dtCtx, 270, 115, 'd', '#00838f', 0, 45);
+            drawSingleGraph(xtCtx, 270, 115, 'x', '#1e88e5', minXGraph, 30);
+            drawSingleGraph(vtCtx, 270, 115, 'v', '#2e7d32', -20, 20);
+            drawSingleGraph(atCtx, 270, 115, 'a', '#d81b60', -25, 25);
+        }
+
+        initPhysics();
+
+        function loop() {
+            if (isPlaying) {
+                updatePhysics(0.02);
+            }
+            drawScene();
+            drawGraphs();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
+</body>
+</html>
