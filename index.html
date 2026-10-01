@@ -213,17 +213,17 @@
         }
 
         /* ==========================================
-           RESPONSIVE DESIGN (ΓΙΑ ΚΙΝΗΤΑ & TABLETS)
+           RESPONSIVE DESIGN (ΜΟΝΟ ΓΙΑ ΚΙΝΗΤΑ & TABLETS)
            ========================================== */
         @media screen and (max-width: 850px) {
             .sims-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 ανά γραμμή σε tablets */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media screen and (max-width: 580px) {
             .sims-grid {
-                grid-template-columns: 1fr; /* 1 ανά γραμμή σε κινητά */
+                grid-template-columns: 1fr;
             }
         }
 
@@ -232,22 +232,23 @@
                 margin-left: 0 !important;
                 flex-direction: column !important;
                 align-items: center !important;
-                text-align: center;
+                text-align: center !important;
                 padding: 0 10px;
             }
 
             .main-title {
-                font-size: 2.1rem;
+                font-size: 2.1rem !important;
             }
 
             .sub-title {
-                font-size: 1.3rem;
+                font-size: 1.3rem !important;
             }
 
+            /* Κρύβουμε τα doodles και το polaroid ΜΟΝΟ στα κινητά */
             .chalk-doodle-top,
             .chalk-doodle-left,
             .experiment-polaroid {
-                display: none;
+                display: none !important;
             }
 
             .main-container {
@@ -269,6 +270,12 @@
 
             .sim-card {
                 transform: none !important;
+            }
+
+            .navbar {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
             }
         }
     </style>
