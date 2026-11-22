@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Φωτοηλεκτρικό Φαινόμενο - PhysicsHub</title>
+    <!-- Το μενού (navbar) παίρνει το στυλ του ΑΠΟΚΛΕΙΣΤΙΚΑ από το εξωτερικό αρχείο -->
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .page-content { 
+            display: flex; 
+            flex-direction: row; 
+            gap: 15px; 
+            align-items: flex-start; 
+            justify-content: center; 
+            padding: 20px 10px; 
+            flex-wrap: nowrap; 
+            max-width: 100%; 
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        .real-world-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px;
+            border-radius: 12px;
+            min-width: 200px;
+            width: 220px; 
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .real-world-card {
+            background: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease;
+            margin-bottom: 12px;
+            border: 1px solid #eee;
+            text-align: center;
+        }
+        .real-world-card:hover { transform: rotate(0deg) scale(1.02); }
+        .real-world-card p { margin: 4px 0 2px 0; font-size: 12px; font-weight: bold; color: #333; }
+        .real-world-desc { font-size: 12px; line-height: 1.4; color: #444; margin: 0; }
+
+        .sim-container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            background: white; 
+            padding: 15px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        .controls { 
+            display: flex; 
+            flex-wrap: wrap;
+            align-items: center; 
+            justify-content: center;
+            gap: 10px; 
+            background: #f8f9fa; 
+            padding: 12px; 
+            border-radius: 12px; 
+            width: 100%; 
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .btn-action {
+            font-size: 12px;
+            font-weight: bold;
+            padding: 6px 14px;
+            cursor: pointer;
+            border-radius: 6px;
+            border: none;
+            transition: all 0.2s;
+            color: white;
+        }
+        #playBtn { background-color: #4caf50; }
+        #playBtn:hover { background-color: #43a047; }
+        #stopBtn { background-color: #f44336; }
+        #stopBtn:hover { background-color: #e53935; }
+
+        .preset-container {
+            width: 100%; 
+            text-align: center; 
+            margin-top: 4px; 
+            display: flex; 
+            justify-content: center; 
+            gap: 6px; 
+            flex-wrap: wrap; 
+            align-items: center;
+        }
+        .preset-btn {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            color: #0d47a1;
+            padding: 3px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .preset-btn:hover { background: #bbdefb; }
+
+        canvas { 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            display: block; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #v-info-box {
+            background: #f9f9f9; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            padding: 8px; 
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+
+        #v-info { 
+            display: flex;
+            justify-content: space-around;
+            font-weight: bold; 
+            font-size: 12px;
+            color: #1565c0;
+        }
+
+        .sim-note { font-size: 10px; color: #666; text-align: center; font-style: italic; }
+
+        .theory-panel { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 15px; 
+            border-radius: 12px; 
+            min-width: 200px;
+            width: 220px; 
+            border: 1px solid #ddd; 
+            line-height: 1.4; 
+            font-size: 12px; 
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        }
+        .theory-panel h3 { color: #800020; margin-top: 0; font-size: 15px; }
+        .theory-panel p { margin-bottom: 8px; }
+        .theory-panel h4 { margin: 10px 0 5px 0; }
+        .theory-panel ul { padding-left: 15px; margin: 0; }
+    </style>
+</head>
+<body>
+
+    <!-- Νέο Μενού (Navbar) -->
+    <div class="navbar">
+        <a href="index.html">Αρχική</a>
+        
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Τυπολόγιο ▼</a>
+            <div class="dropdown-content">
+                <div class="nested-menu">
+                    <a href="#">Γυμνάσιο ▶</a>
+                    <div class="dropdown-content">
+                        <a href="typologiaAgymn.html">Α' Γυμνασίου</a>
+                        <a href="typologiaBgymn.html">Β' Γυμνασίου</a>
+                        <a href="typologiaGgymn.html">Γ' Γυμνασίου</a>
+                    </div>
+                </div>
+                <div class="nested-menu">
+                    <a href="#">Λύκειο ▶</a>
+                    <div class="dropdown-content">
+                        <a href="typologiaAlyk.html">Α' Λυκείου</a>
+                        <a href="typologiaBlyk.html">Β' Λυκείου</a>
+                        <a href="typologiaGlyk.html">Γ' Λυκείου</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Προσομοιώσεις ▼</a>
+            <div class="dropdown-content">
+                <a href="oscilator.html">Απλή Αρμονική Ταλάντωση</a>
+                <a href="Krouseis.html">Κρούσεις</a>
+                <a href="mag_field.html">Μαγνητικό Πεδίο</a>
+                <a href="grav_field3.html">Βαρυτικό Πεδίο</a>
+                <a href="ohm_law.html">Κύκλωμα σε Σειρά</a>
+                <a href="stereo_kinisi.html">Κίνηση Στερεού Σώματος</a>
+                <a href="waves.html">Συμβολή κυμάτων</a>
+                <a href="oriz_voli.html">Οριζόντια βολή</a>
+            </div>
+        </div>
+        
+        <a href="physics_in_action.html">Φυσική στη πράξη</a>
+        <a href="about_us.html">Σχετικά με εμάς</a>
+        <a href="feedback.html">Αξιολόγησε μας</a>
+    </div>
+
+    <div class="page-content">
+        
+        <!-- ΑΡΙΣΤΕΡΑ -->
+        <div class="real-world-box">
+            <div class="real-world-card">
+                <p>Ηλιακά Πάνελ ☀️🔋</p>
+            </div>
+            <p class="real-world-desc">
+                Το φωτοηλεκτρικό φαινόμενο είναι η βάση για τη μετατροπή της φωτεινής ενέργειας σε ηλεκτρική.
+                <br><br>
+                <strong>Πού το συναντάμε;</strong>
+                <br>
+                • <strong>Ηλιακά Πάνελ:</strong> Παράγουν ρεύμα.
+                <br>
+                • <strong>Αυτόματες Πόρτες:</strong> Φωτοκύτταρα ανιχνεύουν την κίνηση.
+                <br>
+                • <strong>Νυχτερινή Όραση:</strong> Ασθενή φωτόνια απελευθερώνουν ηλεκτρόνια.
+            </p>
+        </div>
+
+        <!-- ΚΕΝΤΡΟ: Προσομοίωση -->
+        <div class="sim-container">
+            <div class="controls">
+                <div class="slider-group">
+                    <label>Συχνότητα f (x10¹⁴ Hz): <span id="f-val">7.5</span></label>
+                    <input type="range" id="f-slider" min="4.0" max="8.0" step="0.1" value="7.5">
+                </div>
+                <div class="slider-group">
+                    <label>Τάση Τροφοδοτικού (V): <span id="v-val">0.0</span></label>
+                    <input type="range" id="v-slider" min="-2.0" max="2.0" step="0.1" value="0.0">
+                </div>
+                
+                <button id="playBtn" class="btn-action">Play</button> 
+                <button id="stopBtn" class="btn-action">Stop</button>
+                
+                <div class="preset-container">
+                    <button class="preset-btn" onclick="setPreset(4.5, 0)">🔴 Υπέρυθρο</button>
+                    <button class="preset-btn" onclick="setPreset(6.6, 0)">🟢 Πράσινο</button>
+                    <button class="preset-btn" onclick="setPreset(7.5, -1.0)">🔵 Μπλε με Τάση</button>
+                </div>
+            </div>
+
+            <canvas id="simCanvas" width="540" height="300"></canvas>
+            
+            <div id="v-info-box">
+                <div id="v-info">
+                    <span>E_φωτονίου: <span id="e-val">3.10</span> eV</span>
+                    <span>Max E_κινητική: <span id="k-val">0.40</span> eV</span>
+                    <span>Ρεύμα (I): <span id="i-val">0</span> mA</span>
+                </div>
+                <div class="sim-note">*Έργο εξαγωγής Νατρίου: W₀ = 2.7 eV. h = 4.14×10⁻¹⁵ eV·s</div>
+            </div>
+        </div>
+
+        <!-- ΔΕΞΙΑ -->
+        <div class="theory-panel">
+            <h3>Φωτοηλεκτρικό</h3>
+            <p>Όταν το φως συμπεριφέρεται ως "σωματίδιο" (φωτόνιο), μεταφέρει διακριτά πακέτα ενέργειας.</p>
+            <p>Η ενέργεια εξαρτάται από τη συχνότητα:<br><b>E_φωτ = h·f</b></p>
+            <p>Για να "αποδράσει" ένα ηλεκτρόνιο από το μέταλλο, χρειάζεται την ελάχιστη ενέργεια <b>(Έργο Εξαγωγής W₀)</b>.</p>
+            <p>Η περίσσεια ενέργεια γίνεται κινητική:<br><b>K_max = E_φωτ - W₀</b></p>
+            <hr>
+            <h4>Παρατήρησε:</h4>
+            <ul>
+                <li>Το Γράφημα Μπάρας δείχνει την ενέργεια.</li>
+                <li>Τι γίνεται όταν κάνεις την τάση αρνητική;</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        const h = 4.14e-15; 
+        const W0 = 2.7; 
+        const m_e = 1.0;
+        const dt = 0.02;
+        const scale_v = 2.5;
+
+        let freqBase = 7.5; 
+        let voltage = 0.0;
+        let isRunning = false;
+        
+        // Ιστορικό ρεύματος (Sliding Window) για ομαλή κίνηση της βελόνας και του νούμερου
+        let hitHistory = new Array(40).fill(0);
+        let historyIndex = 0;
+        let ammeterAngle = 0;
+
+        let photons = [];
+        let electrons = [];
+
+        const canvas = document.getElementById('simCanvas'); 
+        const ctx = canvas.getContext('2d');
+        
+        const lampPos = { x: 30, y: 130 };
+        const tube = { x: 110, y: 30, w: 320, h: 200, r: 20 };
+        const cathode = { x: 140, y: 50, w: 15, h: 160 };
+        const anode = { x: 390, y: 50, w: 15, h: 160 };
+
+        function getLampColor(f) {
+            if (f < 4.8) return "#ff3333"; 
+            else if (f < 5.6) return "#ff9900"; 
+            else if (f < 6.2) return "#ffff33"; 
+            else if (f < 6.52) return "#33ff33"; 
+            else if (f < 7.5) return "#3399ff"; 
+            else return "#cc33ff"; 
+        }
+
+        function setPreset(f, v) {
+            document.getElementById('f-slider').value = f;
+            document.getElementById('v-slider').value = v;
+            freqBase = f; voltage = v; updateDashboard();
+        }
+
+        function updateDashboard() {
+            document.getElementById('f-val').innerText = freqBase.toFixed(1);
+            document.getElementById('v-val').innerText = voltage.toFixed(1);
+            let e_photon = h * (freqBase * 1e14);
+            let k_max = Math.max(0, e_photon - W0);
+            document.getElementById('e-val').innerText = e_photon.toFixed(2);
+            document.getElementById('k-val').innerText = (e_photon >= W0) ? k_max.toFixed(2) : "0.00";
+        }
+
+        function drawRoundedRect(x, y, w, h, r, fillColor, strokeColor) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.lineTo(x + w - r, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.closePath();
+            if(fillColor) { ctx.fillStyle = fillColor; ctx.fill(); }
+            if(strokeColor) { ctx.strokeStyle = strokeColor; ctx.lineWidth = 2; ctx.stroke(); }
+        }
+
+        function drawEnergyBar() {
+            let e_photon = h * (freqBase * 1e14);
+            let startX = canvas.width - 95;
+            let startY = 20;
+            let scaleH = 22; 
+            
+            ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+            ctx.fillRect(startX, startY, 75, 100);
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+            ctx.strokeRect(startX, startY, 75, 100);
+            
+            ctx.fillStyle = "#fff";
+            ctx.font = "10px sans-serif";
+            ctx.fillText("Ενέργεια", startX + 15, startY + 12);
+
+            let barBaseY = startY + 90;
+            let w0Height = W0 * scaleH;
+            let photonHeight = e_photon * scaleH;
+
+            ctx.fillStyle = getLampColor(freqBase);
+            ctx.globalAlpha = 0.5;
+            ctx.fillRect(startX + 22, barBaseY - photonHeight, 30, photonHeight);
+            ctx.globalAlpha = 1.0;
+
+            let actualW0 = Math.min(e_photon, W0) * scaleH; 
+            ctx.fillStyle = "#ff4d4d";
+            ctx.fillRect(startX + 22, barBaseY - actualW0, 30, actualW0);
+            
+            if (e_photon > W0) {
+                let kMaxHeight = (e_photon - W0) * scaleH;
+                ctx.fillStyle = "#4caf50"; 
+                ctx.fillRect(startX + 22, barBaseY - photonHeight, 30, kMaxHeight);
+            }
+
+            ctx.strokeStyle = "#fff";
+            ctx.setLineDash([2, 2]);
+            ctx.beginPath();
+            ctx.moveTo(startX + 10, barBaseY - w0Height);
+            ctx.lineTo(startX + 65, barBaseY - w0Height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            ctx.fillStyle = "#fff";
+            ctx.font = "9px sans-serif";
+            ctx.fillText("W₀", startX + 5, barBaseY - w0Height + 8);
+        }
+
+        function draw() { 
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+
+            let bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            bgGrad.addColorStop(0, "#1a2530");
+            bgGrad.addColorStop(1, "#0d141c");
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+            ctx.lineWidth = 1;
+            for (let i = 0; i < canvas.width; i += 20) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke(); }
+            for (let i = 0; i < canvas.height; i += 20) { ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke(); }
+
+            // Καλωδίωση
+            ctx.strokeStyle = "#888";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(cathode.x + cathode.w/2, 210);
+            ctx.lineTo(cathode.x + cathode.w/2, 260);
+            ctx.lineTo(anode.x + anode.w/2, 260);
+            ctx.lineTo(anode.x + anode.w/2, 210);
+            ctx.stroke();
+
+            // Τροφοδοτικό
+            drawRoundedRect(237, 245, 70, 30, 5, "#2c3e50", "#7f8c8d");
+            ctx.fillStyle = "#ecf0f1";
+            ctx.font = "bold 12px sans-serif";
+            ctx.fillText(voltage.toFixed(1) + " V", 252, 265);
+            
+            // Υπολογισμός μέσου όρου ρεύματος για ομαλή σχεδίαση
+            let totalHitsRecent = hitHistory.reduce((a, b) => a + b, 0);
+            
+            // Αμπερόμετρο
+            ctx.fillStyle = "#eee";
+            ctx.beginPath();
+            ctx.arc(anode.x + anode.w/2, 260, 18, 0, Math.PI*2);
+            ctx.fill();
+            ctx.strokeStyle = "#555";
+            ctx.stroke();
+            ctx.fillStyle = "#222";
+            ctx.font = "10px sans-serif";
+            ctx.fillText("mA", anode.x + anode.w/2 - 8, 272);
+            
+            let targetAngle = isRunning ? Math.min(totalHitsRecent * 0.05, 1.5) : 0;
+            ammeterAngle += (targetAngle - ammeterAngle) * 0.1; // Smooth interpolation
+            ctx.save();
+            ctx.translate(anode.x + anode.w/2, 264);
+            ctx.rotate(-Math.PI/2 + ammeterAngle);
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -12); ctx.stroke();
+            ctx.restore();
+
+            // Σωλήνας Κενού
+            drawRoundedRect(tube.x, tube.y, tube.w, tube.h, tube.r, "rgba(173, 216, 230, 0.06)", "rgba(173, 216, 230, 0.3)");
+            ctx.beginPath();
+            ctx.moveTo(tube.x + 20, tube.y + 10);
+            ctx.lineTo(tube.x + 120, tube.y + 10);
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+            ctx.lineWidth = 4;
+            ctx.lineCap = "round";
+            ctx.stroke();
+
+            // Ηλεκτρόδια
+            let cathGrad = ctx.createLinearGradient(cathode.x, 0, cathode.x + cathode.w, 0);
+            cathGrad.addColorStop(0, "#666"); cathGrad.addColorStop(0.5, "#ccc"); cathGrad.addColorStop(1, "#555");
+            ctx.fillStyle = cathGrad;
+            ctx.fillRect(cathode.x, cathode.y, cathode.w, cathode.h);
+            
+            let anodeGrad = ctx.createLinearGradient(anode.x, 0, anode.x + anode.w, 0);
+            anodeGrad.addColorStop(0, "#555"); anodeGrad.addColorStop(0.5, "#aaa"); anodeGrad.addColorStop(1, "#444");
+            ctx.fillStyle = anodeGrad;
+            ctx.fillRect(anode.x, anode.y, anode.w, anode.h);
+
+            ctx.fillStyle = "rgba(255,255,255,0.7)";
+            ctx.font = "11px sans-serif";
+            ctx.fillText("Κάθοδος", cathode.x - 15, cathode.y - 8);
+            ctx.fillText("Άνοδος", anode.x - 8, anode.y - 8);
+
+            drawEnergyBar();
+
+            // Λέιζερ
+            let currentColor = getLampColor(freqBase);
+            ctx.fillStyle = "#222";
+            ctx.fillRect(lampPos.x - 20, lampPos.y - 12, 40, 24);
+            ctx.fillStyle = "#555";
+            ctx.beginPath();
+            ctx.moveTo(lampPos.x + 20, lampPos.y - 12);
+            ctx.lineTo(lampPos.x + 35, lampPos.y - 18);
+            ctx.lineTo(lampPos.x + 35, lampPos.y + 18);
+            ctx.lineTo(lampPos.x + 20, lampPos.y + 12);
+            ctx.fill();
+
+            if (isRunning) {
+                let beamGrad = ctx.createLinearGradient(lampPos.x + 35, 0, cathode.x, 0);
+                beamGrad.addColorStop(0, currentColor);
+                beamGrad.addColorStop(1, "rgba(0,0,0,0)");
+                
+                ctx.globalAlpha = 0.12;
+                ctx.fillStyle = beamGrad;
+                ctx.beginPath();
+                ctx.moveTo(lampPos.x + 35, lampPos.y - 12);
+                ctx.lineTo(cathode.x, cathode.y + 15);
+                ctx.lineTo(cathode.x, cathode.y + cathode.h - 15);
+                ctx.lineTo(lampPos.x + 35, lampPos.y + 12);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+
+                if (Math.random() < 0.6) { 
+                    let targetY = cathode.y + 15 + Math.random() * (cathode.h - 30);
+                    let angle = Math.atan2(targetY - lampPos.y, cathode.x - (lampPos.x + 35));
+                    photons.push({
+                        x: lampPos.x + 35, y: lampPos.y + (Math.random()*10 - 5), 
+                        vx: 10 * Math.cos(angle), vy: 10 * Math.sin(angle), 
+                        color: currentColor, phase: Math.random() * Math.PI * 2
+                    });
+                }
+
+                ctx.lineWidth = 2;
+                for (let i = photons.length - 1; i >= 0; i--) {
+                    let p = photons[i];
+                    p.x += p.vx; p.y += p.vy; p.phase += 0.5;
+
+                    ctx.strokeStyle = p.color; ctx.shadowBlur = 8; ctx.shadowColor = p.color;
+                    ctx.beginPath();
+                    let waveLength = 16;
+                    for (let w = 0; w <= waveLength; w+=2) {
+                        let perpX = -p.vy * 0.1, perpY = p.vx * 0.1;
+                        let waveOffset = Math.sin(p.phase - w * 0.3) * 3;
+                        let drawX = (p.x - p.vx*(w/10)) + perpX * waveOffset;
+                        let drawY = (p.y - p.vy*(w/10)) + perpY * waveOffset;
+                        if (w === 0) ctx.moveTo(drawX, drawY); else ctx.lineTo(drawX, drawY);
+                    }
+                    ctx.stroke(); ctx.shadowBlur = 0;
+
+                    if (p.x >= cathode.x && p.y >= cathode.y && p.y <= cathode.y + cathode.h) {
+                        let e_photon = h * (freqBase * 1e14);
+                        if (e_photon >= W0) {
+                            let k_max = e_photon - W0;
+                            let v_abs = Math.sqrt((2 * k_max) / m_e) * scale_v;
+                            electrons.push({
+                                x: cathode.x + cathode.w + 2, y: p.y,
+                                vx: v_abs, vy: (Math.random() - 0.5) * 0.8
+                            });
+                        }
+                        photons.splice(i, 1);
+                    }
+                }
+
+                let hitsThisFrame = 0;
+                for (let i = electrons.length - 1; i >= 0; i--) {
+                    let e = electrons[i];
+                    e.vx += (voltage * 1.5) * dt; e.x += e.vx; e.y += e.vy;
+
+                    ctx.shadowBlur = 5; ctx.shadowColor = "#00ffff"; ctx.fillStyle = "#00aaff";
+                    ctx.beginPath(); ctx.arc(e.x, e.y, 3.5, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+                    ctx.fillStyle = "#fff"; ctx.font = "bold 9px monospace"; ctx.fillText("-", e.x - 3, e.y + 3);
+
+                    if (e.x < cathode.x + cathode.w) { 
+                        electrons.splice(i, 1); 
+                    } else if (e.x >= anode.x) { 
+                        electrons.splice(i, 1); 
+                        hitsThisFrame += 1; 
+                    }
+                }
+                
+                // Ενημέρωση ιστορικού ρεύματος
+                hitHistory[historyIndex] = hitsThisFrame;
+                historyIndex = (historyIndex + 1) % hitHistory.length;
+                
+                document.getElementById('i-val').innerText = totalHitsRecent.toFixed(0); 
+            }
+
+            requestAnimationFrame(draw); 
+        }
+
+        document.getElementById('f-slider').addEventListener('input', (e) => { freqBase = parseFloat(e.target.value); updateDashboard(); });
+        document.getElementById('v-slider').addEventListener('input', (e) => { voltage = parseFloat(e.target.value); updateDashboard(); });
+        document.getElementById('playBtn').addEventListener('click', () => isRunning = true);
+        document.getElementById('stopBtn').addEventListener('click', () => { 
+            isRunning = false; 
+            photons = []; 
+            electrons = []; 
+            hitHistory.fill(0); // Μηδενισμός ιστορικού
+            document.getElementById('i-val').innerText = "0"; 
+        });
+        
+        updateDashboard(); draw();
+    </script>
+</body>
+</html>
